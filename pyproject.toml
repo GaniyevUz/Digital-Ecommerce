@@ -12,6 +12,7 @@ django-mptt = "^0.14.0"
 djangorestframework = "^3.14.0"
 drf-yasg = "^1.21.4"
 django-filter = "^22.1"
+djangorestframework-simplejwt = "^5.2.2"
 
 
 [build-system]
