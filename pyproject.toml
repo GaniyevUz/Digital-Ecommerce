@@ -14,6 +14,7 @@ drf-yasg = "^1.21.4"
 django-filter = "^22.1"
 djangorestframework-simplejwt = "^5.2.2"
 pytest-django = "^4.5.2"
+django-jazzmin = "^2.6.0"
 
 
 [build-system]

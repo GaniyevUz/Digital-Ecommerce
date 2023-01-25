@@ -226,6 +226,21 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-jazzmin"
+version = "2.6.0"
+description = "Drop-in theme for django admin, that utilises AdminLTE 3 & Bootstrap 4 to make yo' admin look jazzy"
+category = "main"
+optional = false
+python-versions = ">=3.6.2"
+files = [
+    {file = "django_jazzmin-2.6.0-py3-none-any.whl", hash = "sha256:fb554c2d564649c65243b13385121fdbdda58521f49544f9d7cb9c414a4908d4"},
+    {file = "django_jazzmin-2.6.0.tar.gz", hash = "sha256:5bb07055cf19183030724f976904fd8b6337559727959340a43832fab0531812"},
+]
+
+[package.dependencies]
+django = ">=2.2"
+
+[[package]]
 name = "django-js-asset"
 version = "2.0.0"
 description = "script tag with additional attributes for django.forms.Media"
@@ -723,4 +738,4 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "cb64b75bfbe56bf89396c5999954d1a9f93c27f5a1442533250c58f1aba4f668"
+content-hash = "48fa27a54f2a78bad2f1e39fec15e6517c8d1eaf2b5cd0ba13ec39d70f4cd233"
