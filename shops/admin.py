@@ -9,3 +9,4 @@ from shops.models import Category
 @admin.register(Category)
 class ShopCategory(ModelAdmin):
     list_display = ('pk', 'name')
+    ordering = ('pk', )

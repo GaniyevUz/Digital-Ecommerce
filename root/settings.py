@@ -1,6 +1,10 @@
 import os.path
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-q4uaqs-&x+zs)(z15ylebolh)03!^4nd5(u#1c$0=_4xu$*f+5'
@@ -62,8 +66,12 @@ AUTH_USER_MODEL = 'users.User'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -82,7 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -91,28 +98,26 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR / 'static')
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
 }
 
 JAZZMIN_SETTINGS = {
     "site_title": "BotCommerce Admin",
     "site_header": "BotCommerce",
     "site_brand": "BotCommerce",
-    "site_logo": "site/logo.svg",
-    "login_logo": None,
+    "site_logo": "site/logo.square.svg",
+    "login_logo": "site/logo.svg",
     "login_logo_dark": None,
     "site_logo_classes": False,
     "site_icon": None,
@@ -146,7 +151,7 @@ JAZZMIN_SETTINGS = {
     "icons": {
         "auth": "fas fa-users-cog",
         "users.User": "fas fa-user",
-        "auth.Group": "fas fa-guitar",
+        "auth.Group": "fas fa-users",
         "shops.Category": "fas fa-bars",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
