@@ -1,0 +1,663 @@
+https://api.botcommerce.io/api/v1/shop/shop
+{
+    "id": 11065,
+    "name": "HabibulloH",
+    "shop_category_id": 1,
+    "languages": [
+        "ru",
+        "uz",
+        "en"
+    ],
+    "shop_orders_count": 0,
+    "shop_clients_count": 0,
+    "status": "active",
+    "shop_status_readable": "Активный",
+    "shop_is_seen_orders_count": 0,
+    "shop_currency_id": 2,
+    "about_us": null,
+    "delivery_price": null,
+    "delivery_price_per_km": null,
+    "minimum_delivery_price": null,
+    "free_delivery": null,
+    "about_us_image": null,
+    "expires_at": "2023-01-31",
+    "delivery_types": [
+        "pickup",
+        "delivery"
+    ],
+    "has_terminal": true,
+    "created_at": "2023-01-24T18:00:22.167645+05:00",
+    "starts_at": null,
+    "ends_at": null,
+    "current_plans": [
+        {
+            "service": "whatsapp",
+            "days": 0
+        },
+        {
+            "service": "telegram",
+            "days": 0
+        },
+        {
+            "service": "web",
+            "days": 0
+        }
+    ],
+    "delivery_terms": null,
+    "shop_category": "Clothing",
+    "lon": null,
+    "lat": null
+}
+
+https://api.botcommerce.io/api/v1/users/sign-up
+{
+    "id": 18644,
+    "email": "bubbless7456@gmail.com",
+    "first_name": "Habibullo",
+    "last_name": "Rashidov",
+    "invitation_token": null,
+    "invitation": null
+}
+
+https://api.botcommerce.io/api/v1/users/user
+get
+{
+    "id": 18644,
+    "first_name": "Habibullo",
+    "last_name": "Rashidov",
+    "email": "bubbless7456@gmail.com",
+    "invitation_token": "YNFl7jTq",
+    "public_offer": true,
+    "default_shop": 11065,
+    "intro_passed": false
+}
+
+
+https://api.botcommerce.io/api/v1/shop/shop-config
+get
+{
+    "languages": [
+        {
+            "icon": "🇺🇿",
+            "title": "O'zbekcha",
+            "code": "uz"
+        },
+        {
+            "icon": "🇷🇺",
+            "title": "Русский",
+            "code": "ru"
+        },
+        {
+            "icon": "🇺🇸",
+            "title": "English",
+            "code": "en"
+        }
+    ]
+}
+
+https://api.botcommerce.io/api/v1/shop/shop/11065/detail
+get
+{
+    "id": 11065,
+    "name": "HabibulloH",
+    "shop_category_id": 1,
+    "languages": [
+        "ru",
+        "uz",
+        "en"
+    ],
+    "shop_orders_count": 0,
+    "shop_clients_count": 0,
+    "status": "active",
+    "shop_status_readable": "Активный",
+    "shop_is_seen_orders_count": 0,
+    "shop_currency_id": 2,
+    "about_us": null,
+    "delivery_price": null,
+    "delivery_price_per_km": null,
+    "minimum_delivery_price": null,
+    "free_delivery": null,
+    "about_us_image": null,
+    "expires_at": "2023-01-31",
+    "delivery_types": [
+        "pickup",
+        "delivery"
+    ],
+    "has_terminal": true,
+    "created_at": "2023-01-24T18:00:22.167645+05:00",
+    "starts_at": null,
+    "ends_at": null,
+    "current_plans": [
+        {
+            "service": "whatsapp",
+            "days": 0
+        },
+        {
+            "service": "telegram",
+            "days": 0
+        },
+        {
+            "service": "web",
+            "days": 0
+        }
+    ],
+    "delivery_terms": null,
+    "shop_category": "Clothing",
+    "lon": null,
+    "lat": null
+}
+
+https://api.botcommerce.io/api/v1/shop/shop/11065/payment-providers
+get
+
+[
+    {
+        "id": 20,
+        "code": "pay_master",
+        "title": "PayMaster",
+        "image": "/media/payment_logo/PayMaster_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 21,
+        "code": "global_pay_uz",
+        "title": "Global Pay UZ",
+        "image": "/media/payment_logo/Global_Pay_UZ_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 22,
+        "code": "ipay88",
+        "title": "iPay88",
+        "image": "/media/payment_logo/iPay88_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 23,
+        "code": "alifnasiya",
+        "title": "Alifnasiya",
+        "image": "/media/payment_logo/Alifnasiya_Logo.svg",
+        "type": "instalment",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            },
+            {
+                "name": "instalment_types",
+                "value": [],
+                "label": "Instalment Types",
+                "type": "list",
+                "elements": [
+                    {
+                        "name": "period",
+                        "value": 0,
+                        "label": "Period",
+                        "type": "integer",
+                        "required": true
+                    },
+                    {
+                        "name": "percent",
+                        "value": 0,
+                        "label": "Percent",
+                        "type": "integer",
+                        "required": true
+                    }
+                ],
+                "max_length": 100,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 24,
+        "code": "freedom_pay",
+        "title": "Freedom Pay",
+        "image": "/media/payment_logo/FreedomPay_logo_icon.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "code": "payme",
+        "title": "Payme",
+        "image": "/media/payment_logo/payme_02.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 1,
+        "code": "click",
+        "title": "Click",
+        "image": "/media/payment_logo/39027da3844cc44cbff1b0708919384e_icon.png",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "code": "tranzzo",
+        "title": "Tranzzo",
+        "image": "/media/payment_logo/logo.a9366af.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 2,
+        "code": "yandex_money",
+        "title": "Yandex.Money",
+        "image": "/media/payment_logo/logo-black.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "code": "liqpay",
+        "title": "LiqPay",
+        "image": "/media/payment_logo/LIQPAY_logos.svg.png",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "code": "terminal",
+        "title": "Terminal",
+        "image": "/media/payment_logo/Terminal_Logo.svg",
+        "type": "inplace",
+        "status": "not_exist"
+    },
+    {
+        "id": 9,
+        "code": "cash",
+        "title": "Cash",
+        "image": "/media/payment_logo/Cash_Logo.svg",
+        "type": "inplace",
+        "status": "not_exist"
+    },
+    {
+        "id": 6,
+        "code": "stripe",
+        "title": "Stripe",
+        "image": "/media/payment_logo/Stripe_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "code": "rave_by_flutterwave",
+        "title": "Rave by Flutterwave",
+        "image": "/media/payment_logo/Rave_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "code": "sberbank",
+        "title": "Sberbank",
+        "image": "/media/payment_logo/Sberbank_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "code": "smart_glocal",
+        "title": "Smart Glocal",
+        "image": "/media/payment_logo/Smart_Glocal_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 12,
+        "code": "unlimint",
+        "title": "Unlimint",
+        "image": "/media/payment_logo/Unlimint_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 13,
+        "code": "paykassma",
+        "title": "Paykassma",
+        "image": "/media/payment_logo/Paykassma_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 14,
+        "code": "bank_131",
+        "title": "Bank 131",
+        "image": "/media/payment_logo/Bank_131_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 15,
+        "code": "leo_gaming",
+        "title": "LeoGaming",
+        "image": "/media/payment_logo/LeoGaming_Logo_2xnvsGm.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 16,
+        "code": "cascad",
+        "title": "Cascad",
+        "image": "/media/payment_logo/Cascad_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 17,
+        "code": "portmone",
+        "title": "Portmone",
+        "image": "/media/payment_logo/Portmone_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 18,
+        "code": "paymega",
+        "title": "Paymega",
+        "image": "/media/payment_logo/Paymega_Logo_A6WdiwY.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    },
+    {
+        "id": 19,
+        "code": "ecommpay",
+        "title": "ECOMMPAY",
+        "image": "/media/payment_logo/ECOMMPAY_Logo.svg",
+        "type": "telegram",
+        "status": "not_exist",
+        "fields": [
+            {
+                "name": "token",
+                "value": "",
+                "label": "Token",
+                "type": "text",
+                "max_length": 255,
+                "required": true
+            }
+        ]
+    }
+]
+
+https://api.botcommerce.io/api/v1/shop/shop-category
+get
+[
+    {
+        "id": 1,
+        "name": "Clothing"
+    },
+    {
+        "id": 2,
+        "name": "Electronics"
+    },
+    {
+        "id": 3,
+        "name": "Books, Movies,  Music and Games"
+    },
+    {
+        "id": 4,
+        "name": "Cosmetics"
+    },
+    {
+        "id": 5,
+        "name": "Bags and Accessories"
+    },
+    {
+        "id": 6,
+        "name": "food"
+    },
+    {
+        "id": 7,
+        "name": "Appliances"
+    },
+    {
+        "id": 8,
+        "name": "Furniture and Household Goods"
+    },
+    {
+        "id": 9,
+        "name": "Sport and Leisure"
+    },
+    {
+        "id": 10,
+        "name": "Toys and Baby Products"
+    },
+    {
+        "id": 11,
+        "name": "Stationery"
+    },
+    {
+        "id": 12,
+        "name": "Garden & Pets"
+    },
+    {
+        "id": 13,
+        "name": "Other"
+    }
+]
+
+
+https://api.botcommerce.io/api/v1/shop/shop/11065/stat/all
+get
+{
+    "id": 11065,
+    "total_orders": 0,
+    "total_paid_orders": 0,
+    "total_revenue": null,
+    "total_customers": 0,
+    "average_price": "0.00"
+}
+
+
+USER
+SHOP
