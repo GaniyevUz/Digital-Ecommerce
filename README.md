@@ -12,7 +12,7 @@ A complete shop, with payment systems, delivery services and convenient control 
 6. [ ] elasticsearch
 7. [ ] sentry
 8. [ ] security
-9. [ ] custom admin
+9. [x] custom admin
 
 ## Don't Required
 
