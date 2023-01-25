@@ -1,17 +1,21 @@
 # BotCommerce
+
 A complete shop, with payment systems, delivery services and convenient control panel with built-in CRM and Analytics.
 
 ## TODO - Required
+
 1. [ ] server
-2. [ ] github (with github actions)
-3. [ ] test (pytest coverage 80% ^)
-4. [ ] docker/docker compose
-5. [ ] elasticsearch
-6. [ ] sentry
-7. [ ] security
-8. [ ] custom admin
+2. [x] github
+3. [ ] github actions
+4. [ ] test (pytest coverage 80% ^)
+5. [ ] docker/docker compose
+6. [ ] elasticsearch
+7. [ ] sentry
+8. [ ] security
+9. [ ] custom admin
 
 ## Don't Required
+
 1. [ ] cache
 2. [ ] celery
 3. [ ] redis
@@ -19,5 +23,6 @@ A complete shop, with payment systems, delivery services and convenient control 
 5. [ ] cron
 
 ## NOTE - For temmates
+
 - _Don't forget write tests your codes_
 - _Test files must be_ `tests/test_*.py`
