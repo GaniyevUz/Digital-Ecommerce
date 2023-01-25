@@ -27,6 +27,9 @@ A complete shop, with payment systems, delivery services and convenient control 
 - _Don't forget write tests your codes_
 - _Test files must be_ `tests/test_*.py`
 
+## Makefile
+- ```make mig``` makemigrations & migrate 
+- ```make admin``` create admin user
 
-### makemigrations & migrate ```make mig```
-### create admin user ```make admin```
+## Commands
+- ```./manage.py collect_data``` Create Default Objects
