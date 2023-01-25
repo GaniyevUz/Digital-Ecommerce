@@ -20,4 +20,4 @@ A complete shop, with payment systems, delivery services and convenient control 
 
 ## NOTE - For temmates
 - _Don't forget write tests your codes_
-- _Test files must starts with_ **"test\_"**
+- _Test files must be_ `tests/test_*.py`
