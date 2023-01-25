@@ -17,6 +17,7 @@ pytest-django = "^4.5.2"
 django-jazzmin = "^2.6.0"
 python-dotenv = "^0.21.1"
 psycopg2-binary = "^2.9.5"
+pillow = "^9.4.0"
 
 
 [build-system]
