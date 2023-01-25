@@ -147,6 +147,7 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "users.User": "fas fa-user",
         "auth.Group": "fas fa-guitar",
+        "shops.Category": "fas fa-bars",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
