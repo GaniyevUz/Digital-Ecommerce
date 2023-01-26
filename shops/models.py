@@ -1,7 +1,6 @@
 from django.contrib.postgres import fields
 from django.db import models
-from mptt.fields import TreeForeignKey
-from mptt.models import MPTTModel
+from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
 from django.utils.translation import gettext_lazy as _
 
