@@ -10,7 +10,7 @@ A complete shop, with payment systems, delivery services and convenient control 
 4. [ ] test (pytest coverage 80% ^)
 5. [ ] docker/docker compose
 6. [ ] elasticsearch
-7. [ ] sentry
+7. [x] sentry
 8. [ ] security
 9. [x] custom admin
 
@@ -22,7 +22,7 @@ A complete shop, with payment systems, delivery services and convenient control 
 4. [ ] rabbitmq
 5. [ ] cron
 
-## NOTE - For temmates
+## NOTE - For teammates
 
 - _Don't forget write tests your codes_
 - _Test files must be_ `tests/test_*.py`
