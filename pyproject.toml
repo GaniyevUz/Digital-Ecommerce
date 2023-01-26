@@ -19,6 +19,7 @@ python-dotenv = "^0.21.1"
 psycopg2-binary = "^2.9.5"
 pillow = "^9.4.0"
 django-parler = "^2.3"
+sentry-sdk = "^1.14.0"
 
 
 [build-system]

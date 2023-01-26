@@ -2,12 +2,14 @@ import os.path
 from pathlib import Path
 
 from dotenv import load_dotenv
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-q4uaqs-&x+zs)(z15ylebolh)03!^4nd5(u#1c$0=_4xu$*f+5'
+SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -169,3 +171,12 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"users.User": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False,
 }
+
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_SDK_URL'),
+    integrations=[
+        DjangoIntegration(),
+    ],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)
