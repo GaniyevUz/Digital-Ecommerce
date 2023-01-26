@@ -33,4 +33,4 @@ A complete shop, with payment systems, delivery services and convenient control 
 - ```make cl_data``` collect data
 
 ## Commands
-- ```./manage.py collect_data``` Create Default Objects
+- ``` ./manage.py collect_data``` Create Default Objects

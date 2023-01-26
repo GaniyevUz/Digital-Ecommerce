@@ -4,7 +4,7 @@ from shops.models import Shop
 from shops.serializers import ShopSerializer
 
 
-class ShopCreateListAPIVIEW(ListCreateAPIView):
+class ShopCreateListAPIView(ListCreateAPIView):
     def get_queryset(self):
         return self.request.user.shop_set
 

@@ -1,7 +1,7 @@
 from django.urls import path
 
-from shops.views.shop import ShopCreateListAPIVIEW
+from apps.shops.views.shop import ShopCreateListAPIView
 
 urlpatterns = [
-    path('shop/', ShopCreateListAPIVIEW.as_view(), name='shop')
+    path('shop/', ShopCreateListAPIView.as_view(), name='shop')
 ]

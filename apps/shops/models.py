@@ -55,6 +55,7 @@ class Shop(models.Model):
     name = models.CharField(max_length=255)
     languages = MultiSelectField(max_length=15, choices=Languages.choices, min_choices=1)
     user = models.ForeignKey('users.User', models.CASCADE)
+    currency = models.ForeignKey('shops.Currency', models.SET_NULL, null=True, blank=True)
     related_category = models.ForeignKey('shops.ShopCategory', models.CASCADE)
     about_us = models.CharField(max_length=1024, null=True, blank=True)
     delivery_price = models.IntegerField('Delivery Price', null=True, blank=True)
