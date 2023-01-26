@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     'mptt',
     'rest_framework',
     'drf_yasg',
-    'django_filters'
+    'django_filters',
+    'parler'
 ]
 
 MIDDLEWARE = [

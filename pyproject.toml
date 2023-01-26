@@ -18,6 +18,7 @@ django-jazzmin = "^2.6.0"
 python-dotenv = "^0.21.1"
 psycopg2-binary = "^2.9.5"
 pillow = "^9.4.0"
+django-parler = "^2.3"
 
 
 [build-system]

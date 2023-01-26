@@ -2,14 +2,19 @@ from django.contrib.postgres import fields
 from django.db import models
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from parler.models import TranslatableModel, TranslatedFields
+from django.utils.translation import gettext_lazy as _
 
 
-class Category(MPTTModel):
-    name = models.CharField(max_length=50, unique=True)
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
-    emoji = models.CharField(max_length=50)
-    description = models.TextField(null=True, blank=True)
-    image = models.ImageField(upload_to='shop/categories/')
+class Category(MPTTModel, TranslatableModel):
+    translations = TranslatedFields(
+        name=models.CharField(_("Title"), max_length=200),
+        description=models.TextField(null=True, blank=True)
+    )
+    # parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    emoji = models.CharField(max_length=50, null=True, blank=True)
+    image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
+    category = models.ForeignKey('shops.Shop', on_delete=models.CASCADE, null=True, blank=True)
 
 
 class ShopCategory(models.Model):
@@ -34,7 +39,6 @@ class Currency(models.Model):
         verbose_name_plural = 'Shop Currencies'
 
 
-# Create your models here.
 class Shop(models.Model):
     class Languages(models.TextChoices):
         UZBEK = 'uz', "O'zbek"
@@ -61,8 +65,6 @@ class Shop(models.Model):
     languages = fields.ArrayField(models.CharField(max_length=50, choices=Languages.choices))
     user = models.ForeignKey('users.User', models.CASCADE)
     related_category = models.ForeignKey('shops.ShopCategory', models.CASCADE)
-    category = models.ManyToManyField('shops.Category', null=True, blank=True)
-    currency = models.ForeignKey('shops.Currency', models.CASCADE)
     about_us = models.CharField(max_length=1024, null=True, blank=True)
     delivery_price = models.IntegerField('Delivery Price', null=True, blank=True)
     delivery_price_per_km = models.IntegerField('Delivery Price Per KM', null=True, blank=True)

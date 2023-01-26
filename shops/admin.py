@@ -20,5 +20,5 @@ class ShopCurrency(ModelAdmin):
 
 @admin.register(Shop)
 class ShopAdmin(ModelAdmin):
-    list_display = ('name', 'user', 'languages', 'related_category', 'currency')
+    list_display = ('name', 'user', 'languages', 'related_category')
     ordering = ('id',)
