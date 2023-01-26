@@ -58,7 +58,7 @@ class Shop(models.Model):
         DELIVERY = 'delivery'
 
         def delivery(self):
-            return self.DELIVERY, self.PICKUP
+            return f"{self.DELIVERY},{self.PICKUP}"
 
     name = models.CharField(max_length=255)
     languages = fields.ArrayField(models.CharField(max_length=50, choices=Languages.choices))
@@ -83,6 +83,5 @@ class Shop(models.Model):
     lat = models.IntegerField(null=True, blank=True)
     delivery_terms = models.TextField(null=True, blank=True)
 
-
-def __str__(self):
-    return self.name
+    def __str__(self):
+        return self.name
