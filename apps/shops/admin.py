@@ -20,7 +20,7 @@ class ShopCurrency(ModelAdmin):
 
 @admin.register(Shop)
 class ShopAdmin(ModelAdmin):
-    list_display = ('name', 'related_category')
+    list_display = ('name', 'shop_category')
     ordering = ('created_at',)
     search_fields = ('name', 'about_us')
-    list_filter = ('category', 'currency')
+    list_filter = ('shop_category', 'shop_currency')
