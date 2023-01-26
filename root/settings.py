@@ -1,4 +1,5 @@
-import os.path
+import sys
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -7,7 +8,9 @@ from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
@@ -23,12 +26,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'users.apps.UsersConfig',
-    'shops.apps.ShopsConfig',
+    # My apps
     'products.apps.ProductsConfig',
+    'shops.apps.ShopsConfig',
+    'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
 
+    # Third party apps
+    'multiselectfield',
     'mptt',
     'rest_framework',
     'drf_yasg',
@@ -103,10 +109,10 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR / 'static')
+STATIC_ROOT = os.path.join(BASE_DIR + 'static')
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -172,11 +178,11 @@ JAZZMIN_SETTINGS = {
     "language_chooser": False,
 }
 
-sentry_sdk.init(
-    dsn=os.getenv('SENTRY_SDK_URL'),
-    integrations=[
-        DjangoIntegration(),
-    ],
-    traces_sample_rate=1.0,
-    send_default_pii=True
-)
+# sentry_sdk.init(
+#     dsn=os.getenv('SENTRY_SDK_URL'),
+#     integrations=[
+#         DjangoIntegration(),
+#     ],
+#     traces_sample_rate=1.0,
+#     send_default_pii=True
+# )
