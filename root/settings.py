@@ -23,6 +23,7 @@ INSTALLED_APPS = [
 
     'users.apps.UsersConfig',
     'shops.apps.ShopsConfig',
+    'products.apps.ProductsConfig',
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
 

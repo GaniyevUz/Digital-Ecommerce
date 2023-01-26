@@ -1,7 +1,8 @@
 from rest_framework.fields import CharField
 from rest_framework.serializers import ModelSerializer
 
-from products.models import Product, Category
+from products.models import Product
+from shops.models import Category
 
 
 class CategoryModelSerializer(ModelSerializer):

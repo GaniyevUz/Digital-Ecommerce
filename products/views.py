@@ -1,8 +1,7 @@
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.parsers import MultiPartParser
-from rest_framework.viewsets import ViewSetMixin, ModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
-from .models import Product, Category
+from shops.models import Category
+from .models import Product
 from .serializers import ProductModelSerializer, CategoryModelSerializer
 
 

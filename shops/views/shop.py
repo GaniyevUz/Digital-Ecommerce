@@ -1,10 +1,10 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
 
 from shops.models import Shop
 from shops.serializers import ShopSerializer
 
 
-class ShopsCreateListAPIVIEW(CreateAPIView, ListAPIView):
+class ShopCreateListAPIVIEW(ListCreateAPIView):
     def get_queryset(self):
         return self.request.user.shop_set
 

@@ -1,5 +1,4 @@
 from django.urls import path, include
-
 # from apps.views import ProductListCreateApiView, ProductRetrieveUpdateDestroyAPIView
 from rest_framework.routers import DefaultRouter
 
