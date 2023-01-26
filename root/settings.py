@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
 
+
+
     # Third party apps
     'multiselectfield',
     'mptt',

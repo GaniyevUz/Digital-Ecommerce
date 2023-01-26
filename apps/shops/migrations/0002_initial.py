@@ -41,4 +41,12 @@ class Migration(migrations.Migration):
             name='categorytranslation',
             unique_together={('language_code', 'master')},
         ),
+
+        migrations.AddField(
+            model_name='shop',
+            name='currency',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                                    to='shops.currency'),
+        ),
     ]
+
