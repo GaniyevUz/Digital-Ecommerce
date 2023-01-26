@@ -11,10 +11,10 @@ class Category(MPTTModel, TranslatableModel):
         name=models.CharField(_("Title"), max_length=200),
         description=models.TextField(null=True, blank=True)
     )
-    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
+    parent = TreeForeignKey('self', models.CASCADE, 'children', null=True, blank=True)
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
-    category = models.ForeignKey('shops.Shop', on_delete=models.CASCADE, null=True, blank=True)
+    shop = models.ForeignKey('shops.Shop', models.CASCADE, null=True, blank=True)
 
 
 class ShopCategory(models.Model):
