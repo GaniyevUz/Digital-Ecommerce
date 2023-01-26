@@ -6,8 +6,6 @@ from rest_framework_simplejwt.views import (
 
 from users.views import RegisterUserAPIView
 
-
-
 urlpatterns = [
     path('shop/', include('apps.shops.urls')),
     path('', include('apps.products.urls')),

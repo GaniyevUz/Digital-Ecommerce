@@ -1,19 +1,19 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from shops.models import Category, Currency, Shop
+from shops.models import Shop, ShopCategory, ShopCurrency
 
 
 # Register your models here.
 
-@admin.register(Category)
-class ShopCategory(ModelAdmin):
+@admin.register(ShopCategory)
+class ShopCategoryAdmin(ModelAdmin):
     list_display = ('id', 'name')
     ordering = ('id',)
 
 
-@admin.register(Currency)
-class ShopCurrency(ModelAdmin):
+@admin.register(ShopCurrency)
+class ShopCurrencyAdmin(ModelAdmin):
     list_display = ('id', 'name')
     ordering = ('id',)
 

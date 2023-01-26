@@ -26,7 +26,7 @@ class ShopCategory(models.Model):
         verbose_name_plural = 'Shop Categories'
 
 
-class Currency(models.Model):
+class ShopCurrency(models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):

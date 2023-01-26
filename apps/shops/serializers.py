@@ -1,14 +1,9 @@
-from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
 
 from shops.models import Shop
 
 
-class ShopSerializer(serializers.ModelSerializer):
-    count = serializers.SerializerMethodField('objects_count')
-
-    def objects_count(self, object):
-        return 10
-
+class ShopSerializer(ModelSerializer):
     class Meta:
         model = Shop
-        fields = '__all__'
+        exclude = ('user', )
