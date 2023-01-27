@@ -27,7 +27,7 @@ class ShopCategory(models.Model):
 
 
 class ShopCurrency(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=10)
 
     def __str__(self):
         return self.name

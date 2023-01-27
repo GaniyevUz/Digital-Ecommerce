@@ -62,7 +62,7 @@ class Migration(migrations.Migration):
             name='ShopCurrency',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=10)),
             ],
             options={
                 'verbose_name': 'Shop Currency',
@@ -90,8 +90,8 @@ class Migration(migrations.Migration):
                 ('lat', models.DecimalField(blank=True, decimal_places=6, max_digits=9, null=True)),
                 ('delivery_terms', models.TextField(blank=True, null=True)),
                 ('is_active', models.BooleanField(default=True)),
-                ('shop_category', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='shops.shopcategory')),
-                ('shop_currency', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='shops.shopcurrency')),
+                ('shop_category', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='shops.ShopCurrency')),
+                ('shop_currency', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, to='shops.ShopCurrency')),
             ],
         ),
     ]
