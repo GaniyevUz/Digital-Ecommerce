@@ -1,6 +1,7 @@
 from random import randint
 
 import pytest
+from django.contrib.auth.hashers import make_password
 from faker import Faker
 
 from shops.models import Shop, ShopCategory, ShopCurrency
@@ -22,13 +23,9 @@ class TestShopAPIView:
                                 user_id=1,
                                 languages=['uz', 'en', 'ru'],
                                 )
-            user = User.objects.create(username='user 1', password='1234')
-            print(user)
+            User.objects.create(username='user 1', password=make_password('1234'))
 
     def test_create_model(self, create_shop_models):
-        print(ShopCategory.objects.all())
-        print(ShopCurrency.objects.all())
-        print(Shop.objects.all())
         for i in range(20):
             Shop.objects.create(
                 name=fake.name(),
@@ -38,3 +35,8 @@ class TestShopAPIView:
                 user_id=1
             )
         assert Shop.objects.count() == 21
+        assert ShopCategory.objects.count() == 20
+        assert ShopCurrency.objects.count() == 20
+
+    def test_get_user_shops_api(self, client):
+        pass
