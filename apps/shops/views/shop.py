@@ -1,5 +1,5 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, GenericAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, GenericAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 

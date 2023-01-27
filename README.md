@@ -29,8 +29,9 @@ A complete shop, with payment systems, delivery services and convenient control 
 
 ## Makefile
 - ```make mig``` makemigrations & migrate 
+- ```make unmig``` delete migrations files 
 - ```make admin``` create admin superuser
-- ```make cl_data``` collect data
+- ```make data``` collect all datas
 
 ## Commands
 - ``` ./manage.py collect_data``` Create Default Objects

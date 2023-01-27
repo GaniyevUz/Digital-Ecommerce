@@ -5,8 +5,10 @@ mig:
 admin:
 	./manage.py createsuperuser --username admin --email admin@example.com
 
-cl_data:
-	./manage.py collect_data
+data:
+	./manage.py loaddata shop_currency.yaml
+	./manage.py loaddata shop_category.yaml
 
-clear_mig:
+
+unmig:
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
