@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.generics import RetrieveUpdateDestroyAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListCreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ModelViewSet
 
@@ -14,6 +14,10 @@ class UserModelViewSet(ModelViewSet):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
 
-    def create(self, request, *args, **kwargs):
-        self.serializer_class = RegisterModelSerializer
-        return super().create(request, *args, **kwargs)
+
+class UserListCreateAPIView(ListCreateAPIView):
+    serializer_class = RegisterModelSerializer
+    permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        return [User.objects.get(pk=self.request.user.pk)]

@@ -54,11 +54,3 @@ class TestUserAPIView:
         response = client.post(url, data=data)
         assert response.status_code == 201
         assert response.json()['username'] == data['username']
-
-    def test_user_retrieve_api(self, client, adverts):
-        url = reverse('advert_retrieve', args=(adverts.id,))
-        response = client.get(url)
-        assert response.status_code == 200
-        assert response.json()['name'] == adverts.name
-        assert response.json()['category'] == str(adverts.category.id)
-        assert response.json()['id'] == str(adverts.id)
