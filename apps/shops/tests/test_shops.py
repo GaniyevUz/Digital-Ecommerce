@@ -3,20 +3,21 @@ from random import randint
 
 import pytest
 from django.contrib.auth.hashers import make_password
-from faker import Faker
-
-from rest_framework.reverse import reverse
 from django.test import Client
+from faker import Faker
+from model_bakery import baker
+from model_bakery.baker import Baker
+from rest_framework.reverse import reverse
 
 from shops.models import Shop, ShopCategory, ShopCurrency
 from users.models import User
 
-fake = Faker()
-Faker.seed(0)
-
 
 @pytest.mark.django_db
 class TestShopAPIView:
+    fake = Faker()
+    Faker.seed(0)
+
     @pytest.fixture
     def create_default_user(self):
         user = User.objects.create(username='default_user', password=make_password('default_pass'))
@@ -24,19 +25,16 @@ class TestShopAPIView:
 
     @pytest.fixture
     def create_shop_models(self, create_default_user):
-        for _ in range(20):
-            ShopCategory.objects.create(name=fake.first_name())
-            ShopCurrency.objects.create(name=fake.currency_code())
-        else:
-            Shop.objects.create(name=fake.name(), shop_category_id=randint(1, 10), shop_currency_id=randint(1, 10),
-                                user_id=1,
-                                languages=['uz', 'en', 'ru'],
-                                )
+        baker.make(ShopCategory, _quantity=20, _bulk_create=True, name=self.fake.first_name())
+        baker.make(ShopCurrency, _quantity=20, _bulk_create=True, name=self.fake.currency_code())
+        Shop.objects.create(name=self.fake.name(), shop_category_id=randint(1, 10),
+                            shop_currency_id=randint(1, 10), user_id=1, languages=['uz', 'en', 'ru'],
+                            )
 
     def test_create_model(self, create_shop_models):
         for i in range(20):
             Shop.objects.create(
-                name=fake.name(),
+                name=self.fake.name(),
                 shop_category_id=randint(1, 20),
                 shop_currency_id=randint(1, 20),
                 languages=['uz', 'en', 'ru'],
@@ -68,8 +66,10 @@ class TestShopAPIView:
         assert access_response.status_code == 200
         access_token = access_response.data.get('access')
         shop_url = reverse('v1:shops:shop')
+        print(ShopCategory.objects.values_list('pk', 'name'), ShopCategory.objects.count())
+        print(ShopCurrency.objects.values_list('pk', 'name'), ShopCurrency.objects.count())
         data = {
-            'name': fake.name(),
+            'name': self.fake.name(),
             'shop_category': randint(1, 10),
             'shop_currency': randint(1, 10),
             'languages': ['uz', 'ru']

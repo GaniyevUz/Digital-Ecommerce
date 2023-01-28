@@ -42,7 +42,7 @@ class TestUserAPIView:
         assert count < User.objects.count()
 
     def test_user_create_api(self, client):
-        url = reverse('register')
+        url = reverse('v1:users:register')
         data = {
             'username': 'Jack',
             'password': 'string123',
