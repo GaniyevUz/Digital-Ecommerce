@@ -32,6 +32,3 @@ A complete shop, with payment systems, delivery services and convenient control 
 - ```make unmig``` delete migrations files 
 - ```make admin``` create admin superuser
 - ```make data``` collect all datas
-
-## Commands
-- ``` ./manage.py collect_data``` Create Default Objects
