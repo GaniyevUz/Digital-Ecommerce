@@ -21,7 +21,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('api/v1/', include('apps.urls')),
+    path('api/v1/', include(('apps.urls', 'apps'), 'v1')),
     path('api-auth/', include('rest_framework.urls')),
 ]
 
