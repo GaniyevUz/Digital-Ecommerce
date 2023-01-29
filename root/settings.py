@@ -115,7 +115,7 @@ STATIC_ROOT = os.path.join(BASE_DIR + 'static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
-FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/fixtures')]
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/shops/fixtures')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -6,8 +6,8 @@ admin:
 	./manage.py createsuperuser --username admin --email admin@example.com
 
 data:
-	./manage.py loaddata shop_currency.yaml
-	./manage.py loaddata shop_category.yaml
+	./manage.py loaddata currency.yaml
+	./manage.py loaddata category.yaml
 
 
 unmig:

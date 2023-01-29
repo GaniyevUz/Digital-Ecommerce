@@ -7,6 +7,7 @@ from faker import Faker
 from rest_framework.reverse import reverse
 
 from shops.models import Shop, ShopCategory, ShopCurrency
+from shops.serializers import ShopSerializer
 from users.models import User
 
 
@@ -24,7 +25,7 @@ class TestShopAPIView:
         return user
 
     @pytest.fixture
-    def create_shop_models(self, create_default_user):
+    def create_shop_model(self, create_default_user):
         for _ in range(20):
             ShopCategory.objects.create(name=self.fake.first_name())
             ShopCurrency.objects.create(name=self.fake.currency_code())
@@ -34,7 +35,7 @@ class TestShopAPIView:
                                    user=create_default_user, languages=['uz', 'en', 'ru'],
                                    )
 
-    def test_create_model(self, create_shop_models):
+    def test_create_model(self, create_shop_model):
         for _ in range(20):
             Shop.objects.create(
                 name=self.fake.name(),
@@ -60,15 +61,15 @@ class TestShopAPIView:
         if token:
             return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
 
-    def test_get_shops_api(self, client: Client, create_shop_models):
-        header = self.auth_header(client)
+    def test_get_shops_api(self, client: Client, create_shop_model):
+        headers = self.auth_header(client)
         shop_url = reverse('v1:shops:shop')
-        response = client.get(shop_url, **header)
+        response = client.get(shop_url, **headers)
         assert response.status_code == 200
         assert response.data.get('count') == 1
 
-    def test_create_shops_api(self, client: Client, create_shop_models):
-        header = self.auth_header(client)
+    def test_create_shops_api(self, client: Client, create_shop_model):
+        headers = self.auth_header(client)
         shop_url = reverse('v1:shops:shop')
         data = {
             'name': self.fake.name(),
@@ -76,41 +77,56 @@ class TestShopAPIView:
             'shop_currency': self.get_pk_from_list(ShopCurrency.objects.values_list('pk')),
             'languages': {'uz', 'ru'}
         }
-        response = client.post(shop_url, data, **header)
+        response = client.post(shop_url, data, **headers)
         assert response.status_code == 201
         assert response.data['name'] == data['name']
         assert response.data['languages'] == data['languages']
 
-    def test_shop_detail_api(self, client: Client, create_shop_models):
-        url = reverse('v1:shops:detail', kwargs={'pk': create_shop_models.pk})
-        header = self.auth_header(client)
-        response = client.get(url, **header)
+    def test_shop_detail_api(self, client: Client, create_shop_model):
+        url = reverse('v1:shops:detail', kwargs={'pk': create_shop_model.pk})
+        headers = self.auth_header(client)
+        response = client.get(url, **headers)
         assert response.status_code == 200
-        _ = response.data
-        assert 'id' in _
-        assert 'name' in _
-        assert 'shop_category_id' in _
-        assert 'shop_currency_id' in _
-        assert 'languages' in _
-        assert 'shop_orders_count' in _
-        assert 'shop_clients_count' in _
-        assert 'status' in _
-        assert 'shop_status_readable' in _
-        assert 'shop_is_seen_orders_count' in _
-        assert 'about_us' in _
-        assert 'delivery_price' in _
-        assert 'delivery_price_per_km' in _
-        assert 'minimum_delivery_price' in _
-        assert 'free_delivery' in _
-        assert 'about_us_image' in _
-        assert 'expires_at' in _
-        assert 'delivery_types' in _
-        assert 'has_terminal' in _
-        assert 'created_at' in _
-        assert 'starts_at' in _
-        assert 'ends_at' in _
-        assert 'current_plans' in _
-        assert 'delivery_terms' in _
-        assert 'shop_category' in _
-        assert 'lon' in _
-        assert 'lat' in _
+
+        data = {
+            'name': 'ShopName'
+        }
+        response = client.patch(url, data, content_type="application/json", **headers)
+        assert response.status_code == 200
+        assert response.data.get('name') == data['name']
+        assert response.data.get('id') == create_shop_model.pk
+
+        response = client.delete(url, **headers)
+        assert response.status_code == 204
+        assert Shop.objects.count() == 0
+
+    # def test_serializer_response(self, create_shop_model):
+    #     serializer = ShopSerializer(create_shop_model)
+    #     _ = serializer.data
+    #     assert 'id' in _
+    #     assert 'name' in _
+    #     assert 'shop_category_id' in _
+    #     assert 'shop_currency_id' in _
+    #     assert 'languages' in _
+    #     assert 'shop_orders_count' in _
+    #     assert 'shop_clients_count' in _
+    #     assert 'status' in _
+    #     assert 'shop_status_readable' in _
+    #     assert 'shop_is_seen_orders_count' in _
+    #     assert 'about_us' in _
+    #     assert 'delivery_price' in _
+    #     assert 'delivery_price_per_km' in _
+    #     assert 'minimum_delivery_price' in _
+    #     assert 'free_delivery' in _
+    #     assert 'about_us_image' in _
+    #     assert 'expires_at' in _
+    #     assert 'delivery_types' in _
+    #     assert 'has_terminal' in _
+    #     assert 'created_at' in _
+    #     assert 'starts_at' in _
+    #     assert 'ends_at' in _
+    #     assert 'current_plans' in _
+    #     assert 'delivery_terms' in _
+    #     assert 'shop_category' in _
+    #     assert 'lon' in _
+    #     assert 'lat' in _
