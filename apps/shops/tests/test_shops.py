@@ -7,6 +7,7 @@ from faker import Faker
 from rest_framework.reverse import reverse
 
 from shops.models import Shop, ShopCategory, ShopCurrency
+from shops.serializers import ShopSerializer
 from users.models import User
 
 
@@ -56,8 +57,7 @@ class TestShopAPIView:
         }
         response = client.post(token, data)
         assert response.status_code == 200
-        token = response.data.get('access')
-        if token:
+        if token := response.data.get('access'):
             return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
 
     def test_get_shops_api(self, client: Client, create_shop_models):
@@ -86,31 +86,6 @@ class TestShopAPIView:
         header = self.auth_header(client)
         response = client.get(url, **header)
         assert response.status_code == 200
-        _ = response.data
-        assert 'id' in _
-        assert 'name' in _
-        assert 'shop_category_id' in _
-        assert 'shop_currency_id' in _
-        assert 'languages' in _
-        assert 'shop_orders_count' in _
-        assert 'shop_clients_count' in _
-        assert 'status' in _
-        assert 'shop_status_readable' in _
-        assert 'shop_is_seen_orders_count' in _
-        assert 'about_us' in _
-        assert 'delivery_price' in _
-        assert 'delivery_price_per_km' in _
-        assert 'minimum_delivery_price' in _
-        assert 'free_delivery' in _
-        assert 'about_us_image' in _
-        assert 'expires_at' in _
-        assert 'delivery_types' in _
-        assert 'has_terminal' in _
-        assert 'created_at' in _
-        assert 'starts_at' in _
-        assert 'ends_at' in _
-        assert 'current_plans' in _
-        assert 'delivery_terms' in _
-        assert 'shop_category' in _
-        assert 'lon' in _
-        assert 'lat' in _
+        data = response.json()
+        data['languages'] = set(data['languages'])
+        assert sorted(data.items()) == sorted(ShopSerializer(create_shop_models).data.items())
