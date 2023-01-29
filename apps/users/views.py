@@ -10,6 +10,7 @@ from .serializers import RegisterModelSerializer, UserModelSerializer
 
 class UserModelViewSet(ModelViewSet):
     authentication_classes = (TokenAuthentication,)
+    permission_classes = (AllowAny,)
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
 

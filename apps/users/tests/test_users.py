@@ -20,7 +20,7 @@ class TestUserAPIView:
             'last_name': 'Doe'
         }
         c = User.objects.create(**data)
-        c.set_password(data['password'])
+        # c.set_password(data['password'])
         return c
 
     def test_user_model(self, users):
