@@ -57,8 +57,7 @@ class TestShopAPIView:
         }
         response = client.post(token, data)
         assert response.status_code == 200
-        token = response.data.get('access')
-        if token:
+        if token := response.data.get('access'):
             return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
 
     def test_get_shops_api(self, client: Client, create_shop_model):
