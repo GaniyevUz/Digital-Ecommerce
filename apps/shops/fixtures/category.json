@@ -1,90 +1,90 @@
 [
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 1,
     "fields": {
       "name": "Clothing"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 2,
     "fields": {
       "name": "Electronics"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 3,
     "fields": {
       "name": "Books, Movies,  Music and Games"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 4,
     "fields": {
       "name": "Cosmetics"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 5,
     "fields": {
       "name": "Bags and Accessories"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 6,
     "fields": {
       "name": "Food"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 7,
     "fields": {
       "name": "Appliances"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 8,
     "fields": {
       "name": "Furniture and Household Goods"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 9,
     "fields": {
       "name": "Sport and Leisure"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 10,
     "fields": {
       "name": "Toys and Baby Products"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 11,
     "fields": {
       "name": "Stationery"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 12,
     "fields": {
       "name": "Garden & Pets"
     }
   },
   {
-    "model": "shops.shopcategory",
+    "model": "shops.category",
     "pk": 13,
     "fields": {
       "name": "Other"

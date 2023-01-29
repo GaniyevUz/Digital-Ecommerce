@@ -6,7 +6,7 @@ from django.test import Client
 from faker import Faker
 from rest_framework.reverse import reverse
 
-from shops.models import Shop, ShopCategory, ShopCurrency
+from shops.models import Shop, Category, Currency
 from shops.serializers import ShopSerializer
 from users.models import User
 
@@ -27,11 +27,11 @@ class TestShopAPIView:
     @pytest.fixture
     def create_shop_model(self, create_default_user):
         for _ in range(20):
-            ShopCategory.objects.create(name=self.fake.first_name())
-            ShopCurrency.objects.create(name=self.fake.currency_code())
+            Category.objects.create(name=self.fake.first_name())
+            Currency.objects.create(name=self.fake.currency_code())
         return Shop.objects.create(name=self.fake.name(),
-                                   shop_category_id=self.get_pk_from_list(ShopCategory.objects.values_list('pk')),
-                                   shop_currency_id=self.get_pk_from_list(ShopCurrency.objects.values_list('pk')),
+                                   shop_category_id=self.get_pk_from_list(Category.objects.values_list('pk')),
+                                   shop_currency_id=self.get_pk_from_list(Currency.objects.values_list('pk')),
                                    user=create_default_user, languages=['uz', 'en', 'ru'],
                                    )
 
@@ -39,14 +39,14 @@ class TestShopAPIView:
         for _ in range(20):
             Shop.objects.create(
                 name=self.fake.name(),
-                shop_category_id=self.get_pk_from_list(ShopCategory.objects.values_list('pk')),
-                shop_currency_id=self.get_pk_from_list(ShopCurrency.objects.values_list('pk')),
+                shop_category_id=self.get_pk_from_list(Category.objects.values_list('pk')),
+                shop_currency_id=self.get_pk_from_list(Currency.objects.values_list('pk')),
                 languages=['uz', 'en', 'ru'],
                 user_id=1
             )
         assert Shop.objects.count() == 21
-        assert ShopCategory.objects.count() == 20
-        assert ShopCurrency.objects.count() == 20
+        assert Category.objects.count() == 20
+        assert Currency.objects.count() == 20
 
     @staticmethod
     def auth_header(client):
@@ -73,8 +73,8 @@ class TestShopAPIView:
         shop_url = reverse('v1:shops:shop')
         data = {
             'name': self.fake.name(),
-            'shop_category': self.get_pk_from_list(ShopCategory.objects.values_list('pk')),
-            'shop_currency': self.get_pk_from_list(ShopCurrency.objects.values_list('pk')),
+            'shop_category': self.get_pk_from_list(Category.objects.values_list('pk')),
+            'shop_currency': self.get_pk_from_list(Currency.objects.values_list('pk')),
             'languages': {'uz', 'ru'}
         }
         response = client.post(shop_url, data, **headers)

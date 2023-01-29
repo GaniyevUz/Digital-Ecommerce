@@ -115,7 +115,7 @@ STATIC_ROOT = os.path.join(BASE_DIR + 'static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
-FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/shops/fixtures')]
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/shops/fixtures/')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -193,8 +193,8 @@ JAZZMIN_SETTINGS = {
         "auth": "fas fa-users-cog",
         "users.User": "fas fa-user",
         "auth.Group": "fas fa-users",
-        "shops.ShopCategory": "fas fa-bars",
-        "shops.ShopCurrency": "fas fa-coins",
+        "shops.Category": "fas fa-bars",
+        "shops.Currency": "fas fa-coins",
         "shops.Shop": "fas fa-shopping-cart",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
