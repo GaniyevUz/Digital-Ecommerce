@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth.hashers import make_password
 from faker import Faker
 from rest_framework.reverse import reverse
 
@@ -14,13 +15,11 @@ class TestUserAPIView:
     def users(self):
         data = {
             'username': 'Jack',
-            'password': 'string123',
             'email': 'johndoe@example.com',
             'first_name': 'John',
             'last_name': 'Doe'
         }
-        c = User.objects.create(**data)
-        # c.set_password(data['password'])
+        c = User.objects.create(**data, password=make_password('string123'))
         return c
 
     def test_user_model(self, users):
@@ -60,7 +59,8 @@ class TestUserAPIView:
         response = client.get(url)
         assert response.status_code == 200
         # assert response.json() == UserModelSerializer(users).data
-        assert sorted(response.json().items()) == sorted(UserModelSerializer(users).data.items())
+        data = UserModelSerializer(users).data
+        assert sorted(response.json().items()) == sorted(data.items())
 
     def test_user_update_api(self, client, users):
         url = reverse('v1:users:user-detail', args=(users.id,))
