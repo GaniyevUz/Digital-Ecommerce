@@ -16,10 +16,11 @@ class TestUserAPIView:
         data = {
             'username': 'Jack',
             'email': 'johndoe@example.com',
+            'password': make_password('string123'),
             'first_name': 'John',
             'last_name': 'Doe'
         }
-        c = User.objects.create(**data, password=make_password('string123'))
+        c = User.objects.create(**data)
         return c
 
     def test_user_model(self, users):
