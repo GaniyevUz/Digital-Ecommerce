@@ -3,6 +3,8 @@ from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from parler.models import TranslatableModel, TranslatedFields
 
+from products.managers import CategoryManager
+
 
 class Category(MPTTModel, TranslatableModel):
     translations = TranslatedFields(
@@ -13,6 +15,13 @@ class Category(MPTTModel, TranslatableModel):
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
     shop = models.ForeignKey('shops.Shop', models.CASCADE, null=True, blank=True)
+    objects = CategoryManager()
+
+    class Meta:
+        verbose_name_plural = 'Categories'
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):

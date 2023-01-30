@@ -7,7 +7,6 @@ from faker import Faker
 from rest_framework.reverse import reverse
 
 from shops.models import Shop, Category, Currency
-from shops.serializers import ShopSerializer
 from users.models import User
 
 

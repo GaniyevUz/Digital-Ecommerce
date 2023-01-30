@@ -191,11 +191,17 @@ JAZZMIN_SETTINGS = {
     },
     "icons": {
         "auth": "fas fa-users-cog",
-        "users.User": "fas fa-user",
         "auth.Group": "fas fa-users",
+        "auth.User": "fas fa-user",
+
+        "products.Product": "fas fa-boxes",
+        "products.Category": "fas fa-bars",
+
         "shops.Category": "fas fa-bars",
         "shops.Currency": "fas fa-coins",
         "shops.Shop": "fas fa-shopping-cart",
+
+        "orders.Order": "fas fa-box",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",

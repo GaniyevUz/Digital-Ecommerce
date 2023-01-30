@@ -12,15 +12,12 @@ class Shop(models.Model):
         PICKUP = 'pickup', "Pickup"
         DELIVERY = 'delivery', 'Delivery'
 
-        @property
-        def both(self):
-            return self.PICKUP, self.DELIVERY
-
     name = models.CharField(max_length=255)
     languages = MultiSelectField(max_length=15, choices=Languages.choices, min_choices=1)
     user = models.ForeignKey('users.User', models.CASCADE)
     shop_currency = models.ForeignKey('shops.Currency', models.RESTRICT)
     shop_category = models.ForeignKey('shops.Category', models.RESTRICT)
+    delivery_types = MultiSelectField(max_length=15, choices=Delivery.choices, min_choices=1)
     about_us = models.CharField(max_length=1024, null=True, blank=True)
     delivery_price = models.IntegerField('Delivery Price', null=True, blank=True)
     delivery_price_per_km = models.IntegerField('Delivery Price Per KM', null=True, blank=True)
@@ -28,7 +25,6 @@ class Shop(models.Model):
     free_delivery = models.BooleanField(null=True, blank=True)
     about_us_image = models.ImageField(upload_to='shops/', null=True, blank=True)
     expires_at = models.DateTimeField(null=True, blank=True)
-    # delivery_types = MultiSelectField(max_length=15, choices=Delivery.choices, min_choices=1, default=Delivery.both)
     has_terminal = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     starts_at = models.DateTimeField(null=True, blank=True)
