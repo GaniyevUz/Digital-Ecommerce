@@ -223,3 +223,15 @@ JAZZMIN_SETTINGS = {
 #     traces_sample_rate=1.0,
 #     send_default_pii=True
 # )
+
+PARLER_LANGUAGES = {
+    None: (
+        {'code': 'uz', },
+        {'code': 'ru', },
+        {'code': 'en', },
+    ),
+    'default': {
+        'fallbacks': ['en'],
+        'hide_untranslated': False,
+    }
+}
