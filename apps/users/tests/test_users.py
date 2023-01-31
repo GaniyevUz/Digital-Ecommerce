@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 from faker import Faker
 from rest_framework.reverse import reverse
 
+from shops.models import Shop, Category, Currency
 from users.models import User
 from users.serializers import UserModelSerializer
 
@@ -21,6 +22,11 @@ class TestUserAPIView:
             'last_name': 'Doe'
         }
         c = User.objects.create(**data)
+        Shop.objects.create(name=fake.name(),
+                            shop_category=Category.objects.create(name=fake.first_name()),
+                            shop_currency=Currency.objects.create(name=fake.currency_code()),
+                            user=c, languages=['uz', 'en', 'ru'],
+                            )
         return c
 
     def test_user_model(self, users):
@@ -84,12 +90,12 @@ class TestUserAPIView:
         response = client.get(url)
         assert response.status_code == 404
 
-    # def test_user_change_defaul_shop_api(self, client, users):
-    #     url = reverse('v1:users:user-detail', args=(users.id,))
-    #     shop = users.shop_set.first()
-    #     data = {
-    #         'defaul_shop': shop
-    #     }
-    #     response = client.patch(url, data=data, content_type='application/json')
-    #     assert response.status_code == 200
-    #     assert response.json()['default_shop'] == shop.id
+    def test_user_change_defaul_shop_api(self, client, users):
+        url = reverse('v1:users:user-detail', args=(users.id,))
+        shop = users.shop_set.first()
+        data = {
+            'defaul_shop': shop.pk
+        }
+        response = client.patch(url, data=data, content_type='application/json')
+        assert response.status_code == 200
+        assert response.data['default_shop'] == shop.pk
