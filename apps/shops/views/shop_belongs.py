@@ -2,7 +2,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from shops.models import Currency, Category
-from shops.serializers import CategorySerializer, CurrencySerializer
+from shops.models.shop_belongs import PaymentProviders
+from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers
 
 
 class CategoryModelViewSet(ModelViewSet):
@@ -15,3 +16,8 @@ class CurrencyModelViewSet(ModelViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+class PaymentProvidersViewSet(ModelViewSet):
+    serializer_class = PaymentSerializers
+    queryset = PaymentProviders.objects.all()
