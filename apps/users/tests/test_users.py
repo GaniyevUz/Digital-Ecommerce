@@ -94,7 +94,7 @@ class TestUserAPIView:
         url = reverse('v1:users:user-detail', args=(users.id,))
         shop = users.shop_set.first()
         data = {
-            'defaul_shop': shop.pk
+            'default_shop': shop.pk
         }
         response = client.patch(url, data=data, content_type='application/json')
         assert response.status_code == 200
