@@ -28,11 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # My apps
+
+
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
+
 
     # Third party apps
     'multiselectfield',

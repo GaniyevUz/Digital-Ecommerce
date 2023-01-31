@@ -1,9 +1,10 @@
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, ListAPIView
 from rest_framework.response import Response
 
 from shops.models import Shop
-from shops.serializers import ShopSerializer
+from shops.models.shop_belongs import PaymentProviders
+from shops.serializers import ShopSerializer, PaymentSerializers
 
 
 class ShopListCreateAPIView(ListCreateAPIView):
@@ -24,3 +25,8 @@ class ShopListCreateAPIView(ListCreateAPIView):
 class ShopRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
+
+
+class Payment_providersListAPIView(ListAPIView):
+    queryset = PaymentProviders.objects.all()
+    serializer_class = PaymentSerializers
