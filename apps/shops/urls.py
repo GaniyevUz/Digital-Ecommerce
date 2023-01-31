@@ -1,9 +1,15 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
-from apps.shops.views.shop import ShopCreateListAPIView
-from shops.views.shop import ShopRetrieveUpdateDestroyAPIView
+from shops.views import ShopListCreateAPIView, ShopRetrieveUpdateDestroyAPIView, CategoryModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet
+
+router = DefaultRouter()
+router.register('category', CategoryModelViewSet, 'category')
+router.register('currency', CurrencyModelViewSet, 'currency')
+router.register('payment', PaymentProvidersViewSet, 'payment')
 
 urlpatterns = [
-    path('shop', ShopCreateListAPIView.as_view(), name='shop'),
-    path('shop/<int:pk>/detail', ShopRetrieveUpdateDestroyAPIView.as_view(), name='detail')
+    path('shop', ShopListCreateAPIView.as_view(), name='shop'),
+    path('shop/<int:pk>/detail', ShopRetrieveUpdateDestroyAPIView.as_view(), name='detail'),
+    path('', include(router.urls)),
 ]

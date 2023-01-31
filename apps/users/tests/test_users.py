@@ -1,10 +1,10 @@
-import random
-
 import pytest
+from django.contrib.auth.hashers import make_password
 from faker import Faker
 from rest_framework.reverse import reverse
 
 from users.models import User
+from users.serializers import UserModelSerializer
 
 fake = Faker()
 
@@ -15,8 +15,8 @@ class TestUserAPIView:
     def users(self):
         data = {
             'username': 'Jack',
-            'password': 'string123',
             'email': 'johndoe@example.com',
+            'password': make_password('string123'),
             'first_name': 'John',
             'last_name': 'Doe'
         }
@@ -42,7 +42,7 @@ class TestUserAPIView:
         assert count < User.objects.count()
 
     def test_user_create_api(self, client):
-        url = reverse('register')
+        url = reverse('v1:users:register')
         data = {
             'username': 'Jack',
             'password': 'string123',
@@ -54,3 +54,25 @@ class TestUserAPIView:
         response = client.post(url, data=data)
         assert response.status_code == 201
         assert response.json()['username'] == data['username']
+
+    def test_user_retrieve_api(self, client, users):
+        url = reverse('v1:users:user-detail', args=(users.id,))
+        response = client.get(url)
+        assert response.status_code == 200
+        # assert response.json() == UserModelSerializer(users).data
+        data = UserModelSerializer(users).data
+        assert sorted(response.json().items()) == sorted(data.items())
+
+    def test_user_update_api(self, client, users):
+        url = reverse('v1:users:user-detail', args=(users.id,))
+        data = {
+            'username': 'Jane',
+            'email': 'janedoe@example.com',
+            'first_name': 'Jane',
+        }
+        response = client.patch(url, data=data, content_type='application/json')
+        assert response.status_code == 200
+        response = response.json()
+        assert response['first_name'] == data['first_name']
+        assert response['username'] == data['username']
+        assert response['email'] == data['email']

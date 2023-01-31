@@ -253,3 +253,4 @@ cython_debug/
 #.idea/
 
 .env
+requests

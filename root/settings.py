@@ -28,11 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # My apps
+
+
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
+
 
     # Third party apps
     'multiselectfield',
@@ -115,7 +118,7 @@ STATIC_ROOT = os.path.join(BASE_DIR + 'static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
-FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/fixtures')]
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/shops/fixtures/')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -191,11 +194,17 @@ JAZZMIN_SETTINGS = {
     },
     "icons": {
         "auth": "fas fa-users-cog",
-        "users.User": "fas fa-user",
         "auth.Group": "fas fa-users",
-        "shops.ShopCategory": "fas fa-bars",
-        "shops.ShopCurrency": "fas fa-coins",
+        "auth.User": "fas fa-user",
+
+        "products.Product": "fas fa-boxes",
+        "products.Category": "fas fa-bars",
+
+        "shops.Category": "fas fa-bars",
+        "shops.Currency": "fas fa-coins",
         "shops.Shop": "fas fa-shopping-cart",
+
+        "orders.Order": "fas fa-box",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",
