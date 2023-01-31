@@ -661,3 +661,34 @@ get
 
 USER
 SHOP
+
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY3NTA4NDk0OSwiaWF0IjoxNjc0OTEyMTQ5LCJqdGkiOiJhN2UxNDczMWFkOWU0MGMyYTY3OGNiNDA1YWUyYjlmOCIsInVzZXJfaWQiOjF9.PeSDJU7kBIzQqb6E4uYbSWdQb1OhS7vebSWp_JaoGQE",
+    "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjc0OTk4NTQ5LCJpYXQiOjE2NzQ5MTIxNDksImp0aSI6IjlkZDdhYTFiNGM5ODRjNjk5M2EyYTBiMTViNGViYWY1IiwidXNlcl9pZCI6MX0.ULL1sHpLJDlwmRQmGiKWpQ5KurATVmCtx9pPnMs4Ucs"
+    "user": {
+        "id": 18640,
+        "first_name": "Jahongir",
+        "last_name": "G'aniyev",
+        "email": "ganiyevjahongir03@gmail.com",
+        "invitation_token": "aEfMyKhb",
+        "public_offer": true,
+        "default_shop": 11062,
+        "intro_passed": true
+    },
+}
+
+{
+    "token": "127a83158e2daffffa0f34a6e98c4ad51f519afb",
+    "user": {
+        "id": 18640,
+        "first_name": "Jahongir",
+        "last_name": "G'aniyev",
+        "email": "ganiyevjahongir03@gmail.com",
+        "invitation_token": "aEfMyKhb",
+        "public_offer": true,
+        "default_shop": 11062,
+        "intro_passed": true
+    },
+    "permissions": []
+}

@@ -24,6 +24,7 @@ class TestShopAPIView:
 
     @pytest.fixture
     def create_shop_models(self, create_default_user):
+        # TODO model_bakery for rashi ga
         for _ in range(20):
             ShopCategory.objects.create(name=fake.first_name())
             ShopCurrency.objects.create(name=fake.currency_code())
