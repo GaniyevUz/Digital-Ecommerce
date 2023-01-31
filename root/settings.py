@@ -28,11 +28,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # My apps
+
+
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'telegrambots.apps.TelegrambotsConfig',
+
 
     # Third party apps
     'multiselectfield',
@@ -115,7 +118,7 @@ STATIC_ROOT = os.path.join(BASE_DIR + 'static')
 MEDIA_URL = 'media/'
 MEDIA_ROOT = os.path.join(BASE_DIR + 'media')
 
-FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/fixtures')]
+FIXTURE_DIRS = [os.path.join(BASE_DIR, 'apps/shops/fixtures/')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -124,9 +127,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # 'rest_framework.authentication.TokenAuthentication',
-        # 'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
@@ -136,13 +137,14 @@ SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'basic': {
             'type': 'basic',
-            'description': 'Phone number and password.'
+            'description': 'Username and password.'
         },
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
-            'description': 'Type in the *\'Value\'* input box below: **\'Bearer &lt;JWT&gt;\'**, where JWT is the JSON web token you get back when logging in.'
+            'description': 'Type in the *\'Value\'* input box below: **\'Bearer &lt;JWT&gt;\'**, where JWT is the '
+                           'JSON web token you get back when logging in.'
         }
     }
 }
@@ -190,11 +192,17 @@ JAZZMIN_SETTINGS = {
     },
     "icons": {
         "auth": "fas fa-users-cog",
-        "users.User": "fas fa-user",
         "auth.Group": "fas fa-users",
-        "shops.ShopCategory": "fas fa-bars",
-        "shops.ShopCurrency": "fas fa-coins",
+        "auth.User": "fas fa-user",
+
+        "products.Product": "fas fa-boxes",
+        "products.Category": "fas fa-bars",
+
+        "shops.Category": "fas fa-bars",
+        "shops.Currency": "fas fa-coins",
         "shops.Shop": "fas fa-shopping-cart",
+
+        "orders.Order": "fas fa-box",
     },
     "default_icon_parents": "fas fa-chevron-circle-right",
     "default_icon_children": "fas fa-circle",

@@ -1,0 +1,72 @@
+[
+  {
+    "model": "shops.currency",
+    "pk": 1,
+    "fields": {
+      "name": "UZS"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 2,
+    "fields": {
+      "name": "RUB"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 3,
+    "fields": {
+      "name": "KZT"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 4,
+    "fields": {
+      "name": "UAH"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 5,
+    "fields": {
+      "name": "KGS"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 6,
+    "fields": {
+      "name": "TJS"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 7,
+    "fields": {
+      "name": "AZN"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 8,
+    "fields": {
+      "name": "AFN"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 9,
+    "fields": {
+      "name": "USD"
+    }
+  },
+  {
+    "model": "shops.currency",
+    "pk": 10,
+    "fields": {
+      "name": "KRW"
+    }
+  }
+]
