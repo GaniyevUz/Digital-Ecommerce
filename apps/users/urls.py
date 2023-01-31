@@ -9,6 +9,8 @@ from users.views import UserModelViewSet, UserListCreateAPIView
 router = DefaultRouter()
 
 router.register('users', UserModelViewSet, 'user')
+
+
 urlpatterns = [
     path('', include(router.urls)),
     path('profile/', UserListCreateAPIView.as_view(), name='register'),
