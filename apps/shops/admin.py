@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from shops.models import Shop, Category, Currency
+from shops.models import Shop, Category, Currency, PaymentProviders
 
 
 # Register your models here.
@@ -24,3 +24,8 @@ class ShopAdmin(ModelAdmin):
     ordering = ('created_at',)
     search_fields = ('name', 'about_us')
     list_filter = ('shop_category', 'shop_currency')
+
+
+@admin.register(PaymentProviders)
+class PaymentAdmin(ModelAdmin):
+    list_display = ('id', 'title')
