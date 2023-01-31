@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.shops.views.shop import ShopCreateListAPIView
+from shops.views.shop import ShopCreateListAPIView
 from shops.views.shop import ShopRetrieveUpdateDestroyAPIView
 
 urlpatterns = [
