@@ -21,7 +21,7 @@ class Category(MPTTModel, TranslatableModel):
         verbose_name_plural = 'Categories'
 
     def __str__(self):
-        return self.name
+        return self.__getattribute__('name')
 
 
 class Product(models.Model):

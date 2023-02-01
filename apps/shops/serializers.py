@@ -5,6 +5,7 @@ from shops.models.shop_belongs import PaymentProviders
 
 
 class ShopSerializer(ModelSerializer):
+
     class Meta:
         model = Shop
         fields = '__all__'
