@@ -16,5 +16,5 @@ class CountResultMixin:
             serializer = self.get_serializer(page, many=True)
         else:
             serializer = self.get_serializer(queryset, many=True)
-        data['result'] = serializer
+        data['result'] = serializer.data
         return Response(data)
