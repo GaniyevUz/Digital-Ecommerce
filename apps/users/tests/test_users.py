@@ -104,7 +104,7 @@ class TestUserAPIView:
         response = client.get(url)
         assert response.status_code == 404
 
-    def test_user_change_defaul_shop_api(self, client, users):
+    def test_user_change_default_shop_api(self, client, users):
         url = reverse('v1:users:user-detail', args=(users.id,))
         shop = users.shop_set.first()
         data = {
