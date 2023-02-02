@@ -14,12 +14,13 @@ class ShopListCreateAPIView(ListCreateAPIView):
         return self.request.user.shop_set.all()
 
     def get(self, request, *args, **kwargs):
-        serializer = self.get_serializer(self.get_queryset(), many=True)
-        data = {
-            'count': self.get_queryset().count(),
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+            'count': queryset.count(),
             'result': serializer.data
         }
-        return Response(data, status.HTTP_200_OK)
+        return Response(response)
 
 
 class ShopRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
