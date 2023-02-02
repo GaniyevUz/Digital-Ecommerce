@@ -26,9 +26,12 @@ class UserModelViewSet(ModelViewSet):
         return Response({'status': True})
 
 
-class UserListCreateAPIView(ListCreateAPIView):
+class UserProfileCreateAPIView(ListCreateAPIView):
     serializer_class = RegisterModelSerializer
     permission_classes = (AllowAny,)
 
-    def get_queryset(self):
-        return [User.objects.get(pk=self.request.user.pk)]
+    def get(self, request, *args, **kwargs):
+        serializer = UserModelSerializer(request.user)
+        return Response(serializer.data)
+
+
