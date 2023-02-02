@@ -61,14 +61,14 @@ class TestShopAPIView:
 
     def test_get_shops_api(self, client: Client, create_shop_model):
         headers = self.auth_header(client)
-        shop_url = reverse('v1:shops:shop')
+        shop_url = reverse('v1:shops:shop-list')
         response = client.get(shop_url, **headers)
         assert response.status_code == 200
         assert response.data.get('count') == 1
 
     def test_create_shops_api(self, client: Client, create_shop_model):
         headers = self.auth_header(client)
-        shop_url = reverse('v1:shops:shop')
+        shop_url = reverse('v1:shops:shop-list')
         data = {
             'name': self.fake.name(),
             'shop_category': self.get_pk_from_list(Category.objects.values_list('pk')),
@@ -81,7 +81,7 @@ class TestShopAPIView:
         assert response.data['languages'] == data['languages']
 
     def test_shop_detail_api(self, client: Client, create_shop_model):
-        url = reverse('v1:shops:detail', kwargs={'pk': create_shop_model.pk})
+        url = reverse('v1:shops:shop-detail', kwargs={'pk': create_shop_model.pk})
         headers = self.auth_header(client)
         response = client.get(url, **headers)
         assert response.status_code == 200
