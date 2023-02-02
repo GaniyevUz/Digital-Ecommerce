@@ -1,16 +1,13 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
-from parler.models import TranslatableModel, TranslatedFields
+from parler.models import TranslatableModel
 
 from products.managers import CategoryManager
 
 
 class Category(MPTTModel, TranslatableModel):
-    translations = TranslatedFields(
-        name=models.CharField(_("Title"), max_length=200),
-        description=models.TextField(null=True, blank=True)
-    )
+    name = models.JSONField()
+    description = models.JSONField()
     parent = TreeForeignKey('self', models.CASCADE, 'children', null=True, blank=True)
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
@@ -20,12 +17,9 @@ class Category(MPTTModel, TranslatableModel):
     class Meta:
         verbose_name_plural = 'Categories'
 
-    def __str__(self):
-        return self.__getattribute__('name')
-
 
 class Product(models.Model):
-    class Lenght(models.TextChoices):
+    class Length(models.TextChoices):
         M = 'm', 'Metre'
         CM = 'cm', 'CM'
 
@@ -44,5 +38,5 @@ class Product(models.Model):
     width = models.CharField(max_length=50, null=True, blank=True)
     height = models.CharField(max_length=50, null=True, blank=True)
     weight = models.IntegerField(null=True, blank=True)
-    length_class = models.CharField(max_length=10, choices=Lenght.choices, null=True, blank=True)
+    length_class = models.CharField(max_length=10, choices=Length.choices, null=True, blank=True)
     weight_class = models.CharField(max_length=10, choices=Weight.choices, null=True, blank=True)

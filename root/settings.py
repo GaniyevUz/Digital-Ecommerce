@@ -128,7 +128,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
 }
@@ -175,7 +175,7 @@ JAZZMIN_SETTINGS = {
     ],
     "usermenu_links": [
         {"name": "Support", "url": "https://github.com/farridav/django-jazzmin/issues", "new_window": True},
-        {"model": "auth.user"}
+        {"model": "users.User"}
     ],
     "show_sidebar": True,
     "navigation_expanded": True,
@@ -193,7 +193,7 @@ JAZZMIN_SETTINGS = {
     "icons": {
         "auth": "fas fa-users-cog",
         "auth.Group": "fas fa-users",
-        "auth.User": "fas fa-user",
+        "users.user": "fas fa-user",
 
         "products.Product": "fas fa-boxes",
         "products.Category": "fas fa-bars",
