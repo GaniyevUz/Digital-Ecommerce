@@ -34,3 +34,4 @@ class Order(TranslatableModel):
     promo_code = models.CharField(max_length=225, null=True, blank=True)
     paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    shop = models.ForeignKey('shops.Shop', models.CASCADE)

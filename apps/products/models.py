@@ -1,22 +1,13 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
-from parler.models import TranslatableModel, TranslatedFields
+from parler.models import TranslatableModel
 
 from products.managers import CategoryManager
 
 
-#
-# {
-#     'en': 'book',
-#     'ru': 'kniga',
-#     'uz': 'kitob',
-# }
-
-
-class Category(MPTTModel):
-    name = models.JSONField(default=dict)
-    description = models.JSONField(default=dict, null=True, blank=True)
+class Category(MPTTModel, TranslatableModel):
+    name = models.JSONField()
+    description = models.JSONField()
     parent = TreeForeignKey('self', models.CASCADE, 'children', null=True, blank=True)
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
@@ -25,9 +16,6 @@ class Category(MPTTModel):
 
     class Meta:
         verbose_name_plural = 'Categories'
-
-    def __str__(self):
-        return self.name
 
 
 class Product(models.Model):
