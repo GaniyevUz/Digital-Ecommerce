@@ -1,6 +1,7 @@
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from .models import User
@@ -14,9 +15,12 @@ class UserModelViewSet(ModelViewSet):
     queryset = User.objects.all()
 
 
-class UserListCreateAPIView(ListCreateAPIView):
+class UserProfileCreateAPIView(ListCreateAPIView):
     serializer_class = RegisterModelSerializer
     permission_classes = (AllowAny,)
 
-    def get_queryset(self):
-        return [User.objects.get(pk=self.request.user.pk)]
+    def get(self, request, *args, **kwargs):
+        serializer = UserModelSerializer(request.user)
+        return Response(serializer.data)
+
+
