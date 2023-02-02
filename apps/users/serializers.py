@@ -1,6 +1,3 @@
-import uuid
-from django.contrib.auth.tokens import default_token_generator
-import six
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
 
@@ -10,7 +7,11 @@ from users.models import User
 class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'id', 'username', 'first_name', 'last_name', 'email',
+            'invitation_token', 'default_shop', 'invitation',
+            'date_joined', 'last_login'
+        )
 
 
 # TODO jahongirga

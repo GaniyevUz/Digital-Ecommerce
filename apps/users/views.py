@@ -10,8 +10,7 @@ from .serializers import RegisterModelSerializer, UserModelSerializer, CreateUse
 
 
 class UserModelViewSet(ModelViewSet):
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (AllowAny,)
+    # permission_classes = (AllowAny,)
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
 
@@ -19,6 +18,10 @@ class UserModelViewSet(ModelViewSet):
         if self.action == 'create':
             return RegisterModelSerializer
         return super().get_serializer_class()
+
+    def list(self, request, *args, **kwargs):
+        serializer = UserModelSerializer(request.user)
+        return Response(serializer.data)
 
     # TODO: qarab chiqish kk
     @action(methods=['GET'], detail=True, url_name='botir', url_path='botirjon')
@@ -33,5 +36,3 @@ class UserProfileCreateAPIView(ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         serializer = UserModelSerializer(request.user)
         return Response(serializer.data)
-
-
