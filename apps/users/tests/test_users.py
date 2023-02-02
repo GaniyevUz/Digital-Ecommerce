@@ -29,6 +29,18 @@ class TestUserAPIView:
                             )
         return c
 
+    @staticmethod
+    def auth_header(client):
+        token = reverse('v1:users:token_obtain_pair')
+        data = {
+            'username': 'Jack',
+            'password': 'string123'
+        }
+        response = client.post(token, data)
+        assert response.status_code == 200
+        if token := response.data.get('access'):
+            return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
+
     def test_user_model(self, users):
         count = User.objects.count()
 
@@ -70,13 +82,14 @@ class TestUserAPIView:
         assert sorted(response.json().items()) == sorted(data.items())
 
     def test_user_update_api(self, client, users):
+        headers = self.auth_header(client)
         url = reverse('v1:users:user-detail', args=(users.id,))
         data = {
             'username': 'Jane',
             'email': 'janedoe@example.com',
             'first_name': 'Jane',
         }
-        response = client.patch(url, data=data, content_type='application/json')
+        response = client.patch(url, data=data, **headers, content_type='application/json')
         assert response.status_code == 200
         response = response.json()
         assert response['first_name'] == data['first_name']
@@ -84,8 +97,9 @@ class TestUserAPIView:
         assert response['email'] == data['email']
 
     def test_user_destroy_api(self, client, users):
+        headers = self.auth_header(client)
         url = reverse('v1:users:user-detail', args=(users.id,))
-        response = client.delete(url)
+        response = client.delete(url, **headers)
         assert response.status_code == 204
         response = client.get(url)
         assert response.status_code == 404

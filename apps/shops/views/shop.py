@@ -27,6 +27,6 @@ class ShopRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = ShopSerializer
 
 
-class Payment_providersListAPIView(ListAPIView):
+class PaymentProvidersListAPIView(ListAPIView):
     queryset = PaymentProviders.objects.all()
     serializer_class = PaymentSerializers
