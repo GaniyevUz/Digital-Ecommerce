@@ -18,3 +18,11 @@ class CountResultMixin:
             serializer = self.get_serializer(queryset, many=True)
         data['result'] = serializer.data
         return Response(data)
+
+    def get_count_result_list(self, queryset):
+        serializer = self.get_serializer(queryset, many=True)
+        data = {
+            'count': queryset.count(),
+            'result': serializer.data
+        }
+        return Response(data)

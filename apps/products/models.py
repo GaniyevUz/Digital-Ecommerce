@@ -5,14 +5,21 @@ from parler.models import TranslatableModel
 from products.managers import CategoryManager
 
 
-class Category(MPTTModel, TranslatableModel):
-    name = models.JSONField()
-    description = models.JSONField()
+class Category(MPTTModel):
+    class Translate:
+        @staticmethod
+        def default_translate():
+            return {'en': '', 'ru': '', 'uz': ''}
+
+    name = models.JSONField(default=Translate().default_translate)
+    description = models.JSONField(default=Translate().default_translate)
     parent = TreeForeignKey('self', models.CASCADE, 'children', null=True, blank=True)
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to='shop/categories/', null=True, blank=True)
     shop = models.ForeignKey('shops.Shop', models.CASCADE, null=True, blank=True)
-    objects = CategoryManager()
+
+    def __str__(self):
+        return self.name.get('en', '')
 
     class Meta:
         verbose_name_plural = 'Categories'
