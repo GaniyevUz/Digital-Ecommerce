@@ -2,8 +2,7 @@ from rest_framework.fields import HiddenField, CurrentUserDefault, MultipleChoic
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shops.models import Shop, Category, Currency
-from shops.models.shop_belongs import PaymentProviders
+from shops.models import Shop, Category, Currency, PaymentProvider
 
 
 class ShopSerializer(ModelSerializer):
@@ -29,7 +28,7 @@ class CurrencySerializer(ModelSerializer):
 
 class PaymentSerializers(ModelSerializer):
     class Meta:
-        model = PaymentProviders
+        model = PaymentProvider
         fields = '__all__'
 
 

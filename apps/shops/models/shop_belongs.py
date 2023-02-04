@@ -24,7 +24,7 @@ class Currency(models.Model):
         verbose_name_plural = 'Shop Currencies'
 
 
-class PaymentProviders(models.Model):
+class PaymentProvider(models.Model):
     code = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='payment_providers/', null=True, blank=True)

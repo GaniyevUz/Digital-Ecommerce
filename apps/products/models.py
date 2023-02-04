@@ -5,13 +5,20 @@ from products.managers import CategoryManager
 
 
 class Category(MPTTModel):
-    name = JSONField()
-    description = JSONField()
+    class Translate:
+        @staticmethod
+        def default_translate():
+            return {'en': '', 'ru': '', 'uz': ''}
+
+    name = JSONField(default=Translate().default_translate)
+    description = JSONField(default=Translate().default_translate)
     parent = TreeForeignKey('self', CASCADE, 'children', null=True, blank=True)
     emoji = CharField(max_length=50, null=True, blank=True)
     image = ImageField(upload_to='shop/categories/', null=True, blank=True)
     shop = ForeignKey('shops.Shop', CASCADE, null=True, blank=True)
-    # objects = CategoryManager()
+
+    def __str__(self):
+        return self.name.get('en', '')
 
     class Meta:
         verbose_name_plural = 'Categories'

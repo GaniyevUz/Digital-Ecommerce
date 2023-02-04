@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from shops.models import Currency, Category, Shop
-from shops.models.shop_belongs import PaymentProviders
+from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, OrderSerializer
 
 
@@ -23,7 +23,7 @@ class CurrencyModelViewSet(ModelViewSet):
 
 class PaymentProvidersViewSet(ModelViewSet):
     serializer_class = PaymentSerializers
-    queryset = PaymentProviders.objects.all()
+    queryset = PaymentProvider.objects.all()
 
 
 class ShopOrdersRetrieveAPIView(RetrieveAPIView):
