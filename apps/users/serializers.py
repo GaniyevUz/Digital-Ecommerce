@@ -7,7 +7,12 @@ from users.models import User
 class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'id', 'username', 'first_name', 'last_name', 'email',
+            'invitation_token', 'default_shop', 'invitation',
+            'date_joined', 'last_login'
+        )
+
 
 # TODO jahongirga
 class CreateUserModelSerializer(serializers.ModelSerializer):
@@ -19,13 +24,12 @@ class CreateUserModelSerializer(serializers.ModelSerializer):
 class RegisterModelSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[
         validators.UniqueValidator(queryset=User.objects.values_list('email', flat=True))])
-    password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password], min_length=8)
+    confirm_password = serializers.CharField(write_only=True, required=True, min_length=8)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2',
+        fields = ('username', 'password', 'confirm_password',
                   'email', 'first_name', 'last_name')
         extra_kwargs = {
             'first_name': {'required': True},
@@ -33,9 +37,9 @@ class RegisterModelSerializer(serializers.ModelSerializer):
         }
 
     def validate(self, attrs):
-        if attrs.get('password') != attrs.get('password2'):
+        if attrs.get('password') != attrs.get('confirm_password'):
             raise serializers.ValidationError({"password": "Password fields didn't match."})
-        attrs.pop('password2')
+        attrs.pop('confirm_password')
         return attrs
 
     def create(self, validated_data):

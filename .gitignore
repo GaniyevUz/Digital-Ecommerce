@@ -254,3 +254,7 @@ cython_debug/
 
 .env
 requests
+
+**/migrations/**
+!**/migrations/
+!**/migrations/__init__.py

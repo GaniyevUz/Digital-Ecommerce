@@ -1,10 +1,14 @@
+from rest_framework.fields import HiddenField, CurrentUserDefault, MultipleChoiceField
 from rest_framework.serializers import ModelSerializer
 
-from shops.models import Shop, Category, Currency
-from shops.models.shop_belongs import PaymentProviders
+from orders.models import Order
+from shops.models import Shop, Category, Currency, PaymentProvider
 
 
 class ShopSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+    languages = MultipleChoiceField(choices=Shop.Languages.choices)
+
     class Meta:
         model = Shop
         fields = '__all__'
@@ -24,5 +28,11 @@ class CurrencySerializer(ModelSerializer):
 
 class PaymentSerializers(ModelSerializer):
     class Meta:
-        model = PaymentProviders
+        model = PaymentProvider
         fields = '__all__'
+
+
+class OrderSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = 'name',
