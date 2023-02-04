@@ -7,16 +7,16 @@ from shops.models import Shop
 
 class Order(models.Model):
     class Status(models.TextChoices):
-        IN_PROCESS = 'in_process', _('In Process')
-        READY = 'ready', _('Ready')
-        PICKED_UP = 'picked_ip', _('Picked Up')
-        REJECTED = 'rejected', _('Rejected')
-        DELIVERED = 'delivered', _('Delivered')
-        EXPIRED = 'expired', _('Expired')
+        IN_PROCESS = 'in_process', 'In Process'
+        READY = 'ready', 'Ready'
+        PICKED_UP = 'picked_ip', 'Picked Up'
+        REJECTED = 'rejected', 'Rejected'
+        DELIVERED = 'delivered', 'Delivered'
+        EXPIRED = 'expired', 'Expired'
 
     class Payment(models.TextChoices):
-        CASH = 'cash', _('Cash')
-        CARD = 'card', _('Card')
+        CASH = 'cash', 'Cash'
+        CARD = 'card', 'Card'
 
     first_name = models.CharField(max_length=225)
     last_name = models.CharField(max_length=225, null=True, blank=True)
