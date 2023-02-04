@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404
-from rest_framework.permissions import IsAuthenticated, DjangoObjectPermissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -41,7 +41,13 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
         shop = get_object_or_404(Shop, pk=pk)
         return self.get_count_result_list(shop.orders)
 
-DjangoObjectPermissions
+    @action(['GET'], False, 'shop-config', 'shop-config')
+    def shop_config(self, request):
+        langs = (("🇺🇿", "O'zbekcha", "uz"), ("🇷🇺", "Русский", "ru"), ("🇺🇸", "English", "en"))
+        data = {"languages": [{'icon': i, 'title': t, 'code': c} for i, t, c in langs]}
+        return Response(data)
+
+
 class PaymentProvidersListAPIView(ListAPIView):
     queryset = PaymentProvider.objects.all()
     serializer_class = PaymentSerializers
