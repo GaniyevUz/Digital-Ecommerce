@@ -1,20 +1,22 @@
-from django.db.models import Model, CharField, JSONField, ImageField, IntegerField, TextField, BooleanField, ForeignKey, CASCADE, TextChoices
+from django.db.models import Model, CharField, JSONField, ImageField, IntegerField, TextField, BooleanField, ForeignKey, \
+    CASCADE, TextChoices
 from mptt.models import MPTTModel, TreeForeignKey
 
 from products.managers import CategoryManager
+from shared.model_configs import category_directory_path, product_directory_path
 
 
 class Category(MPTTModel):
-    class Translate:
-        @staticmethod
-        def default_translate():
-            return {'en': '', 'ru': '', 'uz': ''}
 
-    name = JSONField(default=Translate().default_translate)
-    description = JSONField(default=Translate().default_translate)
+    @staticmethod
+    def default_translate(self):
+        return {'en': '', 'ru': '', 'uz': ''}
+
+    name = JSONField(default=default_translate)
+    description = JSONField(default=default_translate)
     parent = TreeForeignKey('self', CASCADE, 'children', null=True, blank=True)
     emoji = CharField(max_length=50, null=True, blank=True)
-    image = ImageField(upload_to='shop/categories/', null=True, blank=True)
+    image = ImageField(upload_to=category_directory_path, null=True, blank=True)
     shop = ForeignKey('shops.Shop', CASCADE, null=True, blank=True)
 
     def __str__(self):
@@ -36,7 +38,7 @@ class Product(Model):
     name = CharField(max_length=255)
     description = TextField()
     category = ForeignKey('products.Category', CASCADE)
-    image = ImageField(upload_to='products/%m', null=True, blank=True)
+    image = ImageField(upload_to=product_directory_path, null=True, blank=True)
     price = IntegerField()
     in_availability = BooleanField(default=True)
 
@@ -46,3 +48,15 @@ class Product(Model):
     weight = IntegerField(null=True, blank=True)
     length_class = CharField(max_length=10, choices=Length.choices, null=True, blank=True)
     weight_class = CharField(max_length=10, choices=Weight.choices, null=True, blank=True)
+
+    @property
+    def shop(self):
+        return self.category.shop
+
+    @property
+    def image_url(self):
+        try:
+            url = self.image.url
+        except (ValueError, AttributeError):
+            url = ''
+        return url
