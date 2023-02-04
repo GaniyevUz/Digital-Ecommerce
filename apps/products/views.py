@@ -1,15 +1,25 @@
+from django_filters import rest_framework as filters
+from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
-from shops.models import Category
-from .models import Product
-from .serializers import ProductModelSerializer, CategoryModelSerializer
+from .models import Product, Category
+from .serializers import ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer
 
 
 class ProductModelViewSet(ModelViewSet):
     serializer_class = ProductModelSerializer
     queryset = Product.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    parser_classes = (MultiPartParser,)
+    # filterset_fields = ('category',)
+    filterset_fields = ('name', 'price')
 
 
 class CategoryModelViewSet(ModelViewSet):
-    serializer_class = CategoryModelSerializer
     queryset = Category.objects.all()
+    serializer_class = CategoryModelSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CategoryListSerializer
+        return super().get_serializer_class()

@@ -1,9 +1,8 @@
 from mptt.managers import TreeManager
 from mptt.querysets import TreeQuerySet
-from parler.managers import TranslatableManager, TranslatableQuerySet
 
 
-class CategoryQuerySet(TranslatableQuerySet, TreeQuerySet):
+class CategoryQuerySet(TreeQuerySet):
     def as_manager(cls):
         manager = CategoryManager.from_queryset(cls)()
         manager._built_with_as_manager = True
@@ -13,5 +12,5 @@ class CategoryQuerySet(TranslatableQuerySet, TreeQuerySet):
     as_manager = classmethod(as_manager)
 
 
-class CategoryManager(TreeManager, TranslatableManager):
+class CategoryManager(TreeManager):
     _queryset_class = CategoryQuerySet

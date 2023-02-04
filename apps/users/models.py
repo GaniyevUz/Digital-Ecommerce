@@ -3,7 +3,6 @@ from django.db import models
 from mptt.models import MPTTModel
 
 
-# Create your models here.
 class User(AbstractUser):
     default_shop = models.OneToOneField('shops.Shop', models.CASCADE, related_name='default_shop', null=True,
                                         blank=True)

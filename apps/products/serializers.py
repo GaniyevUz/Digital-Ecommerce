@@ -1,4 +1,3 @@
-from parler_rest.serializers import TranslatableModelSerializer, TranslatedFieldsField
 from rest_framework.serializers import ModelSerializer
 
 from products.models import Product, Category
@@ -13,7 +12,7 @@ class CategoryModelSerializer(ModelSerializer):
 class CategoryListSerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = '__all__'
+        exclude = 'rght', 'lft', 'tree_id', 'level'
 
 
 class ProductModelSerializer(ModelSerializer):
