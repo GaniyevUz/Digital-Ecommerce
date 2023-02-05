@@ -37,3 +37,11 @@ class Shop(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def categories(self):
+        return self.category_set.all()
+
+    @property
+    def orders(self):
+        return self.order_set.all()

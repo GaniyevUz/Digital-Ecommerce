@@ -29,12 +29,14 @@ INSTALLED_APPS = [
 
     # My apps
 
+
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'ecommerce.apps.EcommerceConfig',
     'telegrambots.apps.TelegrambotsConfig',
+
 
     # Third party apps
     'multiselectfield',
@@ -55,6 +57,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'root.urls'
+
+APPEND_SLASH = True
 
 TEMPLATES = [
     {

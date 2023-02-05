@@ -2,18 +2,17 @@ from django.db.models import Model, CharField, JSONField, ImageField, IntegerFie
     CASCADE, TextChoices
 from mptt.models import MPTTModel, TreeForeignKey
 
-from products.managers import CategoryManager
 from shared.model_configs import category_directory_path, product_directory_path
 
 
 class Category(MPTTModel):
+    class Translate:
+        @staticmethod
+        def default_translate():
+            return {'en': '', 'ru': '', 'uz': ''}
 
-    @staticmethod
-    def default_translate(self):
-        return {'en': '', 'ru': '', 'uz': ''}
-
-    name = JSONField(default=default_translate)
-    description = JSONField(default=default_translate)
+    name = JSONField(default=Translate().default_translate)
+    description = JSONField(default=Translate().default_translate)
     parent = TreeForeignKey('self', CASCADE, 'children', null=True, blank=True)
     emoji = CharField(max_length=50, null=True, blank=True)
     image = ImageField(upload_to=category_directory_path, null=True, blank=True)
@@ -41,7 +40,6 @@ class Product(Model):
     image = ImageField(upload_to=product_directory_path, null=True, blank=True)
     price = IntegerField()
     in_availability = BooleanField(default=True)
-
     length = CharField(max_length=50, null=True, blank=True)
     width = CharField(max_length=50, null=True, blank=True)
     height = CharField(max_length=50, null=True, blank=True)

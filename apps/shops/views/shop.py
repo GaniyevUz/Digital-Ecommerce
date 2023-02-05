@@ -1,14 +1,13 @@
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from orders.serializers import OrderModelSerializer
 from products.serializers import CategoryModelSerializer
 from shared.mixins import CountResultMixin
-from shared.permisions import IsOwner
+from shared.permisions import IsAuthenticatedOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers
@@ -16,7 +15,7 @@ from shops.serializers import ShopSerializer, PaymentSerializers
 
 class ShopModelViewSet(ModelViewSet, CountResultMixin):
     serializer_class = ShopSerializer
-    permission_classes = IsAuthenticated, IsOwner
+    permission_classes = IsAuthenticatedOwner,
 
     def get_queryset(self):
         if self.request.user.is_authenticated:
