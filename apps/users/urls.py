@@ -1,19 +1,16 @@
-from django.urls import path, include
+from django.urls import path
+from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView, TokenVerifyView,
 )
-from rest_framework.routers import DefaultRouter
-from users.views import UserModelViewSet, UserProfileCreateAPIView
+
+from users.views import UserUpdateDestroyAPIView
 
 router = DefaultRouter()
-
-router.register('users', UserModelViewSet, 'user')
-
-
+actions = {'get': 'get', 'post': 'create', 'patch': 'patch', 'put': 'put', 'delete': 'delete'}
 urlpatterns = [
-    path('', include(router.urls)),
-    path('profile/', UserProfileCreateAPIView.as_view(), name='register'),
+    path('user/', UserUpdateDestroyAPIView.as_view(actions), name='user'),
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),

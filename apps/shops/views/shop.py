@@ -19,7 +19,9 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
     permission_classes = IsAuthenticated, IsOwner
 
     def get_queryset(self):
-        return self.request.user.shop_set.all()
+        if self.request.user.is_authenticated:
+            return self.request.user.shop_set.all()
+        return Response(status.HTTP_401_UNAUTHORIZED)
 
     def list(self, request, *args, **kwargs):
         return self.count_result_list(request, *args, **kwargs)

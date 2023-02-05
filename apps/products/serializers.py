@@ -1,3 +1,4 @@
+from parler_rest.serializers import TranslatableModelSerializer, TranslatedFieldsField
 from rest_framework.serializers import ModelSerializer
 
 from products.models import Product, Category
@@ -10,6 +11,12 @@ class CategoryModelSerializer(ModelSerializer):
 
     def create(self, validated_data):
         return super().create(validated_data)
+
+
+class CategoryListSerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        exclude = 'rght', 'lft', 'tree_id', 'level'
 
 
 class ProductModelSerializer(ModelSerializer):

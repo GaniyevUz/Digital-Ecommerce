@@ -29,13 +29,12 @@ INSTALLED_APPS = [
 
     # My apps
 
-
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
+    'ecommerce.apps.EcommerceConfig',
     'telegrambots.apps.TelegrambotsConfig',
-
 
     # Third party apps
     'multiselectfield',
@@ -129,7 +128,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
+    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    )
 }
 
 SWAGGER_SETTINGS = {
@@ -151,7 +153,7 @@ SWAGGER_SETTINGS = {
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
-    'UPDATE_LAST_LOGIN': True,
+    # 'UPDATE_LAST_LOGIN': True,
 }
 JAZZMIN_SETTINGS = {
     "site_title": "BotCommerce Admin",

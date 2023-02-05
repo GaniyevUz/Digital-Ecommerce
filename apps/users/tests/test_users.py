@@ -60,12 +60,12 @@ class TestUserAPIView:
         assert count < User.objects.count()
 
     def test_user_create_api(self, client):
-        url = reverse('v1:users:register')
+        url = reverse('v1:users:user-list')
         data = {
-            'username': 'Jack',
+            'username': 'Jack123',
             'password': 'string123',
-            'password2': 'string123',
-            'email': 'johndoe@example.com',
+            'confirm_password': 'string123',
+            'email': 'johndoe123@example.com',
             'first_name': 'John',
             'last_name': 'Doe'
         }
@@ -74,8 +74,9 @@ class TestUserAPIView:
         assert response.json()['username'] == data['username']
 
     def test_user_retrieve_api(self, client, users):
-        url = reverse('v1:users:user-detail', args=(users.id,))
-        response = client.get(url)
+        headers = self.auth_header(client)
+        url = reverse('v1:users:user-list')
+        response = client.get(url, **headers)
         assert response.status_code == 200
         # assert response.json() == UserModelSerializer(users).data
         data = UserModelSerializer(users).data
@@ -101,15 +102,16 @@ class TestUserAPIView:
         url = reverse('v1:users:user-detail', args=(users.id,))
         response = client.delete(url, **headers)
         assert response.status_code == 204
-        response = client.get(url)
-        assert response.status_code == 404
+        response = client.get(url, **headers)
+        assert response.status_code == 403
 
     def test_user_change_default_shop_api(self, client, users):
+        headers = self.auth_header(client)
         url = reverse('v1:users:user-detail', args=(users.id,))
         shop = users.shop_set.first()
         data = {
             'default_shop': shop.pk
         }
-        response = client.patch(url, data=data, content_type='application/json')
+        response = client.patch(url, data=data, **headers, content_type='application/json')
         assert response.status_code == 200
         assert response.data['default_shop'] == shop.pk
