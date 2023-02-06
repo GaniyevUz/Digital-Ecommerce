@@ -22,11 +22,10 @@ class Order(models.Model):
     last_name = models.CharField(max_length=225, null=True, blank=True)
     items = models.ManyToManyField('products.Product')
     phone = models.CharField(max_length=225)
-    delivery_type = models.CharField(max_length=15, choices=Shop.Delivery.choices),
-    status = models.CharField(max_length=50, choices=Status.choices, default='in_process'),
-    payment_type = models.CharField(max_length=225, default='cash', choices=Payment.choices),
+    delivery_type = models.CharField(max_length=15, choices=Shop.Delivery.choices)
+    status = models.CharField(max_length=50, choices=Status.choices, default='in_process')
+    payment_type = models.CharField(max_length=225, default='cash', choices=Payment.choices)
     note = models.TextField(null=True, blank=True)
-    total_price = models.IntegerField()
     promo_code = models.CharField(max_length=225, null=True, blank=True)
     paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
