@@ -258,3 +258,5 @@ requests
 **/migrations/**
 !**/migrations/
 !**/migrations/__init__.py
+
+test.py

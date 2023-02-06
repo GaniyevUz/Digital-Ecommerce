@@ -25,7 +25,8 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
     def list(self, request, *args, **kwargs):
         return self.count_result_list(request, *args, **kwargs)
 
-    @action(['GET', 'POST'], True, 'category', 'category', serializer_class=CategoryModelSerializer)
+    @action(['GET', 'POST'], True, 'category', 'category', serializer_class=CategoryModelSerializer,
+            permission_classes=(IsAuthenticatedOwner,))
     def get_create_categories(self, request, pk):
         shop = get_object_or_404(Shop, pk=pk)
         if request.method == 'GET':
