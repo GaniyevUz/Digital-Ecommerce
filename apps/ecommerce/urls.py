@@ -1,7 +1,7 @@
 from django.urls import include, path
 
 urlpatterns = [
-    # path('sign-up/', ),
+    # path('sign-in/', ),
 ]
 
 """
