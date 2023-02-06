@@ -58,6 +58,15 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
         # user.save()
         return user
 
+    def to_representation(self, user):
+        jwt = RefreshToken.for_user(user)
+        data = {
+            'refresh': str(jwt),
+            'access': str(jwt.access_token),
+            'user': ClientModelSerializer(user).data
+        }
+        return data
+
 
 class LoginClientModelSerializer(serializers.ModelSerializer):
     class Meta:

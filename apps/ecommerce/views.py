@@ -9,7 +9,8 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.models import Client
-from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer
+from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer, \
+    CreateClientModelSerializer
 
 
 class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
@@ -30,7 +31,6 @@ class ClientModelViewSet(ModelViewSet):
 
     @swagger_auto_schema(manual_parameters=[email])
     def get(self, request, *args, **kwargs):
-        self.permission_classes = (AllowAny,)
         serializer = ClientCheckSerializer(request.GET)
         return Response(serializer.data)
 
@@ -55,4 +55,6 @@ class ClientModelViewSet(ModelViewSet):
 
 
 class CreateClientAPIView(CreateAPIView):
-    serializer_class = ClientModelSerializer
+    serializer_class = CreateClientModelSerializer
+    permission_classes = AllowAny,
+
