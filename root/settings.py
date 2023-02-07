@@ -29,14 +29,12 @@ INSTALLED_APPS = [
 
     # My apps
 
-
     'products.apps.ProductsConfig',
     'shops.apps.ShopsConfig',
     'users.apps.UsersConfig',
     'orders.apps.OrdersConfig',
     'ecommerce.apps.EcommerceConfig',
     'telegrambots.apps.TelegrambotsConfig',
-
 
     # Third party apps
     'multiselectfield',
@@ -229,3 +227,14 @@ JAZZMIN_SETTINGS = {
 #     traces_sample_rate=1.0,
 #     send_default_pii=True
 # )
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_USE_TLS = True
+
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = os.getenv('TIME_ZONE')
