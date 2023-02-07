@@ -17,6 +17,12 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = ClientModelSerializer
     queryset = Client.objects.all()
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(shop=shop)
+        return qs
+
     def get_object(self):
         if self.request.user.is_anonymous or self.request.user.is_superuser:
             return None
@@ -28,6 +34,12 @@ class ClientModelViewSet(ModelViewSet):
     queryset = Client.objects.all()
     permission_classes = AllowAny,
     email = openapi.Parameter('email', openapi.IN_QUERY, "check email address", True, type=openapi.TYPE_STRING)
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(shop=shop)
+        return qs
 
     @swagger_auto_schema(manual_parameters=[email])
     def get(self, request, *args, **kwargs):
@@ -58,3 +70,8 @@ class CreateClientAPIView(CreateAPIView):
     serializer_class = CreateClientModelSerializer
     permission_classes = AllowAny,
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(shop=shop)
+        return qs

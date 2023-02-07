@@ -2,7 +2,7 @@ import email
 from random import choices
 
 from django.db import models
-from django.db.models import Model, CharField, EmailField, TextChoices
+from django.db.models import Model, CharField, EmailField, TextChoices, ForeignKey, CASCADE
 from django.template.defaultfilters import first
 
 
@@ -17,3 +17,4 @@ class Client(Model):
     password = CharField(max_length=300)
     phone = CharField(max_length=15, null=True, blank=True)
     account_type = CharField(max_length=10, choices=AccountType.choices)
+    shop = ForeignKey('shops.Shop', CASCADE)
