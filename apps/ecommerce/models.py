@@ -1,9 +1,4 @@
-import email
-from random import choices
-
-from django.db import models
 from django.db.models import Model, CharField, EmailField, TextChoices, ForeignKey, CASCADE
-from django.template.defaultfilters import first
 
 
 class Client(Model):
