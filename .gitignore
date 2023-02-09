@@ -259,4 +259,4 @@ requests
 !**/migrations/
 !**/migrations/__init__.py
 
-test.py
+apps/orders/test.py
