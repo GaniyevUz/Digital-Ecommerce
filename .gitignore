@@ -260,3 +260,5 @@ requests
 !**/migrations/__init__.py
 
 apps/orders/test.py
+
+test.py
