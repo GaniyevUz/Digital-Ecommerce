@@ -14,10 +14,22 @@ class ProductModelViewSet(ModelViewSet):
     # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(category__shop=shop)
+        return qs
+
 
 class CategoryModelViewSet(ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(shop=shop)
+        return qs
 
     def get_serializer_class(self):
         if self.action == 'list':

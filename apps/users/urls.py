@@ -7,7 +7,6 @@ from rest_framework_simplejwt.views import (
 
 from users.views import UserUpdateDestroyAPIView
 
-router = DefaultRouter()
 actions = {'get': 'get', 'post': 'create', 'patch': 'patch', 'put': 'put', 'delete': 'delete'}
 urlpatterns = [
     path('user/', UserUpdateDestroyAPIView.as_view(actions), name='user'),

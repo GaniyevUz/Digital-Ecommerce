@@ -1,36 +1,9 @@
-from django.urls import include, path
+from django.urls import path
+
+from ecommerce.views import ClientUpdateDestroyAPIView, CreateClientAPIView, ClientModelViewSet
 
 urlpatterns = [
-    # path('sign-up/', ),
+    path('sign-in/', ClientModelViewSet.as_view({'get': 'get', 'post': 'post'})),
+    path('sign-up/', CreateClientAPIView.as_view()),
+    path('profile/personal-info/', ClientUpdateDestroyAPIView.as_view()),
 ]
-
-"""
-signup
-{
-    'email': 'colin.morgaan@gmail.com',
-    'exists': False,
-    'password': 'Jahongir2003#',
-    'confirm_password': 'Jahongir2003#',
-    'first_name': 'Jahongir',
-    'last_name': 'Ganiyev'
-}
-
-signin
-{
-    "token": "b8a6225a1fe3eedfc4d894009fe195ef9f1d9a1d",
-    "user": {
-        "id": 168,
-        "first_name": "Jahongir",
-        "last_name": "G'aniyev",
-        "email": "colin.morgaan@gmail.com",
-        "phone": null,
-        "account_type": "email",
-        "linked_accounts": [
-            {
-                "account": "telegram",
-                "is_linked": false
-            }
-        ]
-    }
-}
-"""
