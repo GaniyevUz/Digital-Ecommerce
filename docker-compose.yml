@@ -3,11 +3,13 @@ version: '3.8'
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn root.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/project
-    ports:
-      - 8000:8000
+      - static_volume:project/static
+      - media_volume:project/media
+    expose:
+      - 8000
     env_file:
       - ./.env
     depends_on:
@@ -25,5 +27,16 @@ services:
       - POSTGRES_USER=bot_commerce_admin
       - POSTGRES_PASSWORD=1
       - POSTGRES_DB=bot_commerce
+  nginx:
+    build: ./apps/nginx
+    volumes:
+      - static_volume:project/static
+      - media_volume:project/media
+    ports:
+      - 80:80
+    depends_on:
+      - web
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:

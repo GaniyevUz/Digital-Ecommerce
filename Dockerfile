@@ -1,12 +1,13 @@
 # pull official base image
 FROM python:3.9.6-alpine
-
-# set work directory
-WORKDIR /project
-
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+
+# set work directory
+RUN mkdir /project
+WORKDIR /project
+
 
 # install psycopg2 dependencies
 RUN apk update \
