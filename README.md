@@ -17,8 +17,8 @@ A complete shop, with payment systems, delivery services and convenient control 
 ## Don't Required
 
 1. [ ] cache
-2. [ ] celery
-3. [ ] redis
+2. [x] celery
+3. [x] redis
 4. [ ] rabbitmq
 5. [ ] cron
 

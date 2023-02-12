@@ -1,29 +1,43 @@
 import os
 from itertools import cycle
-from random import choice, randint
+from random import choice, choices, randint
 
 from django.contrib.auth.hashers import make_password
 from django.core.management import BaseCommand
 from faker import Faker
 from model_bakery import baker
 
+from orders.models import Order
+from products.models import Category as ProductCategory, Product
+from shared.emojis import all_emojis
 from shared.visualize import Loader
 from shops.models import Currency, Category, Shop
 from users.models import User
-from products.models import Category as pr_category, Product
 
 
 class Command(BaseCommand):
-    fake = Faker()
+    fake = Faker('en')
+
+    @staticmethod
+    def repeat(func, count, *args, **kwargs):
+        for _ in range(count):
+            yield func(*args, **kwargs)
+
+    @staticmethod
+    def fake_phone():
+        company_codes = ('90', '91', '93', '94', '97', '98', '99', '33')
+        numbers = '0123456789'
+        return '+998' + choice(company_codes) + ''.join((choice(numbers) for _ in range(7)))
 
     def add_arguments(self, parser):
-        parser.add_argument('-u', '--user', type=int, help='Define a fake users number')
-        parser.add_argument('-ctg', '--shop_category', type=int, help='Define a fake categories number')
-        parser.add_argument('-cur', '--shop_currency', type=int, help='Define a fake currencies number')
-        parser.add_argument('-sh', '--shop', type=int, help='Define a fake shops number')
-        parser.add_argument('-p', '--product', type=int, help='Define a products number')
-        parser.add_argument('-p_c', '--product_category', type=int, help='Define a product categories number')
-        parser.add_argument('-o', '--order', type=int, help='Define a orders number')
+        parser.add_argument('-u', '--user', type=int, default=10, help='Define a fake users number')
+        parser.add_argument('-ctg', '--shop_category', default=10, type=int, help='Define a fake categories number')
+        parser.add_argument('-cur', '--shop_currency', default=10, type=int, help='Define a fake currencies number')
+        parser.add_argument('-sh', '--shop', type=int, default=10, help='Define a fake shops number')
+        parser.add_argument('-p', '--product', type=int, default=10, help='Define a products number')
+        parser.add_argument('-p_c', '--product_category', default=10, type=int,
+                            help='Define a product categories number')
+        parser.add_argument('-o', '--order', type=int, default=10, help='Define a orders number')
 
     def handle(self, *args, **options):
         os.system('make data')
@@ -53,94 +67,46 @@ class Command(BaseCommand):
     def fake_users(self, count):
         baker.make(
             'users.User',
-            username=cycle((self.fake.unique.user_name() for _ in range(count))),
+            username=self.repeat(self.fake.unique.user_name, count),
             password=make_password('1'),
+            first_name=self.repeat(self.fake.unique.first_name, count),
+            last_name=self.repeat(self.fake.unique.last_name, count),
+            email=self.repeat(self.fake.unique.email, count),
+            invitation_token=self.repeat(self.fake.unique.password, count, length=10, special_chars=False),
             _quantity=count
         )
 
     def fake_shop_categories(self, count):
         baker.make(
             'shops.Category',
-            name=cycle((self.fake.unique.first_name() for _ in range(count))),
+            name=self.repeat(self.fake.unique.first_name, count),
             _quantity=count
         )
 
     def fake_shop_currencies(self, count):
         baker.make(
             'shops.Currency',
-            name=cycle((self.fake.unique.currency_code() for _ in range(count))),
+            name=self.repeat(self.fake.unique.currency_code, count),
             _quantity=count
         )
 
     def fake_shops(self, count):
         baker.make(
             'shops.Shop',
-            name=cycle((self.fake.unique.company() for _ in range(count))),
-            languages=['uz', 'en', 'ru'],
+            name=self.repeat(self.fake.unique.company, count),
+            languages=cycle(choices(['uz', 'en', 'ru'], k=randint(1, 3)) for _ in range(count)),
+            delivery_types=cycle(choices(['pickup', 'delivery'], k=randint(1, 2)) for _ in range(count)),
+            about_us=self.repeat(self.fake.sentence, count),
+            delivery_price=self.repeat(self.fake.random_number, count, digits=5),
+            delivery_terms=self.repeat(self.fake.sentence, count),
             user=cycle(User.objects.all()),
             shop_category=cycle(Category.objects.all()),
             shop_currency=cycle(Currency.objects.all()),
-            _quantity=count,
-            make_m2m=True
+            _quantity=count
         )
 
     def fake_product_category(self, count):
-        emoji = ('🎽', '👔', '👚', '👕', '🧣', '🧕🏻',
-                 '💻', '🖥', '📱', '📟', '☎', '️📠', '📱', '📺', '✔', '📌', '🏷', '📦', '🚘', '🧊', '❄', '💨', '🌬',
-                 '⌚', '🗄',
-                 '🆕', '🔴',
-                 '🟠', '🟡', '🟢', '🔵', '🟣', '🔘', '🎁', '💧', '🔖', '📕', '📖', '📓', '📔', '📘', '📚', '📙', '📗',
-                 '📒',
-                 '🔖', '📑',
-                 '💄', '💋', '👄', '👅', '🔮', '⚱', '🧬', '🕳', '🧼', '🖌', '🖍', '👛', '👝', '👜', '🎒', '🛄', '🛍',
-                 '🍫', '🍟', '🥓', '🍍', '🥙', '🍯', '🥐', '🍬', '🥟', '🥦', '🍙', '🍣', '🥩', '🥗', '🍩', '🍊', '🍨',
-                 '🥔',
-                 '🍛', '🍌', '🌯',
-                 '🍚', '🍜', '🥤', '🍲', '🧆',
-                 '🍮', '🌽', '🍧', '🍓', '🥜', '🍢', '🍋', '🥚', '🍖', '🍡', '🍈', '🌶', '🍞', '🥬', '🦑', '🥡', '🍰',
-                 '🌭',
-                 '🍘', '🍭', '🦀', '🍦', '🥞',
-                 '🌮', '🦐', '🍏', '🍿', '🍠', '🍱', '🍆', '🥥', '🌰', '🥑', '🎂', '🥯', '🍝', '🥫', '🧀', '🍇', '🍉',
-                 '🥘',
-                 '🍕', '🥝', '🍐', '🥨', '🍒',
-                 '🍤', '🍪', '🥖', '🥣', '🍅', '🍎', '🍳', '🍲', '🥠', '🦞', '🍗', '🍥', '🥕', '🍑', '🧂', '🥭', '🥧',
-                 '🥪',
-                 '😋', '🥒', '🧁', '🍄', '🍔', '🥮',
-                 '📺', '📻', '⏰', '🕰', '📡', '🗑', '🔦', '🔧', '🔩', '⚙', '️⛏', '🛠', '⚒', '🔨', '🔪', '🗡', '⚔', '️⚰',
-                 '️🧱',
-                 '🔭', '🧯',
-                 '🚽', '🚰', '🚿', '🔬', '🛁', '🛀', '🧺', '🛎', '🧻', '🛌', '🛏', '🎁', '🛒', '🧳',
-                 '🚪', '🧳', '🛌', '🛏',
-                 '🤾', '🚴', '🤸', '️⛳', '🏌', '️️🏌', '️🏃', '️🤸', '🤾', '🏄', '‍🧘', '‍🏑', '💪', '🥅', '🤾', '️🏇',
-                 '🤽',
-                 '️🎾', '🛷',
-                 '🥍', '⛹', '️⚾', '🤼', '🏀', '🎱', '🏸', '🚵', '️🏆', '🏉', '🏐', '🚙', '🏟', '🥌',
-                 '🏓', '🤺', '🏅', '🎿', '🏊', '️🥉', '🏃', '‍️🏋', '️‍️🏒', '🤼', '️🤼', '‍️🥈', '🏊', '‍️🚣', '‍️🤽',
-                 '‍️🏈',
-                 '🚴‍', '️🎯', '🏏', '⛷',
-                 '🎣', '🏄', '‍️🤸', '🥋', '🏋', '️‍️🥎', '🎳', '🎽', '🥇', '🚣', '‍️🏂', '⛹️‍', '️🥊', '⛸',
-                 '🧸', '🐻', '🦊', '🐹', '🐷', '🦄', '🐇', '🐿', '⛄', '️🚌', '🚎', '🚚', '✈', '️🚀', '🚁', '🛳',
-                 '💿', '💾', '✉', '📩', '📨', '📧', '💌', '📥', '📤', '📦', '🏷', '📪', '📫', '📬', '📭', '📮', '📯',
-                 '📜',
-                 '📃', '📄', '📑',
-                 '📊', '📈', '📉', '🗒', '🗓', '📆', '📅', '📇', '🗃', '🔏', '🔐', '🔒', '🔓',
-                 '🗳', '🗄', '📋', '📁', '📂', '🗂', '🗞', '📰', '📓', '📔', '📒', '📕', '📗', '📘', '📙', '📚', '📖',
-                 '🔖',
-                 '🔗', '📎', '🖇', '📐',
-                 '📏', '📌', '📍', '✂', '🖊', '🖋', '✒', '🖌', '🖍', '📝', '✏', '️🔍', '🔎',
-                 '🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🦝', '🐻', '🐼', '🦘', '🦡', '🐨', '🐯', '🦁', '🐮', '🐷', '🐽',
-                 '🐸',
-                 '🐵', '🙈', '🙉', '🙊',
-                 '🐒', '🐔', '🐧',
-                 '🦢', '🦅', '🦉', '🦚', '🦜', '🦇', '🐺', '🐗', '🐴', '🦄', '🐝', '🐛', '🦋', '🐌', '🐚', '🐞', '🐜',
-                 '🦗',
-                 '🕷', '🕸', '🦂', '🦟', '🦠', '🐢', '🐍',
-
-                 '🦐', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', '🐋', '🦈', '🐊', '🐅', '🐆', '🦓', '🦍', '🐘', '🦏', '🦛',
-                 '🐪', '🐫',
-                 '🦙', '🐤', '🐣', '🐥', '🦆', '🐦', '🦎', '🐀', '🐿', '🦔', '🐾', '🦕', '🐙', '🦑', '🦖', '⚡' '🦒',
-                 '🐃', '🐂',
-                 '🐄', '🐎', '🐖', '🐏', '🐑', '🐐', '🦌', '🐕', '🐩', '🐈', '🐓', '🦃', '🕊', '🐇', '🐁',)
+        emoji = all_emojis
         shops = Shop.objects.all()
         baker.make(
             'products.Category',
@@ -149,41 +115,43 @@ class Command(BaseCommand):
             emoji=cycle(emoji),
             # image='blogs/default.jpg',
             shop=cycle(shops),
-            _quantity=count,
-            make_m2m=True
+            _quantity=count
         )
 
     def fake_product(self, count):
-        categories = pr_category.objects.all()
+        categories = ProductCategory.objects.all()
 
         baker.make(
             'products.Product',
-            name=cycle((self.fake.unique.first_name() for _ in range(count))),
+            name=self.repeat(self.fake.unique.first_name, count),
             description=cycle(self.fake.sentences(nb=310050)),
             category=cycle(categories),
             # image='blogs/default.jpg',
-            price=cycle((self.fake.random_number() for _ in range(count))),
+            price=self.repeat(self.fake.random_number, count, digits=6),
             in_availability=self.fake.random.choice((True, False)),
             _quantity=count
         )
 
     def fake_orders(self, count):
         shops = Shop.objects.all()
-        products = baker.prepare('products.Product', count)
-        delivery_types = ('pickup', 'delivery')
+        # delivery_types = ('pickup', 'delivery')
         baker.make(
             'orders.Order',
-            first_name=cycle((self.fake.unique.first_name() for _ in range(count))),
-            last_name=cycle((self.fake.unique.last_name() for _ in range(count))),
-            phone=cycle((self.fake_phone() for _ in range(count))),
-            delivery_type='pickup',
+            first_name=self.repeat(self.fake.unique.first_name, count),
+            last_name=self.repeat(self.fake.unique.last_name, count),
+            phone=self.repeat(self.fake_phone, count),
+            delivery_type=cycle(choice(['pickup', 'delivery']) for _ in range(count)),
+            status=cycle(choice(Order.Status.choices)[0] for _ in range(count)),
+            payment_type=cycle(choice(Order.Payment.choices)[0] for _ in range(count)),
+            note=self.repeat(self.fake.sentence, count),
+            paid=cycle(choice((True, False)) for _ in range(count)),
             shop=cycle(shops),
-            # items=products,
+            # items=self.items(count),
             _quantity=count,
-            make_m2m=True
         )
 
-    def fake_phone(self):
-        company_codes = ('90', '91', '93', '94', '97', '98', '99', '33')
-        numbers = '0123456789'
-        return '+998' + choice(company_codes) + ''.join((choice(numbers) for _ in range(7)))
+    @staticmethod
+    def items(count):
+        products = Product.objects.all()
+        for _ in range(count):
+            yield choices(products, k=randint(1, len(products)))

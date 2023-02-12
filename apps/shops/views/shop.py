@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from orders.serializers import OrderModelSerializer
 from products.serializers import CategoryModelSerializer
 from shared.mixins import CountResultMixin
-from shared.permisions import IsAuthenticatedOwner
+from shared.permisions import IsAuthenticatedOwner, IsShopOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers
@@ -17,7 +17,7 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
     serializer_class = ShopSerializer
     permission_classes = IsAuthenticatedOwner,
 
-    def get_queryset(self):
+    def get_queryset(self):  # TODO nega yozildi bu
         if self.request.user.is_authenticated:
             return self.request.user.shop_set.all()
         return Response(status.HTTP_401_UNAUTHORIZED)
@@ -26,7 +26,7 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
         return self.count_result_list(request, *args, **kwargs)
 
     @action(['GET', 'POST'], True, 'category', 'category', serializer_class=CategoryModelSerializer,
-            permission_classes=(IsAuthenticatedOwner,))
+            permission_classes=(IsShopOwner,))
     def get_create_categories(self, request, pk):
         shop = get_object_or_404(Shop, pk=pk)
         if request.method == 'GET':
@@ -43,7 +43,7 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
         shop = get_object_or_404(Shop, pk=pk)
         return self.get_count_result_list(shop.orders)
 
-    @action(['GET'], False, 'shop-config', 'shop-config')
+    @action(['GET'], False)
     def shop_config(self, request):
         langs = (("🇺🇿", "O'zbekcha", "uz"), ("🇷🇺", "Русский", "ru"), ("🇺🇸", "English", "en"))
         data = {"languages": [{'icon': i, 'title': t, 'code': c} for i, t, c in langs]}
