@@ -30,13 +30,14 @@ class Command(BaseCommand):
         return '+998' + choice(company_codes) + ''.join((choice(numbers) for _ in range(7)))
 
     def add_arguments(self, parser):
-        parser.add_argument('-u', '--user', type=int, help='Define a fake users number')
-        parser.add_argument('-ctg', '--shop_category', type=int, help='Define a fake categories number')
-        parser.add_argument('-cur', '--shop_currency', type=int, help='Define a fake currencies number')
-        parser.add_argument('-sh', '--shop', type=int, help='Define a fake shops number')
-        parser.add_argument('-p', '--product', type=int, help='Define a products number')
-        parser.add_argument('-p_c', '--product_category', type=int, help='Define a product categories number')
-        parser.add_argument('-o', '--order', type=int, help='Define a orders number')
+        parser.add_argument('-u', '--user', type=int, default=10, help='Define a fake users number')
+        parser.add_argument('-ctg', '--shop_category', default=10, type=int, help='Define a fake categories number')
+        parser.add_argument('-cur', '--shop_currency', default=10, type=int, help='Define a fake currencies number')
+        parser.add_argument('-sh', '--shop', type=int, default=10, help='Define a fake shops number')
+        parser.add_argument('-p', '--product', type=int, default=10, help='Define a products number')
+        parser.add_argument('-p_c', '--product_category', default=10, type=int,
+                            help='Define a product categories number')
+        parser.add_argument('-o', '--order', type=int, default=10, help='Define a orders number')
 
     def handle(self, *args, **options):
         os.system('make data')

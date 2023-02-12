@@ -2,7 +2,7 @@
 name = "botcommerce"
 version = "0.1.0"
 description = ""
-authors = ["jakhongir <ganiyevuzb@gmail.com>"]
+authors = ["habibullo <bubbless7456@gmail.com>", "jakhongir <ganiyevuzb@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
