@@ -1,8 +1,9 @@
-from rest_framework.fields import HiddenField, CurrentUserDefault, MultipleChoiceField
+from rest_framework.fields import HiddenField, CurrentUserDefault, MultipleChoiceField, CharField
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shops.models import Shop, Category, Currency, PaymentProvider
+from shared.validators import telegram_bot
+from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot
 
 
 class ShopSerializer(ModelSerializer):
@@ -36,3 +37,20 @@ class OrderSerializer(ModelSerializer):
     class Meta:
         model = Order
         fields = 'name',
+
+
+class TelegramBotModelSerializer(ModelSerializer):
+    shop = HiddenField(default=None)
+    username = CharField(max_length=255, read_only=True)
+
+    class Meta:
+        model = TelegramBot
+        fields = '__all__'
+
+    def validate(self, attrs):
+        return super().validate(attrs)
+
+    def update(self, instance, validated_data):
+        if token := validated_data.get('token'):
+            telegram_bot(token)
+        return super().update(instance, validated_data)

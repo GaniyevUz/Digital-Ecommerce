@@ -1,4 +1,4 @@
-from django.db.models import Model, CharField, EmailField, TextChoices, ForeignKey, CASCADE
+from django.db.models import Model, CharField, EmailField, TextChoices, ForeignKey, CASCADE, BooleanField, DateField
 
 
 class Client(Model):
