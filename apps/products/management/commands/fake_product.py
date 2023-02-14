@@ -7,7 +7,6 @@ from model_bakery import baker
 
 from products.models import Category
 from shops.models import Shop
-from users.models import User
 
 
 class Command(BaseCommand):
@@ -19,7 +18,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         if c := options.get('category', 20):
-            parent_category = Category.objects.all()
             shop = Shop.objects.all()
             baker.make(
                 'products.Category',
@@ -31,7 +29,6 @@ class Command(BaseCommand):
             )
         if p := options.get('product', 20):
             category = Category.objects.all()
-            user = User.objects.all()
             baker.make(
                 'products.Product',
                 name=cycle(self.fake.sentences(nb=50)),

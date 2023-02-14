@@ -1,8 +1,6 @@
 import os
 import sys
 from datetime import timedelta
-
-import sentry_sdk
 from dotenv.main import load_dotenv
 
 load_dotenv()
@@ -219,7 +217,8 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"users.User": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False,
 }
-
+# import sentry_sdk
+#
 # sentry_sdk.init(
 #     dsn=os.getenv('SENTRY_SDK_URL'),
 #     integrations=[
