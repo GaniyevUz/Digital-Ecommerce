@@ -14,18 +14,21 @@ class CategoryModelViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
 
 
 class CurrencyModelViewSet(ModelViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
 
 
 class PaymentProvidersViewSet(ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = None
 
 
 # class ShopOrdersRetrieveAPIView(RetrieveAPIView):

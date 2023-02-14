@@ -2,8 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from shops.views.shop_belongs import TelegramBotModelViewSet
-from products.views import CategoryModelViewSet, ProductModelViewSet
-from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet
+from products.views import CategoryModelViewSet as ProductCategoryModelViewSet, ProductModelViewSet
+from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet, CategoryModelViewSet
 
 router = DefaultRouter()
 router.register('shop', ShopModelViewSet, 'shop')
@@ -17,6 +17,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('shop/<int:pk>/bot', TelegramBotModelViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),
          name='telegrambot'),
-    path('<int:pk>/product', ProductModelViewSet.as_view(list_), name='product-list'),
-    path('<int:pk>/category', CategoryModelViewSet.as_view(list_), name='category-list')
+    path('shop/<int:pk>/product', ProductModelViewSet.as_view(list_), name='product-list'),
+    path('shop/<int:pk>/category', ProductCategoryModelViewSet.as_view(list_), name='category-list')
 ]

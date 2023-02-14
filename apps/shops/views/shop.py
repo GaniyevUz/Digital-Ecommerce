@@ -1,35 +1,32 @@
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
-from rest_framework import status
-from rest_framework.decorators import action, permission_classes
+from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView, get_object_or_404
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from orders.models import Order
 from orders.serializers import OrderModelSerializer
-from products.serializers import CategoryModelSerializer, ProductModelSerializer
-from shared.mixins import CountResultMixin
-from shared.permisions import IsAuthenticatedOwner, IsShopOwner
+from shared.permisions import IsAuthenticatedOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers
 
 
-class ShopModelViewSet(ModelViewSet, CountResultMixin):
+class ShopModelViewSet(ModelViewSet):
     serializer_class = ShopSerializer
     permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)
-        return self.count_result_list(request, *args, **kwargs)
+        return super().list(request, *args, **kwargs)
 
     @action(['GET'], True, 'order', 'order', serializer_class=OrderModelSerializer)
-    def get_orders(self, request, pk):
+    def get_orders(self, request, pk, *args, **kwargs):
         shop = get_object_or_404(Shop, pk=pk)
-        return self.get_count_result_list(shop.orders)
+        self.queryset = shop.orders
+        return super().list(request, *args, **kwargs)
 
     @action(['GET'], False)
     def shop_config(self, request):
@@ -39,7 +36,6 @@ class ShopModelViewSet(ModelViewSet, CountResultMixin):
 
     @action(['GET'], True, 'stat/all', 'stat_all')
     def main_stat(self, request, pk=None):
-
         orders = Order.objects.filter(items__order__shop_id=pk).annotate(total_items=Count('items'))
         total_orders = sum(orders.values_list('total_items', flat=True))
 
