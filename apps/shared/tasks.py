@@ -25,7 +25,7 @@ def send_to_gmail(email, domain, user, _type='activation'):
     elif _type == 'change':
         subject = ''
     else:
-        context['username'] = user.username
+        context['name'] = user.first_name + ' ' + user.last_name
 
     message = render_to_string(f'{template}', context)
 
