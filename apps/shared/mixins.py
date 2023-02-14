@@ -4,6 +4,6 @@ from rest_framework.response import Response
 class ShopRequiredMixin:
     def get_queryset(self):
         qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
+        if shop := self.kwargs.get('pk'):
             return qs.filter(shop=shop)
         return qs
