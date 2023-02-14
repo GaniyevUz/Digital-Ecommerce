@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db.models import Model, CharField, JSONField, ImageField, IntegerField, TextField, BooleanField, ForeignKey, \
     CASCADE, TextChoices
 from mptt.models import MPTTModel, TreeForeignKey
@@ -36,6 +37,7 @@ class Product(Model):
 
     name = CharField(max_length=255)
     description = TextField()
+    shop = ForeignKey('shops.Shop', CASCADE)
     category = ForeignKey('products.Category', CASCADE)
     image = ImageField(upload_to=product_directory_path, null=True, blank=True)
     price = IntegerField()
@@ -46,10 +48,7 @@ class Product(Model):
     weight = IntegerField(null=True, blank=True)
     length_class = CharField(max_length=10, choices=Length.choices, null=True, blank=True)
     weight_class = CharField(max_length=10, choices=Weight.choices, null=True, blank=True)
-
-    @property
-    def shop(self):
-        return self.category.shop
+    attributes = ArrayField(JSONField())
 
     @property
     def image_url(self):

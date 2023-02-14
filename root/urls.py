@@ -13,7 +13,7 @@ schema_view = get_schema_view(
         description="A complete shop, with payment systems, delivery services and convenient control panel with "
                     "built-in CRM and Analytics.",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        contact=openapi.Contact(email="administration@botcommerce.io"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,

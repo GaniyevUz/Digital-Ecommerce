@@ -1,29 +1,36 @@
+from django.shortcuts import get_object_or_404
 from django_filters import rest_framework as filters
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 
+from shared.mixins import CountResultMixin
+from shared.paginate import Page20NumberPagination
+from shared.permisions import IsShopOwner
+from shops.models import Shop
 from .models import Product, Category
 from .serializers import ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer
 
 
 class ProductModelViewSet(ModelViewSet):
     serializer_class = ProductModelSerializer
-    queryset = Product.objects.all()
+    pagination_class = Page20NumberPagination
     filter_backends = (filters.DjangoFilterBackend,)
-    parser_classes = (MultiPartParser,)
+    permission_classes = (IsShopOwner,)
+    # parser_classes = (MultiPartParser,)
     # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(category__shop=shop)
-        return qs
+        return get_object_or_404(Shop, pk=self.kwargs.get('shop')).products
 
 
-class CategoryModelViewSet(ModelViewSet):
+class CategoryModelViewSet(ModelViewSet, CountResultMixin):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
+
+    def list(self, request, *args, **kwargs):
+        return self.count_result_list(request, *args, **kwargs)
 
     def get_queryset(self):
         qs = super().get_queryset()

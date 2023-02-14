@@ -1,4 +1,6 @@
-from rest_framework.permissions import BasePermission, IsAdminUser, SAFE_METHODS, DjangoModelPermissionsOrAnonReadOnly
+from rest_framework.permissions import BasePermission, SAFE_METHODS
+
+from shops.models import Shop
 
 
 class IsAuthenticatedOwner(BasePermission):
@@ -7,8 +9,6 @@ class IsAuthenticatedOwner(BasePermission):
         return bool(request.user and request.user.is_authenticated)
 
     def has_object_permission(self, request, view, obj):
-        # OOP
-        # 4 +  object, class
         if hasattr(obj, 'user') and request.user == obj.user:
             return True
         return False
@@ -22,6 +22,9 @@ class IsAdminOrReadOnly(BasePermission):
 
 
 class IsShopOwner(BasePermission):
+    def has_permission(self, request, view):
+        shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('pk'))
+        return self.has_object_permission(request, view, shop)
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user and request.user == obj.user:
