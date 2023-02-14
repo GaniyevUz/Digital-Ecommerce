@@ -1,0 +1,35 @@
+# Version of docker-compose to use
+version: "3.9"
+
+services:
+  app: # This is the service for the Django application
+    build:
+      context: . # Sets the directory containing a Dockerfile .
+
+    # Maps port on the local machine to port on Docker image
+    ports:
+      - "8000:8000"
+
+    environment:
+      # The environment variable credentials that is needed
+      # in django settings for Postgres to work.
+      - DB_HOST=db_postgres
+      - DB_NAME=bot_commerce
+      - DB_USER=postgres
+      - DB_PASS=1
+    depends_on:
+      - db_postgres
+  #        docker run --name p5_db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=1 -d -p 5432:5432 postgres:alpine
+
+  db_postgres:
+    image: postgres:15-alpine # pulling Postgres image from Docker hub
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      # credentials required by postgres image
+      - POSTGRES_DB=bot_commerce
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1
+
+volumes:
+  postgres_data:
