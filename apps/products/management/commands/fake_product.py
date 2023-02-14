@@ -1,11 +1,11 @@
 from itertools import cycle
-from random import randint, sample
+from random import sample
 
 from django.core.management import BaseCommand
 from faker import Faker
 from model_bakery import baker
 
-from products.models import Category, Product
+from products.models import Category
 from shops.models import Shop
 from users.models import User
 

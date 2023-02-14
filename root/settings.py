@@ -1,11 +1,9 @@
 import os
 import sys
 from datetime import timedelta
-from pathlib import Path
 
 import sentry_sdk
 from dotenv.main import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -237,7 +235,7 @@ EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_USE_TLS = True
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', default='redis://localhost:6380')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

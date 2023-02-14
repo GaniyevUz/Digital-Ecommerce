@@ -1,12 +1,11 @@
-from django.db import IntegrityError
-from psycopg2.errorcodes import UNIQUE_VIOLATION
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
 from shared.permisions import IsAdminOrReadOnly
 from shared.validators import telegram_bot
-from shops.models import Currency, Category, TelegramBot, PaymentProvider, Shop
+from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
 
 

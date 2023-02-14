@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
-from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField, IntegerField, JSONField, BooleanField, \
+from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField,\
+    IntegerField, JSONField, BooleanField, \
     DateField, OneToOneField
 
 

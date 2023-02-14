@@ -1,7 +1,6 @@
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import serializers, validators, status
-from rest_framework.response import Response
+from rest_framework import serializers, validators
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.models import Client
