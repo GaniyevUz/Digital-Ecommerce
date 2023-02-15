@@ -1,12 +1,11 @@
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, get_object_or_404
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from orders.models import Order
-from orders.serializers import OrderModelSerializer
 from shared.permisions import IsAuthenticatedOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
@@ -22,18 +21,13 @@ class ShopModelViewSet(ModelViewSet):
         self.queryset = self.queryset.filter(user=request.user)
         return super().list(request, *args, **kwargs)
 
-    @action(['GET'], True, 'order', 'order', serializer_class=OrderModelSerializer)
-    def get_orders(self, request, pk, *args, **kwargs):
-        shop = get_object_or_404(Shop, pk=pk)
-        self.queryset = shop.orders
-        return super().list(request, *args, **kwargs)
-
     @action(['GET'], False)
     def shop_config(self, request):
         langs = (("🇺🇿", "O'zbekcha", "uz"), ("🇷🇺", "Русский", "ru"), ("🇺🇸", "English", "en"))
         data = {"languages": [{'icon': i, 'title': t, 'code': c} for i, t, c in langs]}
         return Response(data)
 
+    # Todo: Muhammad bro classga olib chiqib ketin
     @action(['GET'], True, 'stat/all', 'stat_all')
     def main_stat(self, request, pk=None):
         orders = Order.objects.filter(items__order__shop_id=pk).annotate(total_items=Count('items'))

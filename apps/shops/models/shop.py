@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from multiselectfield import MultiSelectField
 
@@ -29,7 +30,7 @@ class Shop(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     starts_at = models.DateTimeField(null=True, blank=True)
     ends_at = models.DateTimeField(null=True, blank=True)
-    # plan = ArrayField(models.JSONField())
+    current_plans = ArrayField(models.JSONField(), null=True)
     lon = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     lat = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     delivery_terms = models.TextField(null=True, blank=True)
@@ -49,3 +50,7 @@ class Shop(models.Model):
     @property
     def products(self):
         return self.product_set.all()
+
+    @property
+    def clients(self):
+        return self.client_set.all()

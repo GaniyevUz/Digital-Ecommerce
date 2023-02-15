@@ -7,19 +7,18 @@ from shared.model_configs import category_directory_path, product_directory_path
 
 class Category(MPTTModel):
     class Translate:
-        @staticmethod
-        def default_translate():
+        def __call__(self, *args, **kwargs):
             return {'en': '', 'ru': '', 'uz': ''}
 
-    name = models.JSONField(default=Translate().default_translate)
-    description = models.JSONField(default=Translate().default_translate)
+    name = models.JSONField(default=Translate)
+    description = models.JSONField(default=Translate)
     parent = TreeForeignKey('self', models.CASCADE, 'children', null=True, blank=True)
     emoji = models.CharField(max_length=50, null=True, blank=True)
     image = models.ImageField(upload_to=category_directory_path, null=True, blank=True)
     shop = models.ForeignKey('shops.Shop', models.CASCADE, null=True, blank=True)
 
     def __str__(self):
-        return self.name.get('en', '')
+        return self.name.get('en', '') if hasattr(self.name, 'get') else self.name
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -39,7 +38,7 @@ class Product(models.Model):
     shop = models.ForeignKey('shops.Shop', models.CASCADE)
     category = models.ForeignKey('products.Category', models.CASCADE)
     image = models.ImageField(upload_to=product_directory_path, null=True, blank=True)
-    price = models.IntegerField()
+    price = models.CharField(max_length=255)
     in_availability = models.BooleanField(default=True)
     length = models.CharField(max_length=50, null=True, blank=True)
     width = models.CharField(max_length=50, null=True, blank=True)

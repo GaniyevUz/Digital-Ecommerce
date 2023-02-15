@@ -23,7 +23,7 @@ class IsAdminOrReadOnly(BasePermission):
 
 class IsShopOwner(BasePermission):
     def has_permission(self, request, view):
-        shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('pk'))
+        shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('shop'))
         return self.has_object_permission(request, view, shop)
 
     def has_object_permission(self, request, view, obj):

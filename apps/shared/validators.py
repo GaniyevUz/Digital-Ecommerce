@@ -17,6 +17,8 @@ class EmailValidator:
             return False
 
 
+# TODO: Jahongir bro Validators must be class based
+# https://www.django-rest-framework.org/api-guide/validators/#class-based
 def telegram_bot(token: str, **kwargs):
     if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
         return Response({'status': 'Invalid shop'}, status=status.HTTP_400_BAD_REQUEST)

@@ -18,7 +18,7 @@ class ProductModelViewSet(ModelViewSet):
     filterset_fields = ('name', 'price')
 
     def get_queryset(self):
-        shop = get_object_or_404(Shop, pk=self.kwargs.get('pk'))
+        shop = get_object_or_404(Shop, pk=self.kwargs.get('shop'))
         return shop.products
 
 
@@ -28,7 +28,7 @@ class CategoryModelViewSet(ModelViewSet, ShopRequiredMixin):
 
     def get_queryset(self):
         qs = super().get_queryset()
-        if shop := self.kwargs.get('pk'):
+        if shop := self.kwargs.get('shop'):
             return qs.filter(shop=shop)
         return qs
 
