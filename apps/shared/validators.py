@@ -17,24 +17,28 @@ class EmailValidator:
             return False
 
 
-# TODO: Jahongir bro Validators must be class based
-# https://www.django-rest-framework.org/api-guide/validators/#class-based
-def telegram_bot(token: str, **kwargs):
-    if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
-        return Response({'status': 'Invalid shop'}, status=status.HTTP_400_BAD_REQUEST)
-    get_me_url = f'https://api.telegram.org/bot{token}/getMe'
-    response = requests.get(get_me_url).json()
-    is_valid = response.get('ok')
-    data = {}
-    if is_valid:
-        data['token'] = token
-        data['username'] = response.get('result')['username']
-        data['shop'] = Shop.objects.get(pk=kwargs['pk'])
-        if TelegramBot.objects.filter(token=token).exists():
-            return {
-                'data': {
-                    'token': ['A bot with this token has already been registered in the system']
-                },
-                'status': status.HTTP_422_UNPROCESSABLE_ENTITY}
-        return data
-    return {'data': response, 'status': response.get('error_code')}
+class TelegramBotValidator:
+
+    # def __init__(self, token, **kwargs) -> None:
+    #     self.token = token
+    #     self.kwargs = kwargs
+
+    def __call__(self, token, **kwargs):
+        if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
+            return Response({'status': 'Invalid shop'}, status=status.HTTP_400_BAD_REQUEST)
+        get_me_url = f'https://api.telegram.org/bot{token}/getMe'
+        response = requests.get(get_me_url).json()
+        is_valid = response.get('ok')
+        data = {}
+        if is_valid:
+            data['token'] = token
+            data['username'] = response.get('result')['username']
+            data['shop'] = Shop.objects.get(pk=kwargs['pk'])
+            if TelegramBot.objects.filter(token=token).exists():
+                return {
+                    'data': {
+                        'token': ['A bot with this token has already been registered in the system']
+                    },
+                    'status': status.HTTP_422_UNPROCESSABLE_ENTITY}
+            return data
+        return {'data': response, 'status': response.get('error_code')}

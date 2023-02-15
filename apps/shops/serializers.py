@@ -3,7 +3,7 @@ from rest_framework.fields import (HiddenField, CurrentUserDefault, MultipleChoi
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shared.validators import telegram_bot
+from shared.validators import TelegramBotValidator
 from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot
 
 
@@ -67,8 +67,3 @@ class TelegramBotModelSerializer(ModelSerializer):
     class Meta:
         model = TelegramBot
         fields = '__all__'
-
-    def update(self, instance, validated_data):
-        if token := validated_data.get('token'):
-            telegram_bot(token)
-        return super().update(instance, validated_data)
