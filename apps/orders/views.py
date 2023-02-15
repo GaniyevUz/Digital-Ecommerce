@@ -9,7 +9,6 @@ from shops.models import Shop
 class OrderModelViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderModelSerializer
-    pagination_class = None
 
     def list(self, request, shop, *args, **kwargs):
         shop = get_object_or_404(Shop, pk=shop)

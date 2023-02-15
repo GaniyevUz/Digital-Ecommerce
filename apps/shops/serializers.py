@@ -3,7 +3,6 @@ from rest_framework.fields import (HiddenField, CurrentUserDefault, MultipleChoi
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shared.validators import TelegramBotValidator
 from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot
 
 

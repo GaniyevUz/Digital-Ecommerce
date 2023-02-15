@@ -10,3 +10,13 @@ class CustomPageNumberPagination(PageNumberPagination):
             'count': self.page.paginator.count,
             'results': data
         })
+
+
+class CountResultPaginate(PageNumberPagination):
+    page_size = 100
+
+    def get_paginated_response(self, data):
+        return Response({
+            'count': self.page.paginator.count,
+            'results': data
+        })

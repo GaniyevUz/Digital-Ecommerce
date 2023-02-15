@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from orders.models import Order
+from shared.paginate import CountResultPaginate
 from shared.permisions import IsAuthenticatedOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
@@ -16,6 +17,7 @@ class ShopModelViewSet(ModelViewSet):
     serializer_class = ShopSerializer
     permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
+    pagination_class = CountResultPaginate
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)
