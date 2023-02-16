@@ -42,9 +42,3 @@ class CategoryModelViewSet(ModelViewSet, ShopRequiredMixin):
         if self.action == 'list':
             return CategoryListSerializer
         return super().get_serializer_class()
-
-    @action(['POST'], True)
-    def move(self, request, pk):
-        category = self.get_queryset().get(pk=pk)
-        category.move_to()
-        return Response({'position': 3})
