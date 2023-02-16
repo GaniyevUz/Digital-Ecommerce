@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
 from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from shared.mixins import ShopRequiredMixin
@@ -14,6 +15,8 @@ class ProductModelViewSet(ModelViewSet):
     parser_classes = (MultiPartParser,)
     # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')
+
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     def get_queryset(self):
         qs = super().get_queryset()
