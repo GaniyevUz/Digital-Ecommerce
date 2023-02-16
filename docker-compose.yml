@@ -5,7 +5,7 @@ services:
     build: .
     command: gunicorn root.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/project
+      - .:/project/
       - static_volume:/home/project/static/
       - media_volume:/home/project/media/
     expose:
@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=1
       - POSTGRES_DB=bot_commerce
   nginx:
-    build: ./apps/nginx
+    build: ./apps/nginx/
     volumes:
       - static_volume:/home/project/static/
       - media_volume:/home/project/media/

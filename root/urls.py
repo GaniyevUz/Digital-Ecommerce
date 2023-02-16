@@ -13,7 +13,7 @@ schema_view = get_schema_view(
         description="A complete shop, with payment systems, delivery services and convenient control panel with "
                     "built-in CRM and Analytics.",
         terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@snippets.local"),
+        contact=openapi.Contact(email="administration@botcommerce.io"),
         license=openapi.License(name="BSD License"),
     ),
     public=True,
@@ -27,7 +27,10 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
+
     urlpatterns += [
         path('admin/', admin.site.urls),
+        path('__debug__/', include(debug_toolbar.urls)),
         path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     ]

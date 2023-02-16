@@ -1,11 +1,7 @@
 import os
 import sys
 from datetime import timedelta
-from pathlib import Path
-
-import sentry_sdk
 from dotenv.main import load_dotenv
-from sentry_sdk.integrations.django import DjangoIntegration
 
 load_dotenv()
 
@@ -107,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
@@ -134,7 +130,7 @@ REST_FRAMEWORK = {
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
-    )
+    ),
 }
 
 SWAGGER_SETTINGS = {
@@ -220,7 +216,8 @@ JAZZMIN_SETTINGS = {
     "changeform_format_overrides": {"users.User": "collapsible", "auth.group": "vertical_tabs"},
     "language_chooser": False,
 }
-
+# import sentry_sdk
+#
 # sentry_sdk.init(
 #     dsn=os.getenv('SENTRY_SDK_URL'),
 #     integrations=[
@@ -229,13 +226,14 @@ JAZZMIN_SETTINGS = {
 #     traces_sample_rate=1.0,
 #     send_default_pii=True
 # )
+
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_USE_TLS = True
 
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', default='redis://localhost:6379')
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL', default='redis://localhost:6380')
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'

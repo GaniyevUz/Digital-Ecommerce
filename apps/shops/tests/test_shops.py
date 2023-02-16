@@ -7,6 +7,7 @@ from faker import Faker
 from rest_framework.reverse import reverse
 
 from shops.models import Shop, Category, Currency
+from shops.serializers import ShopSerializer
 from users.models import User
 
 
@@ -59,12 +60,23 @@ class TestShopAPIView:
         if token := response.data.get('access'):
             return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
 
+    def test_shop_model(self, create_shop_model):
+        shop = create_shop_model
+        assert str(shop) == shop.name
+        assert shop.categories.count() == shop.category_set.count()
+        assert shop.clients.count() == shop.client_set.count()
+        assert shop.products.count() == shop.product_set.count()
+        assert shop.orders.count() == shop.order_set.count()
+
     def test_get_shops_api(self, client: Client, create_shop_model):
         headers = self.auth_header(client)
         shop_url = reverse('v1:shops:shop-list')
         response = client.get(shop_url, **headers)
         assert response.status_code == 200
         assert response.data.get('count') == 1
+        shop_config = reverse('v1:shops:shop-shop-config')
+        response = client.get(shop_config, **headers)
+        assert response.status_code == 200
 
     def test_create_shops_api(self, client: Client, create_shop_model):
         headers = self.auth_header(client)
@@ -98,33 +110,32 @@ class TestShopAPIView:
         assert response.status_code == 204
         assert Shop.objects.count() == 0
 
-    # def test_serializer_response(self, create_shop_model):
-    #     serializer = ShopSerializer(create_shop_model)
-    #     _ = serializer.data
-    #     assert 'id' in _
-    #     assert 'name' in _
-    #     assert 'shop_category_id' in _
-    #     assert 'shop_currency_id' in _
-    #     assert 'languages' in _
-    #     assert 'shop_orders_count' in _
-    #     assert 'shop_clients_count' in _
-    #     assert 'status' in _
-    #     assert 'shop_status_readable' in _
-    #     assert 'shop_is_seen_orders_count' in _
-    #     assert 'about_us' in _
-    #     assert 'delivery_price' in _
-    #     assert 'delivery_price_per_km' in _
-    #     assert 'minimum_delivery_price' in _
-    #     assert 'free_delivery' in _
-    #     assert 'about_us_image' in _
-    #     assert 'expires_at' in _
-    #     assert 'delivery_types' in _
-    #     assert 'has_terminal' in _
-    #     assert 'created_at' in _
-    #     assert 'starts_at' in _
-    #     assert 'ends_at' in _
-    #     assert 'current_plans' in _
-    #     assert 'delivery_terms' in _
-    #     assert 'shop_category' in _
-    #     assert 'lon' in _
-    #     assert 'lat' in _
+    def test_serializer_response(self, create_shop_model):
+        serializer = ShopSerializer(create_shop_model)
+        _ = serializer.data
+        assert 'id' in _
+        assert 'name' in _
+        assert 'shop_category' in _
+        assert 'shop_currency' in _
+        assert 'languages' in _
+        assert 'shop_orders_count' in _
+        assert 'shop_clients_count' in _
+        assert 'status' in _
+        assert 'shop_status_readable' in _
+        assert 'about_us' in _
+        assert 'delivery_price' in _
+        assert 'delivery_price_per_km' in _
+        assert 'minimum_delivery_price' in _
+        assert 'free_delivery' in _
+        assert 'about_us_image' in _
+        assert 'expires_at' in _
+        assert 'delivery_types' in _
+        assert 'has_terminal' in _
+        assert 'created_at' in _
+        assert 'starts_at' in _
+        assert 'ends_at' in _
+        assert 'current_plans' in _
+        assert 'delivery_terms' in _
+        assert 'shop_category' in _
+        assert 'lon' in _
+        assert 'lat' in _

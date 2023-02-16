@@ -1,6 +1,3 @@
-from django.db.models import Model, DateTimeField
-
-
 def category_directory_path(instance, filename):
     return f'shop/{instance.shop.id}categories/{filename}'
 

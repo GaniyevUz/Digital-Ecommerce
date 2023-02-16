@@ -1,18 +1,38 @@
-from rest_framework.fields import HiddenField, CurrentUserDefault, MultipleChoiceField, CharField
+from rest_framework.fields import (HiddenField, CurrentUserDefault, MultipleChoiceField, CharField,
+                                   SerializerMethodField)
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shared.validators import telegram_bot
 from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot
 
 
 class ShopSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
     languages = MultipleChoiceField(choices=Shop.Languages.choices)
+    shop_orders_count = SerializerMethodField()
+    shop_clients_count = SerializerMethodField()
+    status = SerializerMethodField()
+    shop_status_readable = SerializerMethodField()
 
     class Meta:
         model = Shop
         fields = '__all__'
+
+    @staticmethod
+    def get_shop_orders_count(obj: Shop):
+        return obj.orders.count()
+
+    @staticmethod
+    def get_shop_clients_count(obj: Shop):
+        return obj.clients.count()
+
+    @staticmethod
+    def get_status(obj: Shop):
+        return ('inactive', 'active')[obj.is_active]
+
+    @staticmethod
+    def get_shop_status_readable(obj: Shop):
+        return ('Inactive', 'Active')[obj.is_active]
 
 
 class CategorySerializer(ModelSerializer):
@@ -46,11 +66,3 @@ class TelegramBotModelSerializer(ModelSerializer):
     class Meta:
         model = TelegramBot
         fields = '__all__'
-
-    def validate(self, attrs):
-        return super().validate(attrs)
-
-    def update(self, instance, validated_data):
-        if token := validated_data.get('token'):
-            telegram_bot(token)
-        return super().update(instance, validated_data)
