@@ -1,4 +1,5 @@
 from django.db import models
+from parler.models import TranslatableModel
 
 from shops.models import Shop
 
