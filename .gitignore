@@ -12,6 +12,7 @@
 # AWS User-specific
 .idea/**/aws.xml
 poetry.lock
+
 # Generated files
 .idea/**/contentModel.xml
 

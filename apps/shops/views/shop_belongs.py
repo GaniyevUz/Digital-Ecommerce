@@ -1,8 +1,13 @@
+from rest_framework import status
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-from shared.permisions import IsAdminOrReadOnly
-from shops.models import Currency, Category
-from shops.models.shop_belongs import PaymentProvider
-from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers
+
+from shared.paginate import CountResultPaginate
+from shared.permisions import IsAdminOrReadOnly, IsShopOwner
+from shared.validators import TelegramBotValidator
+from shops.models import Currency, Category, TelegramBot, PaymentProvider
+from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
 
 
 class CategoryModelViewSet(ModelViewSet):
@@ -20,7 +25,15 @@ class CurrencyModelViewSet(ModelViewSet):
 class PaymentProvidersViewSet(ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsShopOwner,)
+    pagination_class = CountResultPaginate
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if shop := self.kwargs.get('shop'):
+            return qs.filter(shop=shop)
+        return qs
+
 
 # class ShopOrdersRetrieveAPIView(RetrieveAPIView):
 #     serializer_class = OrderSerializer
@@ -30,3 +43,22 @@ class PaymentProvidersViewSet(ModelViewSet):
 #     def get_queryset(self):
 #         shop: Shop = self.get_object()
 #         return shop.order_set.all()
+
+class TelegramBotModelViewSet(ModelViewSet):
+    serializer_class = TelegramBotModelSerializer
+    queryset = TelegramBot.objects.all()
+    permission_classes = AllowAny,
+
+    def update(self, request, *args, **kwargs):
+        token = request.data.get('token')
+        validate = TelegramBotValidator()
+        bot = validate(token, **kwargs)
+        if bot.get('data'):
+            return Response(bot['data'], status=bot['status'])
+        shop = bot['shop']
+        bot, _ = TelegramBot.objects.update_or_create(shop=shop, defaults=bot)
+        serializer = TelegramBotModelSerializer(bot)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)

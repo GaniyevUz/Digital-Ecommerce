@@ -1,9 +1,11 @@
 from django.contrib.postgres.fields import ArrayField
-from django.db import models
+from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField,\
+    IntegerField, JSONField, BooleanField, \
+    DateField, OneToOneField
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=255)
+class Category(Model):
+    name = CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -13,8 +15,8 @@ class Category(models.Model):
         verbose_name_plural = 'Shop Categories'
 
 
-class Currency(models.Model):
-    name = models.CharField(max_length=10)
+class Currency(Model):
+    name = CharField(max_length=10)
 
     def __str__(self):
         return self.name
@@ -24,11 +26,31 @@ class Currency(models.Model):
         verbose_name_plural = 'Shop Currencies'
 
 
-class PaymentProvider(models.Model):
-    code = models.CharField(max_length=255)
-    title = models.CharField(max_length=255)
-    image = models.ImageField(upload_to='payment_providers/', null=True, blank=True)
-    type = models.CharField(max_length=255)
-    status = models.IntegerField(null=True, blank=True)
-    fields = ArrayField(models.JSONField())
-    shop = models.ForeignKey('shops.Shop', on_delete=models.CASCADE)
+class PaymentProvider(Model):
+    code = CharField(max_length=255)
+    title = CharField(max_length=255)
+    image = ImageField(upload_to='payment_providers/', null=True, blank=True)
+    type = CharField(max_length=255)
+    status = IntegerField(null=True, blank=True)
+    fields = ArrayField(JSONField())
+    shop = ForeignKey('shops.Shop', CASCADE)
+
+
+class TelegramBot(Model):
+    token = CharField(max_length=255, unique=True)
+    username = CharField(max_length=255, unique=True)
+    shop = ForeignKey('shops.Shop', CASCADE)
+
+    def __str__(self):
+        return self.username
+
+
+class Domain(Model):
+    name = CharField(max_length=255, unique=True)
+    has_ssl = BooleanField(default=True)
+    expires_at = DateField(null=True, blank=True)
+    is_sub_domain = BooleanField(default=True)
+    shop = OneToOneField('shops.Shop', CASCADE)
+
+    def __str__(self):
+        return self.name

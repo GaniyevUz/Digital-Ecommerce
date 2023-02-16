@@ -1,7 +1,6 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
 
-from shared.tokens import one_time_token
 from users.models import User
 
 

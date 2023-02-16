@@ -1,5 +1,5 @@
 from django.contrib.auth.hashers import check_password
-from drf_yasg import openapi, utils
+from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
@@ -11,17 +11,12 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from ecommerce.models import Client
 from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer, \
     CreateClientModelSerializer
+from shared.mixins import ShopRequiredMixin
 
 
-class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, ShopRequiredMixin):
     serializer_class = ClientModelSerializer
     queryset = Client.objects.all()
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(shop=shop)
-        return qs
 
     def get_object(self):
         if self.request.user.is_anonymous or self.request.user.is_superuser:
@@ -29,17 +24,11 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return self.request.user
 
 
-class ClientModelViewSet(ModelViewSet):
+class ClientModelViewSet(ModelViewSet, ShopRequiredMixin):
     serializer_class = ClientModelSerializer
     queryset = Client.objects.all()
     permission_classes = AllowAny,
     email = openapi.Parameter('email', openapi.IN_QUERY, "check email address", True, type=openapi.TYPE_STRING)
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(shop=shop)
-        return qs
 
     @swagger_auto_schema(manual_parameters=[email])
     def get(self, request, *args, **kwargs):
@@ -66,12 +55,6 @@ class ClientModelViewSet(ModelViewSet):
         return super().get_serializer_class()
 
 
-class CreateClientAPIView(CreateAPIView):
+class CreateClientAPIView(CreateAPIView, ShopRequiredMixin):
     serializer_class = CreateClientModelSerializer
     permission_classes = AllowAny,
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(shop=shop)
-        return qs

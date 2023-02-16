@@ -1,29 +1,36 @@
 from django_filters import rest_framework as filters
-from rest_framework.parsers import MultiPartParser
+from rest_framework.decorators import action
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Product, Category
+from shared.mixins import ShopRequiredMixin
+from shared.paginate import CustomPageNumberPagination
+from shared.permisions import IsShopOwner
+from shops.models import Shop
+from .models import Category
 from .serializers import ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer
 
 
 class ProductModelViewSet(ModelViewSet):
     serializer_class = ProductModelSerializer
-    queryset = Product.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
-    parser_classes = (MultiPartParser,)
+    permission_classes = (IsShopOwner,)
+    # parser_classes = (MultiPartParser,)
     # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')
+    pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(category__shop=shop)
-        return qs
+        shop = get_object_or_404(Shop, pk=self.kwargs.get('shop'))
+        return shop.products
 
 
-class CategoryModelViewSet(ModelViewSet):
+class CategoryModelViewSet(ModelViewSet, ShopRequiredMixin):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = IsShopOwner,
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -35,3 +42,9 @@ class CategoryModelViewSet(ModelViewSet):
         if self.action == 'list':
             return CategoryListSerializer
         return super().get_serializer_class()
+
+    @action(['POST'], True)
+    def move(self, request, pk):
+        category = self.get_queryset().get(pk=pk)
+        category.move_to()
+        return Response({'position': 3})

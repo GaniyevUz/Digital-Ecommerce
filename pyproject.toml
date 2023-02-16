@@ -2,7 +2,7 @@
 name = "botcommerce"
 version = "0.1.0"
 description = ""
-authors = ["jakhongir <ganiyevuzb@gmail.com>"]
+authors = ["habibullo <bubbless7456@gmail.com>", "jakhongir <ganiyevuzb@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -29,6 +29,9 @@ model-bakery = "^1.10.1"
 pytest-cov = "^4.0.0"
 django-parler-rest = "^2.2"
 celery = "^5.2.7"
+django-debug-toolbar = "^3.8.1"
+flake8 = "^6.0.0"
+mypy = "^1.0.0"
 
 
 [build-system]

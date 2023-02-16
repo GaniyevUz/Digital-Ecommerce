@@ -16,12 +16,17 @@ from users.models import User
 
 
 class Command(BaseCommand):
-    fake = Faker('en')
+    fake = Faker()
 
     @staticmethod
     def repeat(func, count, *args, **kwargs):
         for _ in range(count):
             yield func(*args, **kwargs)
+
+    @staticmethod
+    def t_repeat(func, count, *args, **kwargs):
+        for _ in range(count):
+            yield {'en': func(*args, **kwargs), 'ru': '', 'uz': ''}
 
     @staticmethod
     def fake_phone():
@@ -35,7 +40,8 @@ class Command(BaseCommand):
         parser.add_argument('-cur', '--shop_currency', type=int, help='Define a fake currencies number')
         parser.add_argument('-sh', '--shop', type=int, help='Define a fake shops number')
         parser.add_argument('-p', '--product', type=int, help='Define a products number')
-        parser.add_argument('-p_c', '--product_category', type=int, help='Define a product categories number')
+        parser.add_argument('-p_c', '--product_category', type=int,
+                            help='Define a product categories number')
         parser.add_argument('-o', '--order', type=int, help='Define a orders number')
 
     def handle(self, *args, **options):
@@ -66,33 +72,33 @@ class Command(BaseCommand):
     def fake_users(self, count):
         baker.make(
             'users.User',
-            username=self.repeat(self.fake.unique.user_name, count),
+            username=self.repeat(self.fake.user_name, count),
             password=make_password('1'),
-            first_name=self.repeat(self.fake.unique.first_name, count),
-            last_name=self.repeat(self.fake.unique.last_name, count),
-            email=self.repeat(self.fake.unique.email, count),
-            invitation_token=self.repeat(self.fake.unique.password, count, length=10, special_chars=False),
+            first_name=self.repeat(self.fake.first_name, count),
+            last_name=self.repeat(self.fake.last_name, count),
+            email=self.repeat(self.fake.email, count),
+            invitation_token=self.repeat(self.fake.password, count, length=10, special_chars=False),
             _quantity=count
         )
 
     def fake_shop_categories(self, count):
         baker.make(
             'shops.Category',
-            name=self.repeat(self.fake.unique.first_name, count),
+            name=self.repeat(self.fake.first_name, count),
             _quantity=count
         )
 
     def fake_shop_currencies(self, count):
         baker.make(
             'shops.Currency',
-            name=self.repeat(self.fake.unique.currency_code, count),
+            name=self.repeat(self.fake.currency_code, count),
             _quantity=count
         )
 
     def fake_shops(self, count):
         baker.make(
             'shops.Shop',
-            name=self.repeat(self.fake.unique.company, count),
+            name=self.repeat(self.fake.company, count),
             languages=cycle(choices(['uz', 'en', 'ru'], k=randint(1, 3)) for _ in range(count)),
             delivery_types=cycle(choices(['pickup', 'delivery'], k=randint(1, 2)) for _ in range(count)),
             about_us=self.repeat(self.fake.sentence, count),
@@ -109,8 +115,8 @@ class Command(BaseCommand):
         shops = Shop.objects.all()
         baker.make(
             'products.Category',
-            name=cycle(self.fake.sentences(nb=100)),
-            description=cycle(self.fake.sentences(nb=310050)),
+            name=self.t_repeat(self.fake.first_name, count),
+            description=self.t_repeat(self.fake.sentence, count),
             emoji=cycle(emoji),
             # image='blogs/default.jpg',
             shop=cycle(shops),
@@ -118,12 +124,14 @@ class Command(BaseCommand):
         )
 
     def fake_product(self, count):
+        shops = Shop.objects.all()
         categories = ProductCategory.objects.all()
 
         baker.make(
             'products.Product',
-            name=self.repeat(self.fake.unique.first_name, count),
-            description=cycle(self.fake.sentences(nb=310050)),
+            name=self.t_repeat(self.fake.first_name, count),
+            description=self.t_repeat(self.fake.sentence, count),
+            shop=cycle(shops),
             category=cycle(categories),
             # image='blogs/default.jpg',
             price=self.repeat(self.fake.random_number, count, digits=6),
@@ -136,8 +144,8 @@ class Command(BaseCommand):
         # delivery_types = ('pickup', 'delivery')
         baker.make(
             'orders.Order',
-            first_name=self.repeat(self.fake.unique.first_name, count),
-            last_name=self.repeat(self.fake.unique.last_name, count),
+            first_name=self.repeat(self.fake.first_name, count),
+            last_name=self.repeat(self.fake.last_name, count),
             phone=self.repeat(self.fake_phone, count),
             delivery_type=cycle(choice(['pickup', 'delivery']) for _ in range(count)),
             status=cycle(choice(Order.Status.choices)[0] for _ in range(count)),
