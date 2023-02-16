@@ -4,8 +4,8 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from .tokens import one_time_token
 from root.settings import EMAIL_HOST_USER
+from .tokens import one_time_token
 
 
 @shared_task
