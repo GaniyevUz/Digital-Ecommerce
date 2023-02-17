@@ -1,9 +1,11 @@
-from django.db import models
+from django.db.models import Model, TextChoices, CharField, ForeignKey, TextField, CASCADE, BooleanField, \
+    ManyToManyField, DateTimeField
+
 from shops.models import Shop
 
 
-class Order(models.Model):
-    class Status(models.TextChoices):
+class Order(Model):
+    class Status(TextChoices):
         IN_PROCESS = 'in_process', 'In Process'
         READY = 'ready', 'Ready'
         PICKED_UP = 'picked_ip', 'Picked Up'
@@ -11,19 +13,19 @@ class Order(models.Model):
         DELIVERED = 'delivered', 'Delivered'
         EXPIRED = 'expired', 'Expired'
 
-    class Payment(models.TextChoices):
+    class Payment(TextChoices):
         CASH = 'cash', 'Cash'
         CARD = 'card', 'Card'
 
-    first_name = models.CharField(max_length=225)
-    last_name = models.CharField(max_length=225, null=True, blank=True)
-    items = models.ManyToManyField('products.Product')
-    phone = models.CharField(max_length=225)
-    delivery_type = models.CharField(max_length=225, choices=Shop.Delivery.choices)
-    status = models.CharField(max_length=225, choices=Status.choices, default='in_process')
-    payment_type = models.CharField(max_length=225, default='cash', choices=Payment.choices)
-    note = models.TextField(null=True, blank=True)
-    promo_code = models.CharField(max_length=225, null=True, blank=True)
-    paid = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    shop = models.ForeignKey('shops.Shop', models.CASCADE)
+    first_name = CharField(max_length=225)
+    last_name = CharField(max_length=225, null=True, blank=True)
+    items = ManyToManyField('products.Product')
+    phone = CharField(max_length=225)
+    delivery_type = CharField(max_length=225, choices=Shop.Delivery.choices)
+    status = CharField(max_length=225, choices=Status.choices, default='in_process')
+    payment_type = CharField(max_length=225, default='cash', choices=Payment.choices)
+    note = TextField(null=True, blank=True)
+    promo_code = CharField(max_length=225, null=True, blank=True)
+    paid = BooleanField(default=False)
+    created_at = DateTimeField(auto_now_add=True)
+    shop = ForeignKey('shops.Shop', CASCADE)
