@@ -54,3 +54,7 @@ class Shop(models.Model):
     @property
     def clients(self):
         return self.client_set.all()
+
+    @property
+    def payment_providers(self):
+        return self.paymentprovider_set.all()

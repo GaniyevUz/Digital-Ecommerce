@@ -31,6 +31,7 @@ django-parler-rest = "^2.2"
 celery = "^5.2.7"
 django-debug-toolbar = "^3.8.1"
 flake8 = "^6.0.0"
+mypy = "^1.0.0"
 
 
 [build-system]

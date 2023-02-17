@@ -1,4 +1,4 @@
-from random import choices
+from random import choice
 
 import pytest
 from django.contrib.auth.hashers import make_password
@@ -13,15 +13,14 @@ from users.models import User
 
 @pytest.mark.django_db
 class TestShopAPIView:
-    @staticmethod
-    def get_pk_from_list(values_list):
-        return choices(values_list)[0][0]
-
     fake = Faker()
 
     @pytest.fixture
     def create_default_user(self):
-        user = User.objects.create(username='default_user', password=make_password('default_pass'))
+        user = User.objects.create(
+            username='default_user',
+            password=make_password('default_pass')
+        )
         return user
 
     @pytest.fixture
@@ -29,18 +28,21 @@ class TestShopAPIView:
         for _ in range(20):
             Category.objects.create(name=self.fake.first_name())
             Currency.objects.create(name=self.fake.currency_code())
-        return Shop.objects.create(name=self.fake.name(),
-                                   shop_category_id=self.get_pk_from_list(Category.objects.values_list('pk')),
-                                   shop_currency_id=self.get_pk_from_list(Currency.objects.values_list('pk')),
-                                   user=create_default_user, languages=['uz', 'en', 'ru'],
-                                   )
+
+        shop = Shop.objects.create(
+            name=self.fake.name(),
+            shop_category_id=choice(Category.objects.values_list('pk', flat=True)),
+            shop_currency_id=choice(Currency.objects.values_list('pk', flat=True)),
+            user=create_default_user, languages=['uz', 'en', 'ru'],
+        )
+        return shop
 
     def test_create_model(self, create_shop_model):
         for _ in range(20):
             Shop.objects.create(
                 name=self.fake.name(),
-                shop_category_id=self.get_pk_from_list(Category.objects.values_list('pk')),
-                shop_currency_id=self.get_pk_from_list(Currency.objects.values_list('pk')),
+                shop_category_id=choice(Category.objects.values_list('pk', flat=True)),
+                shop_currency_id=choice(Currency.objects.values_list('pk', flat=True)),
                 languages=['uz', 'en', 'ru'],
                 user_id=1
             )
@@ -83,8 +85,8 @@ class TestShopAPIView:
         shop_url = reverse('v1:shops:shop-list')
         data = {
             'name': self.fake.name(),
-            'shop_category': self.get_pk_from_list(Category.objects.values_list('pk')),
-            'shop_currency': self.get_pk_from_list(Currency.objects.values_list('pk')),
+            'shop_category': choice(Category.objects.values_list('pk', flat=True)),
+            'shop_currency': choice(Currency.objects.values_list('pk', flat=True)),
             'languages': {'uz', 'ru'}
         }
         response = client.post(shop_url, data, **headers)
@@ -113,7 +115,7 @@ class TestShopAPIView:
     def test_serializer_response(self, create_shop_model):
         serializer = ShopSerializer(create_shop_model)
         _ = serializer.data
-        assert 'id' in _
+        assert 'id' in _  # TODO to optimize
         assert 'name' in _
         assert 'shop_category' in _
         assert 'shop_currency' in _
@@ -139,3 +141,9 @@ class TestShopAPIView:
         assert 'shop_category' in _
         assert 'lon' in _
         assert 'lat' in _
+
+    def test_get_all_orders_api(self, client, create_shop_model):  # TODO to finish
+        headers = self.auth_header(client)
+        url = reverse('v1:shops:order-list', (create_shop_model.pk,))
+        response = client.get(url, **headers)
+        assert response.status_code == 200

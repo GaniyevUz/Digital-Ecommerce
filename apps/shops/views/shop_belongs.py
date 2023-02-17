@@ -3,7 +3,9 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.permisions import IsAdminOrReadOnly
+from shared.mixins import ShopRequiredMixin
+from shared.paginate import CountResultPaginate
+from shared.permisions import IsAdminOrReadOnly, IsShopOwner
 from shared.validators import TelegramBotValidator
 from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
@@ -13,21 +15,19 @@ class CategoryModelViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
 
 
 class CurrencyModelViewSet(ModelViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
 
 
-class PaymentProvidersViewSet(ModelViewSet):
+class PaymentProvidersViewSet(ShopRequiredMixin, ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
-    permission_classes = (IsAdminOrReadOnly,)
-    pagination_class = None
+    permission_classes = (IsShopOwner,)
+    pagination_class = CountResultPaginate
 
 
 # class ShopOrdersRetrieveAPIView(RetrieveAPIView):
