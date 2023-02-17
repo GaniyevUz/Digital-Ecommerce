@@ -1,7 +1,7 @@
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 

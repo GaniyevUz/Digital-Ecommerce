@@ -1,4 +1,4 @@
-from random import choices, choice
+from random import choice
 
 import pytest
 from django.contrib.auth.hashers import make_password

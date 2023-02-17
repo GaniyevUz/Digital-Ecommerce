@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from shared.mixins import ShopRequiredMixin
 from shared.paginate import CountResultPaginate
 from shared.permisions import IsAdminOrReadOnly, IsShopOwner
 from shared.validators import TelegramBotValidator
@@ -22,17 +23,11 @@ class CurrencyModelViewSet(ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class PaymentProvidersViewSet(ModelViewSet):
+class PaymentProvidersViewSet(ShopRequiredMixin, ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsShopOwner,)
     pagination_class = CountResultPaginate
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        if shop := self.kwargs.get('shop'):
-            return qs.filter(shop=shop)
-        return qs
 
 
 # class ShopOrdersRetrieveAPIView(RetrieveAPIView):

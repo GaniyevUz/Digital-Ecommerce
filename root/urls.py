@@ -27,8 +27,6 @@ urlpatterns = [
 ]
 
 if settings.DEBUG:
-    import debug_toolbar
-
     urlpatterns += [
         path('admin/', admin.site.urls),
         path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

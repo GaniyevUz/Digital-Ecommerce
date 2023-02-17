@@ -1,6 +1,5 @@
 from rest_framework.fields import IntegerField
-from rest_framework.serializers import ModelSerializer, Serializer
-
+from rest_framework.serializers import ModelSerializer
 from products.models import Product, Category
 
 

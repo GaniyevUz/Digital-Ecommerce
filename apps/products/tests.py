@@ -45,7 +45,7 @@ class TestProductManager:
 
     @pytest.fixture
     def create_category(self, create_shop):
-        parent_category = PrCategory.objects.all()
+        # parent_category = PrCategory.objects.all()
         shop = Shop.objects.all()
         baker.make(
             'products.Category',
@@ -158,14 +158,13 @@ class TestProductModelViewSet:
     @pytest.mark.urls('products.urls')
     def test_update_product(self, rf, create_category, client: Client):
         url = reverse_lazy('product-detail', args=(1, 1))
-        token = self.auth_header(client, rf)
+        # token = self.auth_header(client, rf)
         request = rf.patch(url, content_type='application/json', data=json.dumps({'name': 'new name product'}))
-        product = Product.objects.create(name='product1',
-                                         description='description1',
-                                         category=PrCategory.objects.first(),
-                                         image=faker.image_url(),
-                                         price=5000
-                                         )
+        # product = Product.objects.create(name='product1',
+        #                                  description='description1',
+        #                                  category=PrCategory.objects.first(),
+        #                                  image=faker.image_url(),
+        #                                  price=5000
+        #                                  )
         response = ProductModelViewSet.as_view({'patch': 'partial_update'})(request).render()
         assert response.status_code == status.HTTP_403_FORBIDDEN
-
