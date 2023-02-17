@@ -45,7 +45,6 @@ class Command(BaseCommand):
         parser.add_argument('-o', '--order', type=int, help='Define a orders number')
 
     def handle(self, *args, **options):
-        os.system('make data')
         user = options.get('user')
         shop_category = options.get('shop_category')
         shop_currency = options.get('shop_currency')
