@@ -13,7 +13,6 @@ djangorestframework = "^3.14.0"
 drf-yasg = "^1.21.4"
 django-filter = "^22.1"
 djangorestframework-simplejwt = "^5.2.2"
-pytest-django = "^4.5.2"
 django-jazzmin = "^2.6.0"
 python-dotenv = "^0.21.1"
 psycopg2-binary = "^2.9.5"
@@ -32,6 +31,7 @@ celery = "^5.2.7"
 django-debug-toolbar = "^3.8.1"
 flake8 = "^6.0.0"
 mypy = "^1.0.0"
+pytest-django = "^4.5.2"
 
 
 [build-system]

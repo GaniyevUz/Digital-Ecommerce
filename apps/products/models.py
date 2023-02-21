@@ -56,3 +56,10 @@ class Product(Model):
         except (ValueError, AttributeError):
             url = ''
         return url
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if self.category.shop_id!=self.shop_id:
+            self.shop_id=self.category.shop_id
+        super().save(force_insert, force_update, using, update_fields)
+
+
