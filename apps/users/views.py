@@ -1,4 +1,5 @@
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSetMixin
 
@@ -6,7 +7,7 @@ from .models import User
 from .serializers import UserModelSerializer, CreateUserModelSerializer
 
 
-class UserUpdateDestroyAPIView(ViewSetMixin, RetrieveUpdateDestroyAPIView, CreateAPIView):
+class UserUpdateDestroyAPIView(ViewSetMixin, RetrieveUpdateDestroyAPIView):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
 
@@ -18,7 +19,8 @@ class UserUpdateDestroyAPIView(ViewSetMixin, RetrieveUpdateDestroyAPIView, Creat
         serializer = UserModelSerializer(request.user)
         return Response(serializer.data)
 
-    def get_serializer_class(self):
-        if self.action == 'create':
-            return CreateUserModelSerializer
-        return super().get_serializer_class()
+
+class UserCreateAPIView(CreateAPIView):
+    serializer_class = CreateUserModelSerializer
+    queryset = User.objects.all()
+    permission_classes = AllowAny,

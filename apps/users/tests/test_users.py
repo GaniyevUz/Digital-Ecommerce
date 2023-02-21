@@ -59,7 +59,8 @@ class TestUserAPIView:
             assert username == user.username
         assert count < User.objects.count()
 
-    def test_user_create_api(self, client):
+    def test_user_create_api(self, client, users):
+        headers = self.auth_header(client)
         url = reverse('v1:users:user')
         data = {
             'username': 'Jack123',
@@ -69,7 +70,7 @@ class TestUserAPIView:
             'first_name': 'John',
             'last_name': 'Doe'
         }
-        response = client.post(url, data=data)
+        response = client.post(url, **headers, data=data)
         assert response.status_code == 201
         assert response.json()['username'] == data['username']
 
