@@ -1,9 +1,9 @@
 import json
 from itertools import cycle
-from random import randint
+from random import randint, choice
 
 import pytest
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Permission
 from django.test import Client
 from django.urls import reverse_lazy
 from faker import Faker
@@ -12,23 +12,27 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from products.models import Category as PrCategory, Product
-from products.views import ProductModelViewSet
 from shops.models import Shop, Currency, Category as ShCategory
 from users.models import User
 
 faker = Faker()
 
 
-@pytest.mark.django_db
-class TestProductManager:
+class FixtureClass:
+    def _generate(self, cls):
+        return choice(cls.object.all())
 
     @pytest.fixture
-    def create_default_user(self):
-        user = User.objects.create(username='default_user', password=make_password('default_pass'))
+    def user(self):
+        user = User.objects.create_user(
+            username='admin', password='password'
+        )
+        for i in Permission.objects.filter(name__endswith='product'):
+            user.user_permissions.add(i)
         return user
 
     @pytest.fixture
-    def create_shop(self, create_default_user):
+    def create_shop(self, user):
         for _ in range(5):
             ShCategory.objects.create(name=faker.first_name())
             Currency.objects.create(name=faker.currency_code())
@@ -37,7 +41,7 @@ class TestProductManager:
             name=faker.company(),
             shop_category_id=cycle(ShCategory.objects.values_list('id', flat=True)),
             shop_currency_id=cycle(Currency.objects.values_list('id', flat=True)),
-            user=create_default_user,
+            user=user,
             languages=['uz', 'en'],
             _quantity=3
         )
@@ -45,15 +49,13 @@ class TestProductManager:
 
     @pytest.fixture
     def create_category(self, create_shop):
-        # parent_category = PrCategory.objects.all()
-        shop = Shop.objects.all()
+        shop = Shop.objects.values_list('pk', flat=True)
         baker.make(
             'products.Category',
             name=cycle(faker.sentences(nb=50)),
             description=cycle(faker.texts(nb_texts=5, max_nb_chars=100)),
-            shop=cycle(shop),
-            _quantity=10,
-            make_m2m=True
+            shop=cycle(Shop.objects.all()),
+            _quantity=5,
         )
         return PrCategory.objects.all()
 
@@ -72,6 +74,10 @@ class TestProductManager:
         )
         return Product.objects.all()
 
+
+@pytest.mark.django_db
+class TestProductManager(FixtureClass):
+
     def test_get_products_by_created(self, create_product):
         assert ShCategory.objects.count() == 5
         assert PrCategory.objects.count() == 10
@@ -79,35 +85,8 @@ class TestProductManager:
 
 
 @pytest.mark.django_db
-class TestProductModelViewSet:
+class TestProductModelViewSet(FixtureClass):
     client = Client()
-
-    @pytest.fixture
-    def create_category(self, admin_user):
-        ShCategory.objects.create(name='shop category')
-        Currency.objects.create(name='USD')
-
-        shop = Shop.objects.create(name='shop1',
-                                   languages=['uz', 'en'],
-                                   user=admin_user,
-                                   shop_category=ShCategory.objects.first(),
-                                   shop_currency=Currency.objects.first())
-
-        PrCategory.objects.create(
-            name=faker.sentences(nb=50),
-            description=faker.texts(nb_texts=5, max_nb_chars=100),
-            shop=shop,
-        )
-
-    @pytest.fixture
-    def create_product(self, create_category, admin_user):
-        Product.objects.create(
-            name='product1',
-            description='description1',
-            category_id=PrCategory.objects.first().id,
-            price=5000,
-        )
-        return Product.objects.first()
 
     @staticmethod
     def auth_header(client, rf):
@@ -125,46 +104,35 @@ class TestProductModelViewSet:
         return data
 
     @pytest.mark.urls('products.urls')
-    def test_list_product(self, rf):
-        request = rf.get('url')
-        response = ProductModelViewSet.as_view({'get': 'list'})(request).render()
+    def test_list_product(self, client: Client, user, create_product):
+        '''
+        This test will check 1 page with 10 details in the product class
+        '''
+        client.force_login(user)
+        url = reverse_lazy('product-list', args=(1,))
+        response = client.get(url)
+
         assert response.status_code == status.HTTP_200_OK
+        assert len(response.data.get('results', 11)) <= 10
 
     @pytest.mark.urls('products.urls')
-    def test_create_product_error(self, rf, create_category, client):
+    def test_create_product(self, user, create_product, client):
         '''
         This test will check if there are any errors you received
         while creating the product
         '''
         url = reverse_lazy('product-list', args=(1,))
-        token = self.auth_header(client, rf)
         data = {
             'name': 'product1',
             'description': 'description1',
-            'category_id': PrCategory.objects.first().id,
-            # 'image': faker.image(),
+            'category': 1,
             'price': 5000,
+            'shop': Shop.objects.first().pk,
+            'attributes': [{}]
         }
-        headers = {'HTTP_AUTHORIZATION': 'Bearer ' + token.get('access'), }
-
-        request = rf.post(url, content_type='application/json', data=json.dumps(data))
-        response = ProductModelViewSet.as_view({'post': 'create'})(request).render()
+        response = client.post(url, data)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
-        request = rf.post(url, content_type='application/json', data=json.dumps(data), **headers)
-        response = ProductModelViewSet.as_view({'post': 'create'})(request).render()
-        print()
-
-    @pytest.mark.urls('products.urls')
-    def test_update_product(self, rf, create_category, client: Client):
-        url = reverse_lazy('product-detail', args=(1, 1))
-        # token = self.auth_header(client, rf)
-        request = rf.patch(url, content_type='application/json', data=json.dumps({'name': 'new name product'}))
-        # product = Product.objects.create(name='product1',
-        #                                  description='description1',
-        #                                  category=PrCategory.objects.first(),
-        #                                  image=faker.image_url(),
-        #                                  price=5000
-        #                                  )
-        response = ProductModelViewSet.as_view({'patch': 'partial_update'})(request).render()
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        client.force_login(user)
+        response = client.post(url, data)
+        assert response.status_code == status.HTTP_201_CREATED
