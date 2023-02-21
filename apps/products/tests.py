@@ -109,14 +109,14 @@ class TestProductModelViewSet(FixtureClass):
         This test will check 1 page with 10 details in the product class
         '''
         client.force_login(user)
-        url = reverse_lazy('product-list', args=(4,))
+        url = reverse_lazy('product-list', args=(1,))
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert response.get('results', 11) == len(response.get('results', 11)) <= 10
+        assert len(response.data.get('results', 11)) <= 10
 
     @pytest.mark.urls('products.urls')
-    def test_create_product_errors(self, user, create_product, client):
+    def test_create_product(self, user, create_product, client):
         '''
         This test will check if there are any errors you received
         while creating the product
@@ -125,7 +125,7 @@ class TestProductModelViewSet(FixtureClass):
         data = {
             'name': 'product1',
             'description': 'description1',
-            'category': PrCategory.objects.get(pk=1).pk,
+            'category': 1,
             'price': 5000,
             'shop': Shop.objects.first().pk,
             'attributes': [{}]
