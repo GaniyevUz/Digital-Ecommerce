@@ -1,7 +1,6 @@
 from random import choice
 
 import pytest
-from django.contrib.auth.hashers import make_password
 from django.test import Client
 from faker import Faker
 from rest_framework.reverse import reverse
@@ -17,23 +16,17 @@ class TestShopAPIView:
 
     @pytest.fixture
     def create_default_user(self):
-        user = User.objects.create(
-            username='default_user',
-            password=make_password('default_pass')
-        )
-        return user
+        return User.objects.create_user(username='default_user', password='default_pass')
 
     @pytest.fixture
     def create_shop_model(self, create_default_user):
-        for _ in range(20):
-            Category.objects.create(name=self.fake.first_name())
-            Currency.objects.create(name=self.fake.currency_code())
+        categories = [Category.objects.create(name=self.fake.first_name()) for _ in range(20)]
+        currencies = [Currency.objects.create(name=self.fake.currency_code()) for _ in range(20)]
 
         shop = Shop.objects.create(
-            name=self.fake.name(),
-            shop_category_id=choice(Category.objects.values_list('pk', flat=True)),
-            shop_currency_id=choice(Currency.objects.values_list('pk', flat=True)),
-            user=create_default_user, languages=['uz', 'en', 'ru'],
+            name=self.fake.name(), shop_category=choice(categories),
+            shop_currency=choice(currencies), user=create_default_user,
+            languages=['uz', 'en', 'ru']
         )
         return shop
 
@@ -41,10 +34,10 @@ class TestShopAPIView:
         for _ in range(20):
             Shop.objects.create(
                 name=self.fake.name(),
-                shop_category_id=choice(Category.objects.values_list('pk', flat=True)),
-                shop_currency_id=choice(Currency.objects.values_list('pk', flat=True)),
+                shop_category=choice(Category.objects.all()),
+                shop_currency=choice(Currency.objects.all()),
                 languages=['uz', 'en', 'ru'],
-                user_id=1
+                user=User.objects.get(username='default_user')
             )
         assert Shop.objects.count() == 21
         assert Category.objects.count() == 20

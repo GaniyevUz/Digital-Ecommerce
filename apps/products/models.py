@@ -1,6 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db.models import TextChoices, CharField, ForeignKey, TextField, CASCADE, ImageField, BooleanField, \
-    IntegerField, JSONField
+    IntegerField, JSONField, Model
 from mptt.models import MPTTModel, TreeForeignKey
 
 from shared.model_configs import category_directory_path, product_directory_path
