@@ -6,7 +6,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.models import Client
 from shared.validators import EmailValidator
-from shops.models import Shop
 
 
 class ClientModelSerializer(serializers.ModelSerializer):

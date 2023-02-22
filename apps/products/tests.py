@@ -8,7 +8,7 @@ from django.test import Client
 from django.urls import reverse_lazy
 from faker import Faker
 from model_bakery import baker
-from rest_framework import status
+from rest_framework import status, reverse
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from products.models import Category as PrCategory, Product
@@ -18,6 +18,7 @@ from users.models import User
 faker = Faker()
 
 
+# Todo: Muhammad Goto apps.shared.mixins.TestFixtures don't edit only see or add something
 class FixtureClass:
     def _generate(self, cls):
         return choice(cls.object.all())
@@ -49,7 +50,7 @@ class FixtureClass:
 
     @pytest.fixture
     def create_category(self, create_shop):
-        shop = Shop.objects.values_list('pk', flat=True)
+        # shop = Shop.objects.values_list('pk', flat=True)
         baker.make(
             'products.Category',
             name=cycle(faker.sentences(nb=50)),
@@ -103,25 +104,23 @@ class TestProductModelViewSet(FixtureClass):
         }
         return data
 
-    @pytest.mark.urls('products.urls')
     def test_list_product(self, client: Client, user, create_product):
         '''
         This test will check 1 page with 10 details in the product class
         '''
         client.force_login(user)
-        url = reverse_lazy('product-list', args=(1,))
+        url = reverse('v1:products:product-list', args=(1,))
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data.get('results', 11)) <= 10
 
-    @pytest.mark.urls('products.urls')
     def test_create_product(self, user, create_product, client):
         '''
         This test will check if there are any errors you received
         while creating the product
         '''
-        url = reverse_lazy('product-list', args=(1,))
+        url = reverse_lazy('v1:products:product-list', args=(1,))
         data = {
             'name': 'product1',
             'description': 'description1',

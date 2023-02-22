@@ -2,7 +2,6 @@ import re
 
 import requests
 from rest_framework import status
-from rest_framework.response import Response
 
 from shops.models import Shop, TelegramBot
 
