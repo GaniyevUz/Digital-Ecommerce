@@ -2,6 +2,9 @@ from random import choice
 
 import pytest
 from itertools import cycle
+
+from django.db.models import QuerySet
+from mptt.querysets import TreeQuerySet
 from rest_framework.reverse import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED
 
@@ -27,11 +30,18 @@ class TestShopAPIView(TestFixtures):
 
     def test_shop_model(self, obj_shop):
         shop = obj_shop
+
+        # Test for __str__ methods of Models
         assert str(shop) == shop.name
-        assert shop.categories.count() == shop.category_set.count()
-        assert shop.clients.count() == shop.client_set.count()
-        assert shop.products.count() == shop.product_set.count()
-        assert shop.orders.count() == shop.order_set.count()
+        assert str(shop.shop_category) == shop.shop_category.name
+        assert str(shop.shop_currency) == shop.shop_currency.name
+
+        # Test for @property methods of Models
+        assert isinstance(shop.categories, TreeQuerySet)
+        assert isinstance(shop.clients, QuerySet)
+        assert isinstance(shop.products, QuerySet)
+        assert isinstance(shop.orders, QuerySet)
+        assert isinstance(shop.payment_providers, QuerySet)
 
     def test_get_shops_api(self, client, obj_user, auth_header, obj_shop):
         shop_url = reverse('v1:shops:shop-list')
