@@ -1,10 +1,12 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
+from rest_framework.fields import BooleanField
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.models import Client
 from shared.validators import EmailValidator
+from shops.models import Shop
 
 
 class ClientModelSerializer(serializers.ModelSerializer):
@@ -15,6 +17,7 @@ class ClientModelSerializer(serializers.ModelSerializer):
 
 
 class ClientCheckSerializer(serializers.Serializer):  # noqa - ABC
+    exists = BooleanField(help_text='Checks if the client is registered with this email address', read_only=True)
 
     def to_representation(self, instance):
         message = {'email': []}
@@ -38,7 +41,7 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('password', 'confirm_password',
-                  'email', 'first_name', 'last_name', 'phone', 'account_type',)
+                  'email', 'first_name', 'last_name', 'phone', 'account_type')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -50,9 +53,12 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
         attrs.pop('confirm_password')
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data, **kwargs):
         validated_data['password'] = make_password(validated_data['password'])
-        user = Client.objects.create(**validated_data)
+        # if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
+        #     pass
+        shop = self.context['request'].parser_context['kwargs']['shop']
+        user = Client.objects.create(**validated_data, shop_id=shop)
         # user.is_active = False
         # user.save()
         return user

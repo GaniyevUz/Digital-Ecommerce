@@ -50,6 +50,8 @@ class TelegramBotModelViewSet(ModelViewSet):
         bot = validate(token, **kwargs)
         if bot.get('data'):
             return Response(bot['data'], status=bot['status'])
+        if not bot.get('shop'):
+            return Response(bot, status=status.HTTP_400_BAD_REQUEST)
         shop = bot['shop']
         bot, _ = TelegramBot.objects.update_or_create(shop=shop, defaults=bot)
         serializer = TelegramBotModelSerializer(bot)

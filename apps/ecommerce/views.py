@@ -25,7 +25,7 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, ShopRequiredMixin
 
 
 class ClientModelViewSet(ModelViewSet, ShopRequiredMixin):
-    serializer_class = ClientModelSerializer
+    serializer_class = ClientCheckSerializer
     queryset = Client.objects.all()
     permission_classes = AllowAny,
     email = openapi.Parameter('email', openapi.IN_QUERY, "check email address", True, type=openapi.TYPE_STRING)
@@ -52,9 +52,18 @@ class ClientModelViewSet(ModelViewSet, ShopRequiredMixin):
     def get_serializer_class(self):
         if self.action == 'post':
             return LoginClientModelSerializer
+        # if self.action == 'get':
+        #     return ClientCheckSerializer
         return super().get_serializer_class()
 
 
 class CreateClientAPIView(CreateAPIView, ShopRequiredMixin):
     serializer_class = CreateClientModelSerializer
     permission_classes = AllowAny,
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
