@@ -1,15 +1,21 @@
 import os
 import sys
 from datetime import timedelta
-from dotenv.main import load_dotenv
+from os import getenv
 
-load_dotenv()
+from dotenv.main import load_dotenv
 
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, 'apps'))
 
+if os.getenv("GITHUB_ACTIONS") == "true":
+    load_dotenv('.env.copy')
+else:
+    load_dotenv()
+
 SECRET_KEY = os.getenv('SECRET_KEY')
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -88,6 +94,18 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT'),
     },
 }
+
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
 AUTH_USER_MODEL = 'users.User'
 
 AUTH_PASSWORD_VALIDATORS = [
