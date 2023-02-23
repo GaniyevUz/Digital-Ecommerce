@@ -1,8 +1,6 @@
-from django.urls import include, path
+from django.urls import path, include
 
 urlpatterns = [
-    path('', include(('users.urls', 'users'), 'users')),
-    path('shop/', include(('shops.urls', 'shops'), 'shops')),
     path('', include(('products.urls', 'products'), 'products')),
-    path('ecommerce/', include('ecommerce.urls'))
+    path('ecommerce/<int:shop>/', include('ecommerce.urls'))
 ]

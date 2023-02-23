@@ -2,12 +2,11 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from django.contrib import admin
 
 from root import settings
 
 urlpatterns = [
-    path('api/v1/', include(('apps.shop_urls', 'apps'), 'v1')),
+    path('api/v1/', include(('apps.urls', 'apps'), 'v1')),
 ]
 
 if settings.DEBUG:
@@ -25,7 +24,7 @@ if settings.DEBUG:
         patterns=urlpatterns,
         permission_classes=[permissions.AllowAny],
     )
+
     urlpatterns += [
-        path('admin/', admin.site.urls),
         path('', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     ]
