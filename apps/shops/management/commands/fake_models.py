@@ -129,7 +129,6 @@ class Command(BaseCommand):
             'products.Product',
             name=self.t_repeat(self.fake.first_name, count),
             description=self.t_repeat(self.fake.sentence, count),
-            shop=cycle(shops),
             category=cycle(categories),
             # image='blogs/default.jpg',
             price=self.repeat(self.fake.random_number, count, digits=6),

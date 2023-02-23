@@ -38,7 +38,6 @@ class FixtureClass:
 
     @pytest.fixture
     def create_category(self, create_shop, faker):
-        shop = Shop.objects.values_list('pk', flat=True)
         baker.make(
             'products.Category',
             name=cycle(faker.sentences(nb=50)),
@@ -56,7 +55,6 @@ class FixtureClass:
             name=faker.word(),
             description=faker.sentence(),
             category=cycle(PrCategory.objects.all()),
-            shop=cycle(Shop.objects.all()),
             image=faker.image_url(),
             price=cycle(random_int),
             in_availability=cycle((True, False)),
@@ -71,7 +69,6 @@ class FixtureClass:
             name=faker.word(),
             description=faker.sentence(),
             category=category,
-            shop=category.shop,
             price=5600,
             attributes=[{}]
         )

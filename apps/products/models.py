@@ -36,7 +36,6 @@ class Product(Model):
 
     name = CharField(max_length=255)
     description = TextField()
-    shop = ForeignKey('shops.Shop', CASCADE)
     category = ForeignKey('products.Category', CASCADE)
     image = ImageField(upload_to=product_directory_path, null=True, blank=True)
     price = CharField(max_length=255)
@@ -56,8 +55,3 @@ class Product(Model):
         except (ValueError, AttributeError):
             url = ''
         return url
-
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        if self.category.shop_id != self.shop_id:
-            self.shop_id = self.category.shop_id
-        super().save(force_insert, force_update, using, update_fields)

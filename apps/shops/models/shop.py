@@ -49,10 +49,6 @@ class Shop(Model):
         return self.order_set.all()
 
     @property
-    def products(self):
-        return self.product_set.all()
-
-    @property
     def clients(self):
         return self.client_set.all()
 
