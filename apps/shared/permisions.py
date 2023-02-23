@@ -30,3 +30,10 @@ class IsShopOwner(BasePermission):
         if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user and request.user == obj.user:
             return True
         return False
+
+
+class UserPermission(BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return True
+        return request.user.is_authenticated
