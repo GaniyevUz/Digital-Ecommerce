@@ -6,10 +6,10 @@ from shops.models import Shop
 class IsAuthenticatedOwner(BasePermission):
 
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated)
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        if hasattr(obj, 'user') and request.user == obj.user:
+        if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user == obj.user:
             return True
         return False
 

@@ -15,9 +15,9 @@ from shops.serializers import ShopSerializer, PaymentSerializers
 
 class ShopModelViewSet(ModelViewSet):
     serializer_class = ShopSerializer
-    permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
     pagination_class = CountResultPaginate
+    permission_classes = IsAuthenticatedOwner,
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)

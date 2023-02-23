@@ -14,7 +14,6 @@ class UserModelViewSet(ModelViewSet):
     def get_object(self):
         return self.request.user
 
-    # http_method_names = 'PATCH', 'DELETE'
     def get(self, request, *args, **kwargs):
         serializer = UserModelSerializer(request.user)
         return Response(serializer.data)

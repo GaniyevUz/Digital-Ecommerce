@@ -45,6 +45,7 @@ class TestShopAPIView(TestFixtures):
 
     def test_get_shops_api(self, client, obj_user, auth_header, obj_shop):
         shop_url = reverse('v1:shops:shop-list')
+
         response = client.get(shop_url, **auth_header)
         assert response.status_code == HTTP_200_OK
         assert response.data.get('count') == obj_user.shop_set.count()
