@@ -39,7 +39,7 @@ class TestShopAPIView(TestFixtures):
         # Test for @property methods of Models
         assert isinstance(shop.categories, TreeQuerySet)
         assert isinstance(shop.clients, QuerySet)
-        assert isinstance(shop.products, QuerySet)
+        # assert isinstance(shop.products, QuerySet) # TODO productsdan shops ochirdim
         assert isinstance(shop.orders, QuerySet)
         assert isinstance(shop.payment_providers, QuerySet)
 

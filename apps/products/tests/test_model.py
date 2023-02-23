@@ -22,7 +22,6 @@ class TestProductManager(FixtureClass):
             name='new product',
             description='desc',
             category=category,
-            shop=category.shop,
             price=5600,
             attributes=[{}],
         )

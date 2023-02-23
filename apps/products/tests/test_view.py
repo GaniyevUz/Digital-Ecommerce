@@ -35,7 +35,7 @@ class TestProductModelViewSet(FixtureClass):
         '''
         client.force_login(user)
         id = Shop.objects.first().pk
-        url = reverse_lazy('v1:products:product-list', args=(id,))
+        url = reverse_lazy('v1:products:product-list', kwargs={'shop':id })
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
@@ -49,13 +49,12 @@ class TestProductModelViewSet(FixtureClass):
         '''
         category = PrCategory.objects.first()
         shop = category.shop
-        url = reverse_lazy('v1:products:product-list', args=(shop.pk,))
+        url = reverse_lazy('v1:products:product-list', kwargs={'shop': shop.pk})
         data = {
             'name': 'product1',
             'description': 'description1',
             'category': category.pk,
             'price': 5000,
-            'shop': shop.pk,
             'attributes': [{}]
         }
         response = client.post(url, data)
@@ -88,7 +87,6 @@ class TestProductModelViewSet(FixtureClass):
         shop = user.shop_set.first()
         product = shop.categories[0].product_set.first()
         url = reverse_lazy('v1:products:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
-        print()
         client.force_login(user)
         response = client.delete(url)
         assert response.status_code == status.HTTP_204_NO_CONTENT

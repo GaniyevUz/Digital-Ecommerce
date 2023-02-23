@@ -8,7 +8,7 @@ from shared.mixins import ShopRequiredMixin
 from shared.paginate import CustomPageNumberPagination
 from shared.permisions import IsShopOwner
 from shops.models import Shop
-from .models import Category
+from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
                           CategoryMoveSerializer)
 
@@ -23,8 +23,7 @@ class ProductModelViewSet(ModelViewSet):
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        shop = get_object_or_404(Shop, pk=self.kwargs.get('shop'))
-        return shop.products
+        return Product.objects.filter(category__shop_id=self.kwargs.get('shop'))
 
 
 class CategoryModelViewSet(ShopRequiredMixin, ModelViewSet):
