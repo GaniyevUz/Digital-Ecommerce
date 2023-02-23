@@ -22,5 +22,4 @@ fake:
 	./manage.py fake_models -u 2 -sh 4 -p_c 10 -p 100 -o 100
 
 test:
-	pytest
-	open coverage/index.html
+	pytest && open coverage/index.html
