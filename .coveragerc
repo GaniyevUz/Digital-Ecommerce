@@ -1,0 +1,2 @@
+[run]
+omit = */migrations/*, */__init__.py

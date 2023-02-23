@@ -1,4 +1,3 @@
-import os
 from itertools import cycle
 from random import choice, choices, randint
 
