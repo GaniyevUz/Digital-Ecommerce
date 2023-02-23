@@ -38,7 +38,6 @@ class FixtureClass:
 
     @pytest.fixture
     def create_category(self, create_shop, faker):
-        shop = Shop.objects.values_list('pk', flat=True)
         baker.make(
             'products.Category',
             name=cycle(faker.sentences(nb=50)),

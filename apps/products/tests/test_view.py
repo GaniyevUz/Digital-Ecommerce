@@ -72,16 +72,17 @@ class TestProductModelViewSet(FixtureClass):
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    # def test_product_update(self, client, user, create_products):
-    #     product = user.shop_set.first().categories[0].product_set.first()
-    #     shop = product.category.shop
-    #     url = reverse_lazy('v1:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
-    #     data = {
-    #         'name': 'new name1',
-    #     }
-    #     client.force_login(user)
-    #     response = client.patch(url, data)
-    #     print()
+    def test_product_update(self, client, user, create_products):
+        product = user.shop_set.first().categories[0].product_set.first()
+        shop = product.category.shop
+        url = reverse_lazy('v1:products:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
+        data = {
+            'name': 'new name1',
+        }
+        client.force_login(user)
+        response = client.patch(url, data, 'application/json')
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data.get('name') == data.get('name')
 
     def test_product_delete(self, client, user, create_products):
         shop = user.shop_set.first()

@@ -34,4 +34,3 @@ class TestProductModelSerializer(FixtureClass):
         result = ProductModelSerializer(product).data
 
         assert result == expected_data
-
