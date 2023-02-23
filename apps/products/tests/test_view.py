@@ -1,5 +1,4 @@
 import json
-import os
 
 import pytest
 from django.test import Client
@@ -36,9 +35,7 @@ class TestProductModelViewSet(FixtureClass):
         '''
         client.force_login(user)
         id = Shop.objects.first().pk
-        url = reverse_lazy('v1:product-list', args=(id,))
-        print('os.getcwd', os.getcwd())
-        print('url=', url)
+        url = reverse_lazy('v1:products:product-list', args=(id,))
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
@@ -52,7 +49,7 @@ class TestProductModelViewSet(FixtureClass):
         '''
         category = PrCategory.objects.first()
         shop = category.shop
-        url = reverse_lazy('v1:shops:product-list', args=(shop.pk,))
+        url = reverse_lazy('v1:products:product-list', args=(shop.pk,))
         data = {
             'name': 'product1',
             'description': 'description1',
@@ -71,7 +68,7 @@ class TestProductModelViewSet(FixtureClass):
     def test_product_detail(self, client, user, create_product):
         product = Product.objects.first()
         shop = product.category.shop
-        url = reverse_lazy('v1:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
+        url = reverse_lazy('v1:products:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
@@ -89,7 +86,7 @@ class TestProductModelViewSet(FixtureClass):
     def test_product_delete(self, client, user, create_products):
         shop = user.shop_set.first()
         product = shop.categories[0].product_set.first()
-        url = reverse_lazy('v1:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
+        url = reverse_lazy('v1:products:product-detail', kwargs={'shop': shop.pk, 'pk': product.pk})
         print()
         client.force_login(user)
         response = client.delete(url)
