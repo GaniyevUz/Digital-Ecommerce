@@ -35,7 +35,7 @@ class TestProductModelViewSet(FixtureClass):
         '''
         client.force_login(user)
         id = Shop.objects.first().pk
-        url = reverse_lazy('v1:products:product-list', kwargs={'shop':id })
+        url = reverse_lazy('v1:products:product-list', kwargs={'shop': id})
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK

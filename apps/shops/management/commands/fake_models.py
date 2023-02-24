@@ -1,4 +1,3 @@
-import datetime
 from itertools import cycle
 from random import choice, choices, randint
 
@@ -65,7 +64,7 @@ class Command(BaseCommand):
         if shop:
             Loader(self.fake_shops, shop, 'Shop', shop)
         if domain:
-            Loader(self.fake_domains, domain, 'Shop', domain)
+            Loader(self.fake_domains, domain, 'Domain', domain)
         if product_category:
             Loader(self.fake_product_category, product_category, 'ProductCategory', product_category)
         if product:
@@ -129,57 +128,54 @@ class Command(BaseCommand):
             pass
 
 
-def fake_product_category(self, count):
-    emoji = all_emojis
-    shops = Shop.objects.all()
-    baker.make(
-        'products.Category',
-        name=self.t_repeat(self.fake.first_name, count),
-        description=self.t_repeat(self.fake.sentence, count),
-        emoji=cycle(emoji),
-        # image='blogs/default.jpg',
-        shop=cycle(shops),
-        _quantity=count
-    )
+    def fake_product_category(self, count):
+        emoji = all_emojis
+        shops = Shop.objects.all()
+        baker.make(
+            'products.Category',
+            name=self.t_repeat(self.fake.first_name, count),
+            description=self.t_repeat(self.fake.sentence, count),
+            emoji=cycle(emoji),
+            # image='blogs/default.jpg',
+            shop=cycle(shops),
+            _quantity=count
+        )
 
+    def fake_product(self, count):
+        shops = Shop.objects.all()
+        categories = ProductCategory.objects.all()
 
-def fake_product(self, count):
-    shops = Shop.objects.all()
-    categories = ProductCategory.objects.all()
+        baker.make(
+            'products.Product',
+            name=self.t_repeat(self.fake.first_name, count),
+            description=self.t_repeat(self.fake.sentence, count),
+            category=cycle(categories),
+            # image='blogs/default.jpg',
+            price=self.repeat(self.fake.random_number, count, digits=6),
+            in_availability=self.fake.random.choice((True, False)),
+            _quantity=count
+        )
 
-    baker.make(
-        'products.Product',
-        name=self.t_repeat(self.fake.first_name, count),
-        description=self.t_repeat(self.fake.sentence, count),
-        category=cycle(categories),
-        # image='blogs/default.jpg',
-        price=self.repeat(self.fake.random_number, count, digits=6),
-        in_availability=self.fake.random.choice((True, False)),
-        _quantity=count
-    )
+    def fake_orders(self, count):
+        shops = Shop.objects.all()
+        # delivery_types = ('pickup', 'delivery')
+        baker.make(
+            'orders.Order',
+            first_name=self.repeat(self.fake.first_name, count),
+            last_name=self.repeat(self.fake.last_name, count),
+            phone=self.repeat(self.fake_phone, count),
+            delivery_type=cycle(choice(['pickup', 'delivery']) for _ in range(count)),
+            status=cycle(choice(Order.Status.choices)[0] for _ in range(count)),
+            payment_type=cycle(choice(Order.Payment.choices)[0] for _ in range(count)),
+            note=self.repeat(self.fake.sentence, count),
+            paid=cycle(choice((True, False)) for _ in range(count)),
+            shop=cycle(shops),
+            # items=self.items(count),
+            _quantity=count,
+        )
 
-
-def fake_orders(self, count):
-    shops = Shop.objects.all()
-    # delivery_types = ('pickup', 'delivery')
-    baker.make(
-        'orders.Order',
-        first_name=self.repeat(self.fake.first_name, count),
-        last_name=self.repeat(self.fake.last_name, count),
-        phone=self.repeat(self.fake_phone, count),
-        delivery_type=cycle(choice(['pickup', 'delivery']) for _ in range(count)),
-        status=cycle(choice(Order.Status.choices)[0] for _ in range(count)),
-        payment_type=cycle(choice(Order.Payment.choices)[0] for _ in range(count)),
-        note=self.repeat(self.fake.sentence, count),
-        paid=cycle(choice((True, False)) for _ in range(count)),
-        shop=cycle(shops),
-        # items=self.items(count),
-        _quantity=count,
-    )
-
-
-@staticmethod
-def items(count):
-    products = Product.objects.all()
-    for _ in range(count):
-        yield choices(products, k=randint(1, len(products)))
+    @staticmethod
+    def items(count):
+        products = Product.objects.all()
+        for _ in range(count):
+            yield choices(products, k=randint(1, len(products)))
