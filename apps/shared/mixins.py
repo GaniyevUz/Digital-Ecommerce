@@ -2,7 +2,6 @@ from random import choice
 
 from django.core.exceptions import ObjectDoesNotExist
 from django_hosts import reverse
-from django.urls import reverse
 from model_bakery import baker
 from pytest import fixture
 from rest_framework.status import HTTP_200_OK
@@ -48,7 +47,7 @@ class TestFixtures:
 
     @fixture
     def auth_header(self, obj_user, client):
-        token = reverse('v1:users:token_obtain_pair', host='app')
+        token = reverse('v1:users:token_obtain_pair', host='api')
         data = {
             'username': 'default_user',
             'password': 'default_pass'
