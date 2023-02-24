@@ -1,8 +1,8 @@
+from django.contrib import admin
 from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from django.contrib import admin
 
 from root import settings
 
@@ -18,8 +18,8 @@ if settings.DEBUG:
             description="A complete shop, with payment systems, delivery services and convenient control panel with "
                         "built-in CRM and Analytics.",
             terms_of_service="https://www.google.com/policies/terms/",
-            contact=openapi.Contact(email="administration@botcommerce.io"),
-            license=openapi.License(name="BSD License"),
+            contact=openapi.Contact('GitHub Repository', 'https://github.com/GaniyevUz/BotCommerce'),
+            license=openapi.License(name='MIT License'),
         ),
         public=True,
         patterns=urlpatterns,
