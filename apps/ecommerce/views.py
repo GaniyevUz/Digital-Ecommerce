@@ -11,10 +11,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from ecommerce.models import Client
 from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer, \
     CreateClientModelSerializer
-from shared.mixins import ShopRequiredMixin
+from shared.mixins import BaseShopMixin
 
 
-class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, ShopRequiredMixin):
+class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):
     serializer_class = ClientModelSerializer
     queryset = Client.objects.all()
 
@@ -24,7 +24,7 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, ShopRequiredMixin
         return self.request.user
 
 
-class ClientModelViewSet(ModelViewSet, ShopRequiredMixin):
+class ClientModelViewSet(ModelViewSet, BaseShopMixin):
     serializer_class = ClientCheckSerializer
     queryset = Client.objects.all()
     permission_classes = AllowAny,
@@ -57,7 +57,7 @@ class ClientModelViewSet(ModelViewSet, ShopRequiredMixin):
         return super().get_serializer_class()
 
 
-class CreateClientAPIView(CreateAPIView, ShopRequiredMixin):
+class CreateClientAPIView(CreateAPIView, BaseShopMixin):
     serializer_class = CreateClientModelSerializer
     permission_classes = AllowAny,
 

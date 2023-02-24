@@ -1,6 +1,7 @@
 from random import choice
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
 from django_hosts import reverse
 from model_bakery import baker
 from pytest import fixture
@@ -11,7 +12,7 @@ from shops.models import Currency, Category, Shop
 from users.models import User
 
 
-class BaseShopRequiredMixin:
+class BaseShopMixin:
     def get_queryset(self):
         assert self.queryset is not None, (  # noqa
                 "'%s' should either include a `queryset` attribute, "
@@ -23,16 +24,9 @@ class BaseShopRequiredMixin:
 
         if shop := self.kwargs.get('shop') is not None:  # noqa
             return queryset.filter(shop=shop)
-        # if isinstance(queryset, QuerySet):
-        #     queryset = queryset.all()
+        if domain := get_subdomain(self.request):
+            return queryset.filter(shop__domain=domain)
         return queryset.none()
-
-
-class ShopRequiredMixin:
-    def get_queryset(self):
-        if shop_domain := get_subdomain(self.request):  # noqa
-            return self.queryset.filter(shop__domain=shop_domain)  # noqa
-        return self.queryset.none()  # noqa
 
 
 class TestFixtures:

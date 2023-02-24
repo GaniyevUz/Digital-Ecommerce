@@ -3,7 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.mixins import ShopRequiredMixin
+from shared.mixins import BaseShopMixin
 from shared.paginate import CountResultPaginate
 from shared.permisions import IsAdminOrReadOnly, IsShopOwner
 from shared.validators import TelegramBotValidator
@@ -23,7 +23,7 @@ class CurrencyModelViewSet(ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class PaymentProvidersViewSet(ShopRequiredMixin, ModelViewSet):
+class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsShopOwner,)
