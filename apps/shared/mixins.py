@@ -2,7 +2,6 @@ from random import choice
 
 from django.core.exceptions import ObjectDoesNotExist
 from django_hosts import reverse
-from django.db.models import QuerySet
 from django.urls import reverse
 from model_bakery import baker
 from pytest import fixture
