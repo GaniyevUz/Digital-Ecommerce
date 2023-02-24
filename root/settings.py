@@ -1,8 +1,6 @@
 import os
 import sys
 from datetime import timedelta
-from os import getenv
-
 from dotenv.main import load_dotenv
 
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,7 +46,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'root.middleware.GetSubdomainMiddleware',
     'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -62,7 +59,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'root.urls'
 ROOT_HOSTCONF = 'root.hosts'
-DEFAULT_HOST = 'app'
+PARENT_HOST = os.getenv('DOMAIN')
+DEFAULT_HOST = 'api'
 
 APPEND_SLASH = True
 

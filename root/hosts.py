@@ -1,14 +1,7 @@
 from django_hosts import patterns, host
 
-from root import settings
-
 host_patterns = patterns(
     'root',
-    host(r'app', 'urls', 'app'),
-    host(r'(\w+)', 'other_urls', 'other'),
+    host(r'api', 'urls', 'api'),
+    host(r'(?P<subdomain>\w+)', 'other_urls', 'other', 'ecommerce.urls.shop_exists_callback'),
 )
-
-if settings.DEBUG:
-    host_patterns.insert(
-        0, host(r'testserver', 'urls', 'testserver')
-    )
