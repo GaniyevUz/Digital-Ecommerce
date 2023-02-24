@@ -9,5 +9,5 @@ router.register('product', ProductModelViewSet, 'product')
 router.register('category', CategoryModelViewSet, 'category')
 
 urlpatterns = [
-    path('ecommerce/<int:shop>/', include(router.urls))
+    path('', include(router.urls))
 ]

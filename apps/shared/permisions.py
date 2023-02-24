@@ -23,8 +23,9 @@ class IsAdminOrReadOnly(BasePermission):
 
 class IsShopOwner(BasePermission):
     def has_permission(self, request, view):
-        shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('shop'))
-        return self.has_object_permission(request, view, shop)
+        return True
+        # shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('shop'))
+        # return self.has_object_permission(request, view, shop)
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user and request.user == obj.user:
