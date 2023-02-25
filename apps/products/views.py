@@ -7,7 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from shared.mixins import ShopRequiredMixin
 from shared.paginate import CustomPageNumberPagination
 from shared.permisions import IsShopOwner
-from shops.models import Shop
+from shared.validators import get_subdomain
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
                           CategoryMoveSerializer)

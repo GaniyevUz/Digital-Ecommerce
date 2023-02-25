@@ -1,10 +1,7 @@
-import re
-
-import requests
-from django.shortcuts import get_object_or_404
+from httpx import get
+from re import fullmatch
 from rest_framework import status
 from rest_framework.request import Request
-
 from shops.models import Shop, TelegramBot, Domain
 
 
@@ -12,7 +9,7 @@ class EmailValidator:
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
 
     def __call__(self, value) -> bool:
-        return bool(re.fullmatch(self.regex, value))
+        return bool(fullmatch(self.regex, value))
 
 
 class TelegramBotValidator:
@@ -25,7 +22,7 @@ class TelegramBotValidator:
         if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
             return {'status': 'Invalid shop'}
         get_me_url = f'https://api.telegram.org/bot{token}/getMe'
-        response = requests.get(get_me_url).json()
+        response = get(get_me_url).json()
         is_valid = response.get('ok')
         data = {}
         if is_valid:
@@ -45,6 +42,9 @@ class TelegramBotValidator:
 def get_subdomain(request: Request) -> Domain | bool:
     domains = request.get_host().split('.')
     if len(domains) >= 2:  # subdomain.example.com
-        if shop_domain := get_object_or_404(Domain, name=domains[0]):
+        try:
+            shop_domain = Domain.objects.get(name=domains[0])
             return shop_domain
+        except (Domain.DoesNotExist, Domain.MultipleObjectsReturned):
+            pass
     return False
