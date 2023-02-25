@@ -11,6 +11,7 @@ from shared.permisions import IsAuthenticatedOwner
 from shops.models import Shop
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers
+from shops.services import main_stat_service
 
 
 class ShopModelViewSet(ModelViewSet):
@@ -32,24 +33,7 @@ class ShopModelViewSet(ModelViewSet):
     # Todo: Muhammad bro classga olib chiqib ketin
     @action(['GET'], True, 'stat/all', 'stat_all')
     def main_stat(self, request, pk=None):
-        orders = Order.objects.filter(items__order__shop_id=pk).annotate(total_items=Count('items'))
-        total_orders = sum(orders.values_list('total_items', flat=True))
-
-        paid_orders = orders.filter(paid=True).annotate(total_items=Count('items'))
-        paid_orders_cost = sum(paid_orders.values_list('total_items', flat=True))
-
-        _ = Order.objects.values('id').annotate(summ=RawSQL("SELECT get_summ_all(%s)", (1,)),
-                                                avg=RawSQL("SELECT get_avarage_price(%s)", (1,)))[0]
-        revenue, avg = _['summ'], _['avg']
-        # total_customers = Client.objects.filter(shop_id=pk).count() # client chala
-        data = {
-            'id': pk,
-            'total_orders': total_orders,
-            'paid_orders': paid_orders_cost,
-            'total_revenue': revenue,
-            'total_customers': 'chala',
-            'average_price': avg
-        }
+        data = main_stat_service(pk)
         return Response(data)
 
 

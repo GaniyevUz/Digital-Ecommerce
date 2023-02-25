@@ -4,8 +4,6 @@ from django.contrib.admin import ModelAdmin
 from shops.models import Shop, Category, Currency, PaymentProvider
 
 
-# Register your models here.
-
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     list_display = ('id', 'name')
