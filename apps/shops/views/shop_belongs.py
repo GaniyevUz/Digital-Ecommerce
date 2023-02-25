@@ -29,6 +29,9 @@ class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
     permission_classes = (IsShopOwner,)
     pagination_class = CountResultPaginate
 
+    def perform_create(self, serializer):
+        serializer.save(shop=self.get_shop())
+
 
 # class ShopOrdersRetrieveAPIView(RetrieveAPIView):
 #     serializer_class = OrderSerializer

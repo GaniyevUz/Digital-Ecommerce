@@ -55,3 +55,4 @@ class Product(Model):
         except (ValueError, AttributeError):
             url = ''
         return url
+
