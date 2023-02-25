@@ -11,7 +11,7 @@ A complete shop, with payment systems, delivery services and convenient control 
 5. [ ] docker/docker compose
 6. [ ] elasticsearch
 7. [x] sentry
-8. [ ] security
+8. [x] security
 9. [x] custom admin
 
 ## Don't Required

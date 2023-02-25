@@ -50,7 +50,7 @@ class CurrencySerializer(ModelSerializer):
 class PaymentSerializers(ModelSerializer):
     class Meta:
         model = PaymentProvider
-        fields = '__all__'
+        exclude = ('shop',)
 
 
 class OrderSerializer(ModelSerializer):

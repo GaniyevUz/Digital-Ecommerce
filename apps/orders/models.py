@@ -1,5 +1,5 @@
 from django.db.models import Model, TextChoices, CharField, ForeignKey, TextField, CASCADE, BooleanField, \
-    ManyToManyField, DateTimeField
+    ManyToManyField, DateTimeField, IntegerField
 
 from shops.models import Shop
 
@@ -19,7 +19,7 @@ class Order(Model):
 
     first_name = CharField(max_length=225)
     last_name = CharField(max_length=225, null=True, blank=True)
-    items = ManyToManyField('products.Product')
+    items = ManyToManyField('products.Product', through='orders.ProductOrder')
     phone = CharField(max_length=225)
     delivery_type = CharField(max_length=225, choices=Shop.Delivery.choices)
     status = CharField(max_length=225, choices=Status.choices, default='in_process')
@@ -29,3 +29,9 @@ class Order(Model):
     paid = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
     shop = ForeignKey('shops.Shop', CASCADE)
+
+
+class ProductOrder(Model):
+    order = ForeignKey('orders.Order', CASCADE)
+    product = ForeignKey('products.Product', CASCADE)
+    count = IntegerField(default=1)

@@ -1,6 +1,8 @@
 from random import choice
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
 from django_hosts import reverse
 from model_bakery import baker
 from pytest import fixture
@@ -11,28 +13,23 @@ from shops.models import Currency, Category, Shop
 from users.models import User
 
 
-class BaseShopRequiredMixin:
+class BaseShopMixin:
+    def get_shop(self):
+        if (shop_id := self.kwargs.get('shop')) is not None:  # noqa
+            return get_object_or_404(Shop, pk=shop_id)
+        domain = get_subdomain(self.request)
+        return get_object_or_404(Shop, shop__domain=domain)
+
     def get_queryset(self):
         assert self.queryset is not None, (  # noqa
                 "'%s' should either include a `queryset` attribute, "
                 "or override the `get_queryset()` method."
                 % self.__class__.__name__
         )
-
         queryset = self.queryset  # noqa
-
-        if shop := self.kwargs.get('shop') is not None:  # noqa
+        if shop := self.get_shop():
             return queryset.filter(shop=shop)
-        # if isinstance(queryset, QuerySet):
-        #     queryset = queryset.all()
         return queryset.none()
-
-
-class ShopRequiredMixin:
-    def get_queryset(self):
-        if shop_domain := get_subdomain(self.request):  # noqa
-            return self.queryset.filter(shop__domain=shop_domain)  # noqa
-        return self.queryset.none()  # noqa
 
 
 class TestFixtures:
@@ -47,7 +44,7 @@ class TestFixtures:
 
     @fixture
     def auth_header(self, obj_user, client):
-        token = reverse('v1:users:token_obtain_pair', host='api')
+        token = reverse('api:users:token_obtain_pair', host='api')
         data = {
             'username': 'default_user',
             'password': 'default_pass'

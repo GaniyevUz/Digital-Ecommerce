@@ -5,9 +5,11 @@ from shared.routers import BotCommerceRouter
 
 router = BotCommerceRouter()
 
-router.register('product', ProductModelViewSet, 'product')
-router.register('category', CategoryModelViewSet, 'category')
 
 urlpatterns = [
+    path('product', ProductModelViewSet.as_view({'get': 'list'}), name='product-list'),
+    path('product/<int:pk>', ProductModelViewSet.as_view({'get': 'retrieve'}), name='product-detail'),
+    path('category', CategoryModelViewSet.as_view({'get': 'list'}), name='category'),
+    path('category/<int:pk>', CategoryModelViewSet.as_view({'get': 'retrieve'}), name='category'),
     path('', include(router.urls))
 ]
