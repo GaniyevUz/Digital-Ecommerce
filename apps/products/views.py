@@ -23,7 +23,7 @@ class ProductModelViewSet(BaseShopMixin, ModelViewSet):
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        return self.queryset.filter(category__shop=self.get_shop())
+        return self.queryset.filter(category__shop=self.get_shop)
 
 
 class CategoryModelViewSet(BaseShopMixin, ModelViewSet):

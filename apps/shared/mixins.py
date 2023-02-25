@@ -1,7 +1,6 @@
 from random import choice
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django_hosts import reverse
 from model_bakery import baker
@@ -14,22 +13,16 @@ from users.models import User
 
 
 class BaseShopMixin:
+    @property
     def get_shop(self):
-        if (shop_id := self.kwargs.get('shop')) is not None:  # noqa
+        if shop_id := self.kwargs.get('shop'):  # noqa
             return get_object_or_404(Shop, pk=shop_id)
-        domain = get_subdomain(self.request)
-        return get_object_or_404(Shop, shop__domain=domain)
+        if domain := get_subdomain(self.request):  # noqa
+            return get_object_or_404(Shop, domain=domain)
+        return None
 
     def get_queryset(self):
-        assert self.queryset is not None, (  # noqa
-                "'%s' should either include a `queryset` attribute, "
-                "or override the `get_queryset()` method."
-                % self.__class__.__name__
-        )
-        queryset = self.queryset  # noqa
-        if shop := self.get_shop():
-            return queryset.filter(shop=shop)
-        return queryset.none()
+        return self.queryset.filter(shop=self.get_shop)  # noqa
 
 
 class TestFixtures:

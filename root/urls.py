@@ -8,7 +8,6 @@ from root import settings
 
 urlpatterns = [
     path('api/v1/', include(('apps.shop_urls', 'apps'), 'api')),
-    path('api/v1/', include(('apps.urls', 'apps'), 'v1')),
 ]
 
 if settings.DEBUG:
