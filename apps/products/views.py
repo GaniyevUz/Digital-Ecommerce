@@ -1,32 +1,30 @@
 from django_filters import rest_framework as filters
-from rest_framework.generics import get_object_or_404, GenericAPIView
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.mixins import ShopRequiredMixin
+from shared.mixins import BaseShopMixin
 from shared.paginate import CustomPageNumberPagination
 from shared.permisions import IsShopOwner
-from shops.models import Shop
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
                           CategoryMoveSerializer)
 
 
-class ProductModelViewSet(ModelViewSet):
+class ProductModelViewSet(BaseShopMixin, ModelViewSet):
+    queryset = Product.objects.all()
     serializer_class = ProductModelSerializer
     filter_backends = (filters.DjangoFilterBackend,)
     permission_classes = (DjangoModelPermissionsOrAnonReadOnly, IsShopOwner,)
-    # parser_classes = (MultiPartParser,)
-    # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')
     pagination_class = CustomPageNumberPagination
 
     def get_queryset(self):
-        return Product.objects.filter(category__shop_id=self.kwargs.get('shop'))
+        return self.queryset.filter(category__shop=self.get_shop())
 
 
-class CategoryModelViewSet(ShopRequiredMixin, ModelViewSet):
+class CategoryModelViewSet(BaseShopMixin, ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
     pagination_class = CustomPageNumberPagination

@@ -6,10 +6,10 @@ from shops.models import Shop
 class IsAuthenticatedOwner(BasePermission):
 
     def has_permission(self, request, view):
-        return bool(request.user and request.user.is_authenticated)
+        return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        if hasattr(obj, 'user') and request.user == obj.user:
+        if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user == obj.user:
             return True
         return False
 
@@ -23,16 +23,20 @@ class IsAdminOrReadOnly(BasePermission):
 
 class IsShopOwner(BasePermission):
     def has_permission(self, request, view):
-        shop = Shop.objects.get(pk=request.parser_context.get('kwargs').get('shop'))
-        return self.has_object_permission(request, view, shop)
+        return True
 
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS or hasattr(obj, 'user') and request.user and request.user == obj.user:
+        if request.method in SAFE_METHODS:
             return True
-        if hasattr(obj, 'category') and hasattr(obj.category, 'shop') and hasattr(obj.category.shop,
-                                                                                  'user') and request.user == obj.category.shop.user:
+        if hasattr(obj, 'shop') and hasattr(obj.shop, 'user') and request.user == obj.shop.user:
             return True
-
+        if hasattr(obj, 'user') and request.user == obj.user:
+            return True
+        if hasattr(obj, 'category') and \
+                hasattr(obj.category, 'shop') and \
+                hasattr(obj.category.shop, 'user') and \
+                request.user == obj.category.shop.user:
+            return True
         return False
 
 

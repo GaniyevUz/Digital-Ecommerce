@@ -5,7 +5,7 @@ from itertools import cycle
 
 from django.db.models import QuerySet
 from mptt.querysets import TreeQuerySet
-from rest_framework.reverse import reverse
+from django_hosts import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED
 
 from shared.mixins import TestFixtures
@@ -44,16 +44,17 @@ class TestShopAPIView(TestFixtures):
         assert isinstance(shop.payment_providers, QuerySet)
 
     def test_get_shops_api(self, client, obj_user, auth_header, obj_shop):
-        shop_url = reverse('v1:shops:shop-list')
+        shop_url = reverse('v1:shops:shop-list', host='api')
+
         response = client.get(shop_url, **auth_header)
         assert response.status_code == HTTP_200_OK
         assert response.data.get('count') == obj_user.shop_set.count()
-        shop_config = reverse('v1:shops:shop-shop-config')
+        shop_config = reverse('v1:shops:shop-shop-config', host='api')
         response = client.get(shop_config, **auth_header)
         assert response.status_code == HTTP_200_OK
 
     def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies):
-        shop_url = reverse('v1:shops:shop-list')
+        shop_url = reverse('v1:shops:shop-list', host='api')
         data = {
             'name': faker.name(),
             'shop_category': choice(model_shop_categories).pk,
@@ -66,7 +67,7 @@ class TestShopAPIView(TestFixtures):
         assert response.data['languages'] == data['languages']
 
     def test_shop_detail_api(self, client, auth_header, obj_shop):
-        url = reverse('v1:shops:shop-detail', kwargs={'pk': obj_shop.pk})
+        url = reverse('v1:shops:shop-detail', kwargs={'pk': obj_shop.pk}, host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == HTTP_200_OK
 
@@ -94,6 +95,6 @@ class TestShopAPIView(TestFixtures):
             assert field in serializer.data
 
     def test_get_all_orders_api(self, client, auth_header, obj_shop):  # TODO to finish
-        url = reverse('v1:shops:order-list', (obj_shop.pk,))
+        url = reverse('v1:shops:order-list', (obj_shop.pk,), host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == HTTP_200_OK

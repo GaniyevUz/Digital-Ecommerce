@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSetMixin
 
+from shared.mixins import BaseShopMixin
 from orders.models import Order
 from shared.mixins import ShopRequiredMixin
 from shared.paginate import CountResultPaginate
@@ -29,11 +30,14 @@ class CurrencyModelViewSet(ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class PaymentProvidersViewSet(ShopRequiredMixin, ModelViewSet):
+class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsShopOwner,)
     pagination_class = CountResultPaginate
+
+    def perform_create(self, serializer):
+        serializer.save(shop=self.get_shop())
 
 
 class TelegramBotModelViewSet(ModelViewSet):

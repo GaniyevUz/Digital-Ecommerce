@@ -1,9 +1,11 @@
 import re
 
 import requests
+from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.request import Request
 
-from shops.models import Shop, TelegramBot
+from shops.models import Shop, TelegramBot, Domain
 
 
 class EmailValidator:
@@ -38,3 +40,11 @@ class TelegramBotValidator:
                     'status': status.HTTP_422_UNPROCESSABLE_ENTITY}
             return data
         return {'data': response, 'status': response.get('error_code')}
+
+
+def get_subdomain(request: Request) -> Domain | bool:
+    domains = request.get_host().split('.')
+    if len(domains) >= 2:  # subdomain.example.com
+        if shop_domain := get_object_or_404(Domain, name=domains[0]):
+            return shop_domain
+    return False

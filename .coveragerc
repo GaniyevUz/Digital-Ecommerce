@@ -1,2 +1,6 @@
 [run]
-omit = */migrations/*, */__init__.py
+omit = */migrations/*, */__init__.py, root/*
+disable_warnings = True
+
+[html]
+title=BotCommerceApi Coverage

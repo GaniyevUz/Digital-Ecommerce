@@ -19,6 +19,7 @@ class ClientCheckSerializer(serializers.Serializer):  # noqa - ABC
     exists = BooleanField(help_text='Checks if the client is registered with this email address', read_only=True)
 
     def to_representation(self, instance):
+        # TODO to optimize
         message = {'email': []}
         if email := instance.get('email'):
             email_validator = EmailValidator()

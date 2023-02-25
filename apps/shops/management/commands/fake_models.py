@@ -3,6 +3,7 @@ from random import choice, choices, randint
 
 from django.contrib.auth.hashers import make_password
 from django.core.management import BaseCommand
+from django.db.utils import IntegrityError
 from faker import Faker
 from model_bakery import baker
 
@@ -10,7 +11,7 @@ from orders.models import Order
 from products.models import Category as ProductCategory, Product
 from shared.emojis import all_emojis
 from shared.visualize import Loader
-from shops.models import Currency, Category, Shop
+from shops.models import Currency, Category, Shop, Domain
 from users.models import User
 
 
@@ -38,6 +39,7 @@ class Command(BaseCommand):
         parser.add_argument('-ctg', '--shop_category', type=int, help='Define a fake categories number')
         parser.add_argument('-cur', '--shop_currency', type=int, help='Define a fake currencies number')
         parser.add_argument('-sh', '--shop', type=int, help='Define a fake shops number')
+        parser.add_argument('-d', '--domain', type=int, help='Define a fake domain number')
         parser.add_argument('-p', '--product', type=int, help='Define a products number')
         parser.add_argument('-p_c', '--product_category', type=int,
                             help='Define a product categories number')
@@ -48,6 +50,7 @@ class Command(BaseCommand):
         shop_category = options.get('shop_category')
         shop_currency = options.get('shop_currency')
         shop = options.get('shop')
+        domain = options.get('domain')
         product_category = options.get('product_category')
         product = options.get('product')
         order = options.get('order')
@@ -60,6 +63,8 @@ class Command(BaseCommand):
             Loader(self.fake_shop_categories, shop_category, 'Category', shop_category)
         if shop:
             Loader(self.fake_shops, shop, 'Shop', shop)
+        if domain:
+            Loader(self.fake_domains, domain, 'Domain', domain)
         if product_category:
             Loader(self.fake_product_category, product_category, 'ProductCategory', product_category)
         if product:
@@ -107,6 +112,21 @@ class Command(BaseCommand):
             shop_currency=cycle(Currency.objects.all()),
             _quantity=count
         )
+
+    def fake_domains(self, count):
+        try:
+            baker.make(
+                'shops.Domain',
+                name=self.repeat(self.fake.domain_word, count),
+                is_sub_domain=True,
+                expires_at=datetime.date(2023, 4, 11),
+                has_ssl=False,
+                shop=cycle(Shop.objects.all()),
+                _quantity=count
+            )
+        except IntegrityError:
+            pass
+
 
     def fake_product_category(self, count):
         emoji = all_emojis

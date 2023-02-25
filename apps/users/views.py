@@ -14,11 +14,11 @@ class UserModelViewSet(ModelViewSet):
     def get_object(self):
         return self.request.user
 
-    # http_method_names = 'PATCH', 'DELETE'
+    def get_serializer_class(self):
+        if self.action == 'create':
+            return CreateUserModelSerializer
+        return super().get_serializer_class()
+
     def get(self, request, *args, **kwargs):
         serializer = UserModelSerializer(request.user)
         return Response(serializer.data)
-
-    def create(self, request, *args, **kwargs):
-        self.serializer_class = CreateUserModelSerializer
-        return super().create(request, *args, **kwargs)
