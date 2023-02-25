@@ -8,9 +8,6 @@ class CategoryModelSerializer(ModelSerializer):
         model = Category
         exclude = 'lft', 'rght', 'level', 'tree_id', 'shop'
 
-    def create(self, validated_data):
-        return super().create(validated_data)
-
 
 class CategoryListSerializer(ModelSerializer):
     class Meta:

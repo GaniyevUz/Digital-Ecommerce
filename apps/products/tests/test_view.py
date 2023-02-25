@@ -14,28 +14,13 @@ from shops.models import Shop
 @pytest.mark.django_db
 class TestProductModelViewSet(FixtureClass):
 
-    @staticmethod
-    def auth_header(client, rf):
-        data = {
-            "username": "admin",
-            "password": "password"
-        }
-        request = rf.post('/api/v1/token/', content_type='application/json',
-                          data=json.dumps(data))
-        response = TokenObtainPairView.as_view()(request).render()
-        data = {
-            "access": response.data.get('access'),
-            "refresh": response.data.get('refresh'),
-        }
-        return data
-
     def test_list_product(self, client: Client, user, create_products):
         '''
         This test will check per page with 10 details in the product class
         '''
         client.force_login(user)
         id = Shop.objects.first().pk
-        url = reverse_lazy('v1:products:product-list', kwargs={'shop':id })
+        url = reverse_lazy('v1:products:product-list', kwargs={'shop': id})
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
