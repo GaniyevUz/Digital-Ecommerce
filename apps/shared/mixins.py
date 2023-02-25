@@ -44,7 +44,7 @@ class TestFixtures:
 
     @fixture
     def auth_header(self, obj_user, client):
-        token = reverse('v1:users:token_obtain_pair', host='api')
+        token = reverse('api:users:token_obtain_pair', host='api')
         data = {
             'username': 'default_user',
             'password': 'default_pass'

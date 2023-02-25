@@ -10,7 +10,6 @@ from rest_framework.viewsets import ModelViewSet, ViewSetMixin
 
 from shared.mixins import BaseShopMixin
 from orders.models import Order
-from shared.mixins import ShopRequiredMixin
 from shared.paginate import CountResultPaginate
 from shared.permisions import IsAdminOrReadOnly, IsShopOwner
 from shared.validators import TelegramBotValidator

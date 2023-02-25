@@ -23,7 +23,7 @@ class TestUserAPIView(TestFixtures):
         assert User.objects.count() == users_count + 10
 
     def test_user_create_api(self, client):
-        url = reverse('v1:users:user')
+        url = reverse('api:users:user')
         data = {
             'username': 'Jack123',
             'password': 'string123',
@@ -37,7 +37,7 @@ class TestUserAPIView(TestFixtures):
         assert response.json()['username'] == data['username']
 
     def test_user_retrieve_api(self, client, auth_header, obj_user):
-        url = reverse('v1:users:user')
+        url = reverse('api:users:user')
         response = client.get(url, **auth_header)
         assert response.status_code == 200
         # assert response.json() == UserModelSerializer(obj_user).data
@@ -45,7 +45,7 @@ class TestUserAPIView(TestFixtures):
         assert sorted(response.json().items()) == sorted(data.items())
 
     def test_user_update_api(self, client, auth_header, obj_user):
-        url = reverse('v1:users:user')
+        url = reverse('api:users:user')
         data = {
             'username': 'Jane',
             'email': 'janedoe@example.com',
@@ -59,14 +59,14 @@ class TestUserAPIView(TestFixtures):
         assert response['email'] == data['email']
 
     def test_user_destroy_api(self, client, auth_header, obj_user):
-        url = reverse('v1:users:user')
+        url = reverse('api:users:user')
         response = client.delete(url, **auth_header)
         assert response.status_code == 204
         response = client.get(url, **auth_header)
         assert response.status_code == 403
 
     def test_user_change_default_shop_api(self, client, auth_header, obj_shop, obj_user):
-        url = reverse('v1:users:user')
+        url = reverse('api:users:user')
         shop = obj_user.shop_set.first()
         data = {
             'default_shop': shop.pk

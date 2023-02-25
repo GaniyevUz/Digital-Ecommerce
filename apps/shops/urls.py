@@ -21,6 +21,7 @@ urlpatterns = [
          name='telegrambot'),
 
     path('shop/<int:shop>/product', ProductModelViewSet.as_view(list_), name='product-list'),
+    path('shop/<int:shop>/product/<int:pk>', ProductModelViewSet.as_view(detail), name='product-detail'),
     path('shop/<int:shop>/category', ProductCategoryModelViewSet.as_view(list_), name='product-category-list'),
     path('shop/<int:shop>/category/<int:pk>', ProductCategoryModelViewSet.as_view(detail),
          name='product-category-detail'),
