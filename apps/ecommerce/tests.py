@@ -22,14 +22,14 @@ class TestEcommerce(FixtureClass):
 
     @pytest.fixture
     def obj_client(self) -> User:
-        client, _ = Client.objects.get_or_create(username='client', password='client_pass')
+        client, _ = Client.objects.get_or_create(email='client@example.com', password='client_pass')
         return client
 
     @pytest.fixture
     def auth_header(self, obj_client, client):
         token = reverse('api:users:token_obtain_pair', host='api')
         data = {
-            'username': obj_client.username,
+            'email': obj_client.email,
             'password': 'client_pass'
         }
         response = client.post(token, data)

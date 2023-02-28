@@ -15,7 +15,7 @@ class FixtureClass:
     @pytest.fixture
     def user(self):
         user = User.objects.create_user(
-            username='admin', password='password'
+            email='admin@example.com', password='password'
         )
         user.user_permissions.add(*Permission.objects.filter(name__endswith='product'))
         return user

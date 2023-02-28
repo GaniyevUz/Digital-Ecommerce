@@ -47,7 +47,7 @@ class ClientModelViewSet(ModelViewSet, BaseShopMixin):
                     'user': ClientModelSerializer(user).data
                 }
                 return Response(data)
-        return Response({"password": ["Wrong username or password specified"]}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"password": ["Wrong email or password specified"]}, status=status.HTTP_400_BAD_REQUEST)
 
     def get_serializer_class(self):
         if self.action == 'post':
