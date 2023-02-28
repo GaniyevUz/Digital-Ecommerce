@@ -1,5 +1,7 @@
 # BotCommerce
 
+[![codecov](https://codecov.io/gh/GaniyevUz/BotCommerce/branch/master/graph/badge.svg?token=IPVIFRXEMB)](https://codecov.io/gh/GaniyevUz/BotCommerce)
+
 A complete shop, with payment systems, delivery services and convenient control panel with built-in CRM and Analytics.
 
 ## TODO - Required
