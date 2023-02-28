@@ -1,5 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
-from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField,\
+from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField, \
     IntegerField, JSONField, BooleanField, \
     DateField, OneToOneField
 
@@ -54,3 +54,7 @@ class Domain(Model):
 
     def __str__(self):
         return self.name
+
+
+class Country(Model):
+    name = CharField(max_length=255, unique=True)

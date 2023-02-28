@@ -5,9 +5,9 @@ from rest_framework.viewsets import ModelViewSet
 
 from shared.paginate import CountResultPaginate
 from shared.permisions import IsAuthenticatedOwner
-from shops.models import Shop
+from shops.models import Shop, Country
 from shops.models.shop_belongs import PaymentProvider
-from shops.serializers import ShopSerializer, PaymentSerializers
+from shops.serializers import ShopSerializer, PaymentSerializers, CountrySerializer
 
 
 class ShopModelViewSet(ModelViewSet):
@@ -25,6 +25,11 @@ class ShopModelViewSet(ModelViewSet):
         langs = (("🇺🇿", "O'zbekcha", "uz"), ("🇷🇺", "Русский", "ru"), ("🇺🇸", "English", "en"))
         data = {"languages": [{'icon': i, 'title': t, 'code': c} for i, t, c in langs]}
         return Response(data)
+
+
+class CountryModelViewSet(ModelViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
 
 
 class PaymentProvidersListAPIView(ListAPIView):

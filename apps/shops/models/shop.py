@@ -19,6 +19,7 @@ class Shop(Model):
     user = ForeignKey('users.User', CASCADE)
     shop_currency = ForeignKey('shops.Currency', RESTRICT)
     shop_category = ForeignKey('shops.Category', RESTRICT)
+    country = ForeignKey('shops.Country', RESTRICT)
     delivery_types = MultiSelectField(max_length=255, choices=Delivery.choices, min_choices=1, default=Delivery.PICKUP)
     about_us = CharField(max_length=1024, null=True, blank=True)
     delivery_price = IntegerField('Delivery Price', null=True, blank=True)
@@ -55,3 +56,7 @@ class Shop(Model):
     @property
     def payment_providers(self):
         return self.paymentprovider_set.all()
+
+    @property
+    def telegram_bot(self):
+        return self.telegrambot_set.first()

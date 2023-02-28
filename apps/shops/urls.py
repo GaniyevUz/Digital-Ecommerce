@@ -5,12 +5,14 @@ from products.views import CategoryModelViewSet as ProductCategoryModelViewSet, 
     ProductCategoryMoveAPI
 from shared.routers import BotCommerceRouter
 from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet, CategoryModelViewSet, StatShop
+from shops.views.shop import CountryModelViewSet
 from shops.views.shop_belongs import TelegramBotModelViewSet
 
 router = BotCommerceRouter()
 router.register('shop', ShopModelViewSet, 'shop')
 router.register('category', CategoryModelViewSet, 'category')
 router.register('currency', CurrencyModelViewSet, 'currency')
+router.register('countries', CountryModelViewSet, 'country')
 
 list_ = {'get': 'list', 'post': 'create'}
 detail = {'get': 'retrieve', 'patch': 'partial_update', 'put': 'update', 'delete': 'destroy'}

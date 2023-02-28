@@ -35,6 +35,8 @@ class TestShopAPIView(TestFixtures):
         assert str(shop) == shop.name
         assert str(shop.shop_category) == shop.shop_category.name
         assert str(shop.shop_currency) == shop.shop_currency.name
+        assert str(shop.telegram_bot) == shop.telegram_bot.username
+        assert str(shop.domain) == shop.domain.name
 
         # Test for @property methods of Models
         assert isinstance(shop.categories, TreeQuerySet)
@@ -98,3 +100,4 @@ class TestShopAPIView(TestFixtures):
         url = reverse('api:shops:order-list', (obj_shop.pk,), host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == HTTP_200_OK
+

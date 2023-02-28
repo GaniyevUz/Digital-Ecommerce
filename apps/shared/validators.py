@@ -1,5 +1,6 @@
-from httpx import get
 from re import fullmatch
+
+from httpx import get
 from rest_framework import status
 from rest_framework.request import Request
 from shops.models import Shop, TelegramBot, Domain

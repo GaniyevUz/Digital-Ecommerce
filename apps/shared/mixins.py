@@ -80,12 +80,14 @@ class TestFixtures:
     @fixture
     def obj_shop(self, faker, obj_user, model_shop_categories, model_currencies) -> Shop:
         shop_count = Shop.objects.count()
-
         shop = Shop.objects.create(
             name=faker.name(), shop_category=choice(model_shop_categories),
             shop_currency=choice(model_currencies), user=obj_user,
             languages=['uz', 'en', 'ru']
         )
+
+        self.baker.make('shops.TelegramBot', token='token', username='username', shop=shop)
+        self.baker.make('shops.Domain', name='domain', shop=shop)
         assert Shop.objects.count() == shop_count + 1
 
         return shop
