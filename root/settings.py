@@ -62,7 +62,6 @@ ROOT_HOSTCONF = 'root.hosts'
 PARENT_HOST = os.getenv('DOMAIN')
 DEFAULT_HOST = 'api'
 
-APPEND_SLASH = True
 
 TEMPLATES = [
     {
@@ -144,7 +143,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
@@ -155,10 +154,6 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic',
-            'description': 'Username and password.'
-        },
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',

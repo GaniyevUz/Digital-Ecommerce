@@ -30,13 +30,14 @@ class TestFixtures:
 
     @fixture
     def obj_user(self) -> User:
-        return User.objects.get_or_create(email='default_user@example.com', password='default_pass')
+        user, _ = User.objects.get_or_create(email='default_user@example.com', password='default_pass')
+        return user
 
     @fixture
     def auth_header(self, obj_user, client):
         token = reverse('api:users:token_obtain_pair', host='api')
         data = {
-            'username': 'default_user',
+            'email': 'default_user@example.com',
             'password': 'default_pass'
         }
         response = client.post(token, data)

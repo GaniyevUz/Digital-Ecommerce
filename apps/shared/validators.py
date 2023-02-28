@@ -24,9 +24,8 @@ class TelegramBotValidator:
             return {'status': 'Invalid shop'}
         get_me_url = f'https://api.telegram.org/bot{token}/getMe'
         response = get(get_me_url).json()
-        is_valid = response.get('ok')
         data = {}
-        if is_valid:
+        if response.get('ok'):
             data['token'] = token
             data['username'] = response.get('result')['username']
             data['shop'] = Shop.objects.get(pk=kwargs['pk'])
