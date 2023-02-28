@@ -20,7 +20,7 @@ remig:
 	make fake --no-print-directory -s
 
 fake:
-	./manage.py fake_models -u 2 -sh 4 -p_c 10 -p 100 -o 100
+	./manage.py fake_models -u 2 -sh 4 -p_c 10 -p 100 -o 100 -d 4
 
 test:
 	pytest && open coverage/index.html
