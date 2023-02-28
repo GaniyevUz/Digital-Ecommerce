@@ -1,9 +1,9 @@
 import pytest
-from django_hosts import reverse
+from django_hosts import reverse, reverse_host
 from django.test.utils import override_settings
 from rest_framework import status
+from django.test.client import Client as TestClient
 from rest_framework.status import HTTP_200_OK
-
 from ecommerce.models import Client
 from products.tests.fixture import FixtureClass
 from shops.models import Domain
@@ -22,7 +22,7 @@ class TestEcommerce(FixtureClass):
 
     @pytest.fixture
     def obj_client(self) -> User:
-        client, _ = Client.objects.get_or_create(email='client@example.com', password='client_pass')
+        client, _ = Client.objects.get_or_create(email='client@mail.com', password='client_pass')
         return client
 
     @pytest.fixture
@@ -42,16 +42,19 @@ class TestEcommerce(FixtureClass):
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    def test_client_sign_up(self, client, domain):
+    def test_client_sign_up(self, client: TestClient, rf, admin_user, domain):
         url = reverse('api:ecommerce:sign-up', host='other', host_args=(domain.name,))
         data = {
-            'password': 'password123',
-            'confirm_password': 'password123',
+            'password': '@DK@Gdu236gc2bf23',
+            'confirm_password': '@DK@Gdu236gc2bf23',
             'email': 'user@example.com',
             'first_name': 'John',
             'last_name': 'Doe',
             'phone': '+998901234567',
             'account_type': 'email'
         }
-        response = client.post(url, data=data)
-        print()
+        server_name = reverse_host('other', (domain.name,))
+        url = reverse('api:ecommerce:sign-up', host='other', host_args=(domain.name,))
+        response = client.post(url, data, SERVER_NAME=server_name)
+
+        assert response.status_code == status.HTTP_201_CREATED
