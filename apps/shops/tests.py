@@ -33,7 +33,7 @@ class TestShopAPIView(TestFixtures):
 
         # Test for __str__ methods of Models
         assert str(shop) == shop.name
-        assert str(shop.shop_category) == shop.shop_category.name
+        assert str(shop.shop_category.name) == shop.shop_category.name
         assert str(shop.shop_currency) == shop.shop_currency.name
 
         # Test for @property methods of Models

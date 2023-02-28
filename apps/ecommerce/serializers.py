@@ -5,7 +5,7 @@ from rest_framework.fields import BooleanField
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.models import Client
-from shared.validators import EmailValidator
+from shared.validators import EmailValidator, get_subdomain
 
 
 class ClientModelSerializer(serializers.ModelSerializer):
@@ -55,10 +55,8 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data, **kwargs):
         validated_data['password'] = make_password(validated_data['password'])
-        # if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
-        #     pass
-        shop = self.context['request'].parser_context['kwargs']['shop']
-        user = Client.objects.create(**validated_data, shop_id=shop)
+        domain = get_subdomain(self.context['request']).shop
+        user = Client.objects.create(**validated_data, shop=domain)
         # user.is_active = False
         # user.save()
         return user

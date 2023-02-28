@@ -2,7 +2,7 @@
 name = "botcommerce"
 version = "0.1.0"
 description = ""
-authors = ["habibullo <bubbless7456@gmail.com>", "jakhongir <ganiyevuzb@gmail.com>"]
+authors = [ "jakhongir <ganiyevuzb@gmail.com>", "habibullo <bubbless7456@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -14,14 +14,14 @@ drf-yasg = "^1.21.4"
 django-filter = "^22.1"
 djangorestframework-simplejwt = "^5.2.2"
 django-jazzmin = "^2.6.0"
-python-dotenv = "^0.21.1"
+python-dotenv = "1.0.0"
 psycopg2-binary = "^2.9.5"
 pillow = "^9.4.0"
 django-parler = "^2.3"
 sentry-sdk = "^1.14.0"
 django-multiselectfield = "^0.1.12"
 pyyaml = "^6.0"
-faker = "^17.0.0"
+faker = "^17.3.0"
 pytest = "^7.2.1"
 coverage = "^7.1.0"
 model-bakery = "^1.10.1"

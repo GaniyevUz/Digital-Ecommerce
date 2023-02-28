@@ -1,3 +1,4 @@
+import datetime
 from itertools import cycle
 from random import choice, choices, randint
 
@@ -75,11 +76,10 @@ class Command(BaseCommand):
     def fake_users(self, count):
         baker.make(
             'users.User',
-            username=self.repeat(self.fake.user_name, count),
+            email=self.repeat(self.fake.unique.email, count),
             password=make_password('1'),
             first_name=self.repeat(self.fake.first_name, count),
             last_name=self.repeat(self.fake.last_name, count),
-            email=self.repeat(self.fake.email, count),
             invitation_token=self.repeat(self.fake.password, count, length=10, special_chars=False),
             _quantity=count
         )
@@ -126,7 +126,6 @@ class Command(BaseCommand):
             )
         except IntegrityError:
             pass
-
 
     def fake_product_category(self, count):
         emoji = all_emojis
