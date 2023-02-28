@@ -8,6 +8,7 @@ admin:
 data:
 	./manage.py loaddata currency.json
 	./manage.py loaddata category.json
+	./manage.py loaddata countries.json
 
 unmig:
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete

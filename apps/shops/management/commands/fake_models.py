@@ -10,9 +10,9 @@ from model_bakery import baker
 
 from orders.models import Order
 from products.models import Category as ProductCategory, Product
-from shared.emojis import all_emojis
+from shared.const import all_emojis
 from shared.visualize import Loader
-from shops.models import Currency, Category, Shop, Domain
+from shops.models import Currency, Category, Shop, Country
 from users.models import User
 
 
@@ -110,6 +110,7 @@ class Command(BaseCommand):
             user=cycle(User.objects.all()),
             shop_category=cycle(Category.objects.all()),
             shop_currency=cycle(Currency.objects.all()),
+            country=cycle(Country.objects.all()),
             _quantity=count
         )
 

@@ -40,6 +40,7 @@ class CategoryModelViewSet(BaseShopMixin, ModelViewSet):
 
 class ProductCategoryMoveAPI(GenericAPIView):
     serializer_class = CategoryMoveSerializer
+    queryset = Product.objects.all()
 
     def post(self, request, shop, pk):  # TODO to finish
         Category.objects.filter(shop=shop, pk=pk)
