@@ -30,10 +30,7 @@ class TestFixtures:
 
     @fixture
     def obj_user(self) -> User:
-        try:
-            return User.objects.get(username='default_user')
-        except ObjectDoesNotExist:
-            return User.objects.create_user(username='default_user', password='default_pass')
+        return User.objects.get_or_create(email='default_user@example.com', password='default_pass')
 
     @fixture
     def auth_header(self, obj_user, client):

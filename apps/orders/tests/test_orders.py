@@ -15,7 +15,6 @@ class TestOrderAPI:
             first_name='Elizabeth',
             last_name='Liz',
             email='elizabeth@liz.io',
-            username='elizabeth',
             password=make_password('1234')
         )
         return user
