@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import check_password
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
@@ -19,8 +20,6 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):
     queryset = Client.objects.all()
 
     def get_object(self):
-        if self.request.user.is_anonymous or self.request.user.is_superuser:
-            return None
         return self.request.user
 
 

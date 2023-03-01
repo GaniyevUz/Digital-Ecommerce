@@ -12,7 +12,7 @@ class ClientModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = ('id', 'first_name', 'last_name', 'email',
-                  'phone', 'account_type',)
+                  'phone', 'account_type')
 
 
 class ClientCheckSerializer(serializers.Serializer):  # noqa - ABC

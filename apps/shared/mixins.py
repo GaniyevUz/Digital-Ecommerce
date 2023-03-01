@@ -1,5 +1,6 @@
 from random import choice
 
+from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django_hosts import reverse
@@ -30,7 +31,7 @@ class TestFixtures:
 
     @fixture
     def obj_user(self) -> User:
-        user, _ = User.objects.get_or_create(email='default_user@example.com', password='default_pass')
+        user, _ = User.objects.get_or_create(email='default_user@example.com', password=make_password('default_pass'))
         return user
 
     @fixture
