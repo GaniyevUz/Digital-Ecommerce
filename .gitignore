@@ -263,3 +263,6 @@ requests
 apps/orders/test.py
 
 test.py
+
+**/.coverage
+**/covereage/**

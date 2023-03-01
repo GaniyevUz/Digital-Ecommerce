@@ -55,12 +55,13 @@ class TestShopAPIView(TestFixtures):
         response = client.get(shop_config, **auth_header)
         assert response.status_code == HTTP_200_OK
 
-    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies):
+    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies, model_countries):
         shop_url = reverse('api:shops:shop-list', host='api')
         data = {
             'name': faker.name(),
             'shop_category': choice(model_shop_categories).pk,
             'shop_currency': choice(model_currencies).pk,
+            'country': choice(model_countries).pk,
             'languages': {'uz', 'ru'}
         }
         response = client.post(shop_url, data, **auth_header)
