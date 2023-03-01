@@ -28,7 +28,7 @@ services:
       - POSTGRES_PASSWORD=1
       - POSTGRES_DB=bot_commerce
   nginx:
-    build: ./apps/nginx/
+    build: nginx/
     volumes:
       - static_volume:/home/project/static/
       - media_volume:/home/project/media/

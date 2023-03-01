@@ -1,7 +1,7 @@
+from pprint import pprint
 from random import choice
 
 from django.contrib.auth.hashers import make_password
-from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from django_hosts import reverse
 from model_bakery import baker
@@ -9,7 +9,7 @@ from pytest import fixture
 from rest_framework.status import HTTP_200_OK
 
 from shared.validators import get_subdomain
-from shops.models import Currency, Category, Shop
+from shops.models import Currency, Category, Shop, Country
 from users.models import User
 
 
@@ -32,16 +32,19 @@ class TestFixtures:
     @fixture
     def obj_user(self) -> User:
         user, _ = User.objects.get_or_create(email='default_user@example.com', password=make_password('default_pass'))
+        print(user)
         return user
 
     @fixture
     def auth_header(self, obj_user, client):
         token = reverse('api:users:token_obtain_pair', host='api')
+        print(obj_user)
         data = {
-            'email': 'default_user@example.com',
+            'email': obj_user.email,
             'password': 'default_pass'
         }
         response = client.post(token, data)
+        pprint(response.json())
         assert response.status_code == HTTP_200_OK
         if token := response.data.get('access'):
             return {'HTTP_AUTHORIZATION': 'Bearer ' + token}
@@ -77,14 +80,27 @@ class TestFixtures:
         return currencies
 
     @fixture
-    def obj_shop(self, faker, obj_user, model_shop_categories, model_currencies) -> Shop:
-        shop_count = Shop.objects.count()
-        shop = Shop.objects.create(
-            name=faker.name(), shop_category=choice(model_shop_categories),
-            shop_currency=choice(model_currencies), user=obj_user,
-            languages=['uz', 'en', 'ru']
+    def model_countries(self, faker) -> list:
+        country_count = Country.objects.count()
+
+        self.baker.make(
+            'shops.Country',
+            _quantity=20,
+            name=self.repeat(faker.unique.country, 20)
         )
 
+        countries = Country.objects.all()
+        assert countries.count() == country_count + 20
+
+        return countries
+
+    @fixture
+    def obj_shop(self, faker, obj_user) -> Shop:
+        shop_count = Shop.objects.count()
+        shop = self.baker.make('shops.Shop',
+                               name=faker.name(), user=obj_user,
+                               languages=['uz', 'en', 'ru']
+                               )
         self.baker.make('shops.TelegramBot', token='token', username='username', shop=shop)
         self.baker.make('shops.Domain', name='domain', shop=shop)
         assert Shop.objects.count() == shop_count + 1
