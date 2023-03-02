@@ -1,3 +1,4 @@
+from itertools import cycle
 from pprint import pprint
 from random import choice
 
@@ -8,8 +9,9 @@ from model_bakery import baker
 from pytest import fixture
 from rest_framework.status import HTTP_200_OK
 
+from ecommerce.models import Client
 from shared.validators import get_subdomain
-from shops.models import Currency, Category, Shop, Country
+from shops.models import Currency, Category, Shop, Country, Domain
 from users.models import User
 
 
@@ -32,13 +34,11 @@ class TestFixtures:
     @fixture
     def obj_user(self) -> User:
         user, _ = User.objects.get_or_create(email='default_user@example.com', password=make_password('default_pass'))
-        print(user)
         return user
 
     @fixture
     def auth_header(self, obj_user, client):
         token = reverse('api:users:token_obtain_pair', host='api')
-        print(obj_user)
         data = {
             'email': obj_user.email,
             'password': 'default_pass'
@@ -102,10 +102,42 @@ class TestFixtures:
                                languages=['uz', 'en', 'ru']
                                )
         self.baker.make('shops.TelegramBot', token='token', username='username', shop=shop)
-        self.baker.make('shops.Domain', name='domain', shop=shop)
         assert Shop.objects.count() == shop_count + 1
 
         return shop
+
+    @fixture
+    def domain(self, obj_shop):
+        domain, _ = Domain.objects.get_or_create(name='ecommerce', shop=obj_shop)
+        return domain
+
+    @fixture
+    def obj_category(self, obj_shop, faker):
+        category = baker.make('products.Category',
+                              name=faker.word(),
+                              description=faker.sentence(),
+                              shop=obj_shop,
+                              _quantity=4
+                              )
+        return category
+
+    @fixture
+    def obj_product(self, obj_category, faker):
+        product = baker.make('products.Product',
+                             name=faker.word(),
+                             description=faker.sentence(),
+                             category=cycle(obj_category),
+                             price=1000,
+                             in_availability=True,
+                             _quantity=10
+                             )
+        return product
+
+    @fixture
+    def obj_client(self, obj_shop) -> User:
+        client, _ = Client.objects.get_or_create(email='client@example.com', password=make_password('client_pass'),
+                                                 shop=obj_shop)
+        return client
 
     @staticmethod
     def repeat(func, count, *args, **kwargs):

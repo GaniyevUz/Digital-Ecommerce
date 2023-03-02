@@ -6,6 +6,9 @@ from django.db.models import OneToOneField, CharField, ForeignKey, SET_NULL, CAS
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
+    def get_by_natural_key(self, username, shop=None):
+        return self.get(**{self.model.USERNAME_FIELD: username, 'shop': shop})
+
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The given email must be set')
@@ -33,7 +36,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
-    email = EmailField(max_length=255, unique=True)
+    email = EmailField(max_length=255)
     default_shop = OneToOneField('shops.Shop', CASCADE, related_name='default_shop', null=True,
                                  blank=True)
     invitation_token = CharField(max_length=255, null=True)
@@ -41,5 +44,9 @@ class User(AbstractUser):
     username = None
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['shop']
     objects = UserManager()
+    shop = ForeignKey('shops.Shop', CASCADE, 'shops', null=True, blank=True)
+
+    class Meta:
+        unique_together = ('email', 'shop')

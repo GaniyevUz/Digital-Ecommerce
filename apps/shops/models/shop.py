@@ -16,7 +16,7 @@ class Shop(Model):
 
     name = CharField(max_length=255)
     languages = MultiSelectField(max_length=255, choices=Languages.choices, min_choices=1)
-    user = ForeignKey('users.User', CASCADE)
+    user = ForeignKey('users.User', CASCADE, related_name='users')
     shop_currency = ForeignKey('shops.Currency', RESTRICT)
     shop_category = ForeignKey('shops.Category', RESTRICT)
     country = ForeignKey('shops.Country', RESTRICT)
