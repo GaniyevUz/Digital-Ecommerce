@@ -3,12 +3,12 @@ from django.urls import path, include
 from orders.views import OrderModelViewSet
 from products.views import CategoryModelViewSet as ProductCategoryModelViewSet, ProductModelViewSet, \
     ProductCategoryMoveAPI
-from shared.routers import BotCommerceRouter
+from shared.restframework import CustomRouter
 from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet, CategoryModelViewSet, StatShop
 from shops.views.shop import CountryModelViewSet
 from shops.views.shop_belongs import TelegramBotModelViewSet
 
-router = BotCommerceRouter()
+router = CustomRouter()
 router.register('shop', ShopModelViewSet, 'shop')
 router.register('category', CategoryModelViewSet, 'category')
 router.register('currency', CurrencyModelViewSet, 'currency')

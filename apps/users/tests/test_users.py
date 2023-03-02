@@ -1,7 +1,7 @@
 import pytest
 from rest_framework.reverse import reverse
 
-from shared.mixins import TestFixtures
+from shared.django import TestFixtures
 from users.models import User
 from users.serializers import UserModelSerializer
 

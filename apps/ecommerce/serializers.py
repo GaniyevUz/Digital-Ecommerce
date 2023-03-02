@@ -5,7 +5,7 @@ from rest_framework.fields import BooleanField
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
-from shared.validators import EmailValidator, get_subdomain
+from shared.utils import EmailValidator, get_subdomain
 from users.models import User
 
 

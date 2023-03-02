@@ -10,7 +10,7 @@ from model_bakery import baker
 
 from orders.models import Order
 from products.models import Category as ProductCategory, Product
-from shared.const import all_emojis
+from shared.utils import all_emojis
 from shared.visualize import Loader
 from shops.models import Currency, Category, Shop, Country
 from users.models import User

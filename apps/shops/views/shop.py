@@ -3,8 +3,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.paginate import CountResultPaginate
-from shared.permisions import IsAuthenticatedOwner
+from shared.restframework import CountResultPaginate, IsAuthenticatedOwner
+
 from shops.models import Shop, Country
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers, CountrySerializer
