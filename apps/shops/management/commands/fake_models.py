@@ -142,7 +142,7 @@ class Command(BaseCommand):
         )
 
     def fake_product(self, count):
-        shops = Shop.objects.all()
+        # shops = Shop.objects.all()
         categories = ProductCategory.objects.all()
 
         baker.make(
