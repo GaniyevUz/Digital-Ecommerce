@@ -168,7 +168,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     # 'UPDATE_LAST_LOGIN': True,
-    "TOKEN_OBTAIN_SERIALIZER": "apps.shared.simplejwt_serializers.CustomTokenObtainPairSerializer",
+    "TOKEN_OBTAIN_SERIALIZER": "apps.shared.restframework.CustomTokenObtainPairSerializer",
 
 }
 JAZZMIN_SETTINGS = {
