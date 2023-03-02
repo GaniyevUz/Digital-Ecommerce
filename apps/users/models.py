@@ -46,7 +46,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['shop']
     objects = UserManager()
-    shop = ForeignKey('shops.Shop', CASCADE, 'shops', null=True, blank=True)
+    shop = ForeignKey('shops.Shop', CASCADE, 'shops', null=True, blank=True)  # client for this shop
 
     class Meta:
         unique_together = ('email', 'shop')
