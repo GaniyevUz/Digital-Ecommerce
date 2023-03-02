@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.permisions import UserPermission
+from shared.restframework import UserPermission
 from .models import User
 from .serializers import UserModelSerializer, CreateUserModelSerializer
 

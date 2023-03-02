@@ -1,8 +1,5 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
-from shops.models import Shop
-
-
 class IsAuthenticatedOwner(BasePermission):
 
     def has_permission(self, request, view):

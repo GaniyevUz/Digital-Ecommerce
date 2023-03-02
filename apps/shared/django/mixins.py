@@ -1,6 +1,5 @@
 from itertools import cycle
 from pprint import pprint
-from random import choice
 
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
@@ -10,7 +9,7 @@ from pytest import fixture
 from rest_framework.status import HTTP_200_OK
 
 from ecommerce.models import Client
-from shared.validators import get_subdomain
+from shared.utils import get_subdomain
 from shops.models import Currency, Category, Shop, Country, Domain
 from users.models import User
 
