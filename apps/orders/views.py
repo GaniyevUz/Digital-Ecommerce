@@ -2,6 +2,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from orders.models import Order
 from orders.serializers import OrderModelSerializer
+from products.models import Category
 from shared.mixins import BaseShopMixin
 from shared.paginate import CustomPageNumberPagination
 

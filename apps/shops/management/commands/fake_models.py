@@ -128,9 +128,50 @@ class Command(BaseCommand):
         except IntegrityError:
             pass
 
+    # def generate_category(self, shop):
+
+        # c1 = ProductCategory.objects.create(
+        #     name={'uz': "Ko'chmas mulk"},
+        #     shop_id=shop
+        # )
+        # c11 = ProductCategory.objects.create(
+        #     name={'uz': "Sutkalik ijarasi'"},
+        #     shop_id=shop,
+        #     parent=c1
+        # )
+        # c12 = ProductCategory.objects.create(
+        #     name={'uz': "Kvartiralar'"},
+        #     shop_id=shop,
+        #     parent=c1
+        # )
+        #
+        # c2 = ProductCategory.objects.create(
+        #     name={'uz': "Transport"},
+        #     shop_id=shop,
+        # )
+        #
+        # c21 = ProductCategory.objects.create(
+        #     name={'uz': "Yengil avtomashinalar"},
+        #     shop_id=shop,
+        #     parent=c2
+        # )
+        #
+        # c22 = ProductCategory.objects.create(
+        #     name={'uz': "Avto ehtiyot qismlari va aksessuarlar"},
+        #     shop_id=shop,
+        #     parent=c2
+        # )
+        #
+        # c23 = ProductCategory.objects.create(
+        #     name={'uz': "Shinalar, disklar va g'ildiraklar"},
+        #     shop_id=shop,
+        #     parent=c2
+        # )
+
     def fake_product_category(self, count):
         emoji = all_emojis
         shops = Shop.objects.all()
+
         baker.make(
             'products.Category',
             name=self.t_repeat(self.fake.first_name, count),

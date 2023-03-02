@@ -8,7 +8,7 @@ from shared.model_configs import category_directory_path, product_directory_path
 
 class Category(MPTTModel):
     class Translate:
-        def __call__(self, *args, **kwargs):
+        def __new__(self, *args, **kwargs):
             return {'en': '', 'ru': '', 'uz': ''}
 
     name = JSONField(default=Translate)
@@ -55,4 +55,3 @@ class Product(Model):
         except (ValueError, AttributeError):
             url = ''
         return url
-
