@@ -1,10 +1,9 @@
 from django.urls import path, include
 
 from products.views import ProductModelViewSet, CategoryModelViewSet
-from shared.routers import BotCommerceRouter
+from shared.django import BotCommerceRouter
 
 router = BotCommerceRouter()
-
 
 urlpatterns = [
     path('product', ProductModelViewSet.as_view({'get': 'list'}), name='product-list'),
