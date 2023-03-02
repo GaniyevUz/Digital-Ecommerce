@@ -1,6 +1,6 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-from django.db.models import OneToOneField, CharField, ForeignKey, SET_NULL, CASCADE, EmailField
+from django.db.models import OneToOneField, CharField, ForeignKey, SET_NULL, CASCADE, EmailField, TextChoices
 
 
 class UserManager(BaseUserManager):
@@ -36,11 +36,17 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+    class AccountType(TextChoices):
+        EMAIL = 'email', 'Email'
+        PHONE = 'phone', 'Phone'
+
     email = EmailField(max_length=255)
     default_shop = OneToOneField('shops.Shop', CASCADE, related_name='default_shop', null=True,
                                  blank=True)
     invitation_token = CharField(max_length=255, null=True)
     invitation = ForeignKey('self', SET_NULL, null=True, blank=True)
+    phone = CharField(max_length=15, null=True, blank=True)
+    account_type = CharField(max_length=10, choices=AccountType.choices)
     username = None
 
     USERNAME_FIELD = 'email'

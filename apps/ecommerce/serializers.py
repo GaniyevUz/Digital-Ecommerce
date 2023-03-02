@@ -4,13 +4,14 @@ from rest_framework import serializers, validators
 from rest_framework.fields import BooleanField
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from ecommerce.models import Client
+
 from shared.validators import EmailValidator, get_subdomain
+from users.models import User
 
 
 class ClientModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = User
         fields = ('id', 'first_name', 'last_name', 'email',
                   'phone', 'account_type')
 
@@ -24,7 +25,7 @@ class ClientCheckSerializer(serializers.Serializer):  # noqa - ABC
         if email := instance.get('email'):
             email_validator = EmailValidator()
             if email_validator(email):
-                exists = Client.objects.filter(email=email).exists()
+                exists = User.objects.filter(email=email).exists()
                 return {'exists': exists}
             message['email'] = ['Enter a valid email address.']
             return message
@@ -34,12 +35,12 @@ class ClientCheckSerializer(serializers.Serializer):  # noqa - ABC
 
 class CreateClientModelSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(required=True, validators=[
-        validators.UniqueValidator(queryset=Client.objects.values_list('email', flat=True))])
+        validators.UniqueValidator(queryset=User.objects.values_list('email', flat=True))])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password], min_length=8)
     confirm_password = serializers.CharField(write_only=True, required=True, min_length=8)
 
     class Meta:
-        model = Client
+        model = User
         fields = ('password', 'confirm_password',
                   'email', 'first_name', 'last_name', 'phone', 'account_type')
         extra_kwargs = {
@@ -56,7 +57,7 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
     def create(self, validated_data, **kwargs):
         validated_data['password'] = make_password(validated_data['password'])
         domain = get_subdomain(self.context['request']).shop
-        user = Client.objects.create(**validated_data, shop=domain)
+        user = User.objects.create(**validated_data, shop=domain)
         # user.is_active = False
         # user.save()
         return user
@@ -73,5 +74,5 @@ class CreateClientModelSerializer(serializers.ModelSerializer):
 
 class LoginClientModelSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Client
+        model = User
         fields = ('password', 'email')
