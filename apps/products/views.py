@@ -1,12 +1,10 @@
 from django_filters import rest_framework as filters
-from rest_framework.generics import GenericAPIView, get_object_or_404
+from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from shared.mixins import BaseShopMixin
-from shared.paginate import CustomPageNumberPagination
-from shared.permisions import IsShopOwner
+from shared.django import BaseShopMixin
+from shared.restframework import CustomPageNumberPagination, IsShopOwner
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
                           CategoryMoveSerializer)

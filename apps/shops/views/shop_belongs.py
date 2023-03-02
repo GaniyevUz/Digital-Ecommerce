@@ -8,11 +8,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ViewSetMixin
 
-from shared.mixins import BaseShopMixin
 from orders.models import Order
-from shared.paginate import CountResultPaginate
-from shared.permisions import IsAdminOrReadOnly, IsShopOwner
-from shared.validators import TelegramBotValidator
+from shared.django import BaseShopMixin
+from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
+from shared.utils import TelegramBotValidator
 from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
 

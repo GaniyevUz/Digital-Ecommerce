@@ -2,9 +2,7 @@ from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
-
-from shared.paginate import CountResultPaginate
-from shared.permisions import IsAuthenticatedOwner
+from shared.restframework import IsAuthenticatedOwner, CountResultPaginate
 from shops.models import Shop, Country
 from shops.models.shop_belongs import PaymentProvider
 from shops.serializers import ShopSerializer, PaymentSerializers, CountrySerializer
