@@ -9,4 +9,3 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         user = User.objects.create_superuser('admin@site.com', '1')
         print(f'\033[43m<SuperUser {user}: email=admin@site.com>\033[92m  Created!\033[00m')
-

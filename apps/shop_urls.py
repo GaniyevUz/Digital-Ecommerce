@@ -1,6 +1,6 @@
 from django.urls import include, path
 
 urlpatterns = [
-    path('accounts/', include(('users.urls', 'users'), 'users')),
-    path('shop/', include(('shops.urls', 'shops'), 'shops')),
+    path('users/', include(('users.urls', 'users'), 'users')),
+    path('shops/', include(('shops.urls', 'shops'), 'shops')),
 ]

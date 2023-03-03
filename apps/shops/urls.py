@@ -1,39 +1,39 @@
 from django.urls import path, include
 
-from orders.views import OrderModelViewSet
-from products.views import CategoryModelViewSet as ProductCategoryModelViewSet, ProductModelViewSet, \
+from orders.views import OrderAPIViewSet
+from products.views import CategoryAPIViewSet as ProductCategoryAPIViewSet, ProductAPIViewSet, \
     ProductCategoryMoveAPI
-from shared.django import BotCommerceRouter
-from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet, CategoryModelViewSet, StatShop
-from shops.views.shop import CountryModelViewSet
-from shops.views.shop_belongs import TelegramBotModelViewSet
+from shared.django import CustomRouter
+from shops.views import ShopAPIViewSet, CurrencyAPIViewSet, PaymentProvidersViewSet, CategoryAPIViewSet, StatShop
+from shops.views.shop import CountryAPIViewSet
+from shops.views.shop_belongs import TelegramBotAPIViewSet
 
-router = BotCommerceRouter()
-router.register('shop', ShopModelViewSet, 'shop')
-router.register('category', CategoryModelViewSet, 'category')
-router.register('currency', CurrencyModelViewSet, 'currency')
-router.register('countries', CountryModelViewSet, 'country')
+router = CustomRouter()
+router.register('shop', ShopAPIViewSet, 'shop')
+router.register('category', CategoryAPIViewSet, 'category')
+router.register('currency', CurrencyAPIViewSet, 'currency')
+router.register('countries', CountryAPIViewSet, 'country')
 
 list_ = {'get': 'list', 'post': 'create'}
 detail = {'get': 'retrieve', 'patch': 'partial_update', 'put': 'update', 'delete': 'destroy'}
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('shop/<int:shop>/bot', TelegramBotModelViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),
+    path('<int:shop>/bot', TelegramBotAPIViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),
          name='telegrambot'),
 
-    path('shop/<int:shop>/product', ProductModelViewSet.as_view(list_), name='product-list'),
-    path('shop/<int:shop>/product/<int:pk>', ProductModelViewSet.as_view(detail), name='product-detail'),
-    path('shop/<int:shop>/category', ProductCategoryModelViewSet.as_view(list_), name='product-category-list'),
-    path('shop/<int:shop>/category/<int:pk>', ProductCategoryModelViewSet.as_view(detail),
+    path('<int:shop>/product', ProductAPIViewSet.as_view(list_), name='product-list'),
+    path('<int:shop>/product/<int:pk>', ProductAPIViewSet.as_view(detail), name='product-detail'),
+    path('<int:shop>/category', ProductCategoryAPIViewSet.as_view(list_), name='product-category-list'),
+    path('<int:shop>/category/<int:pk>', ProductCategoryAPIViewSet.as_view(detail),
          name='product-category-detail'),
-    path('shop/<int:shop>/category/<int:pk>/move', ProductCategoryMoveAPI.as_view(), name='product-category-move'),
-    path('shop/<int:shop>/order', OrderModelViewSet.as_view({'get': 'list'}), name='order-list'),
-    path('shop/<int:shop>/payment-providers', PaymentProvidersViewSet.as_view(list_),
+    path('<int:shop>/category/<int:pk>/move', ProductCategoryMoveAPI.as_view(), name='product-category-move'),
+    path('<int:shop>/order', OrderAPIViewSet.as_view({'get': 'list'}), name='order-list'),
+    path('<int:shop>/payment-providers', PaymentProvidersViewSet.as_view(list_),
          name='payment-providers-list'),
-    path('shop/<int:shop>/payment-providers/<int:pk>', PaymentProvidersViewSet.as_view(detail),
+    path('<int:shop>/payment-providers/<int:pk>', PaymentProvidersViewSet.as_view(detail),
          name='payment-providers-detail'),
 
-    path('shop/shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all'),
+    path('shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all'),
 
 ]

@@ -55,3 +55,6 @@ class Product(Model):
         except (ValueError, AttributeError):
             url = ''
         return url
+
+    class Meta:
+        ordering = ('-id',)

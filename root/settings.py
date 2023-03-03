@@ -103,7 +103,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 AUTH_USER_MODEL = 'users.User'
-AUTHENTICATION_BACKENDS = ['apps.shared.backends.CustomUserBackend']
+AUTHENTICATION_BACKENDS = ['apps.shared.django.CustomUserBackend']
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

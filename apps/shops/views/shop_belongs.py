@@ -6,9 +6,10 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, ViewSetMixin
+from rest_framework.viewsets import ViewSetMixin
 
 from orders.models import Order
+from shared.django import APIViewSet
 from shared.django import BaseShopMixin
 from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
 from shared.utils import TelegramBotValidator
@@ -16,19 +17,19 @@ from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
 
 
-class CategoryModelViewSet(ModelViewSet):
+class CategoryAPIViewSet(APIViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class CurrencyModelViewSet(ModelViewSet):
+class CurrencyAPIViewSet(APIViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
+class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsShopOwner,)
@@ -38,7 +39,7 @@ class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
         serializer.save(shop=self.get_shop())
 
 
-class TelegramBotModelViewSet(ModelViewSet):
+class TelegramBotAPIViewSet(APIViewSet):
     serializer_class = TelegramBotModelSerializer
     queryset = TelegramBot.objects.all()
     permission_classes = AllowAny,
@@ -78,6 +79,7 @@ class StatShop(GenericAPIView, ViewSetMixin):
             revenue, avg = _['summ'], _['avg']
         except ProgrammingError as error:
             revenue = avg = 0
+            print(error)
 
         # total_customers = Client.objects.filter(shop_id=pk).count() # client chala
         data = {

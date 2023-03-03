@@ -9,7 +9,7 @@ from shops.models import Shop
 
 
 @pytest.mark.django_db
-class TestProductModelViewSet(FixtureClass):
+class TestProductAPIViewSet(FixtureClass):
 
     def test_list_product(self, client: Client, user):
         '''

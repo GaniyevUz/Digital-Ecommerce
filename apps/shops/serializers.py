@@ -8,7 +8,7 @@ from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot,
 
 class ShopSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
-    languages = MultipleChoiceField(choices=Shop.Languages.choices)
+    languages = MultipleChoiceField(choices=Shop.langs)
     shop_orders_count = SerializerMethodField()
     shop_clients_count = SerializerMethodField()
     status = SerializerMethodField()

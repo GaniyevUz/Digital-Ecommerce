@@ -1,2 +1,2 @@
-from shops.views.shop import ShopModelViewSet
-from shops.views.shop_belongs import CategoryModelViewSet, CurrencyModelViewSet, PaymentProvidersViewSet, StatShop
+from shops.views.shop import ShopAPIViewSet
+from shops.views.shop_belongs import CategoryAPIViewSet, CurrencyAPIViewSet, PaymentProvidersViewSet, StatShop

@@ -5,10 +5,9 @@ from rest_framework import status
 from rest_framework.status import HTTP_200_OK
 
 from products.serializers import ProductModelSerializer, CategoryModelSerializer
-from shared.mixins import TestFixtures
+from shared.django import TestFixtures
 
 
-# @override_settings(DEFAULT_HOST='other')
 @pytest.mark.django_db
 class TestEcommerce(TestFixtures):
 
