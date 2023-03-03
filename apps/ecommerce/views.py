@@ -16,6 +16,7 @@ from users.models import User
 
 class ShopClientListAPIView(BaseShopMixin, ListAPIView):
     serializer_class = ClientModelSerializer
+    queryset = User.objects.all()
 
 
 class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):

@@ -2,6 +2,7 @@ from itertools import cycle
 from pprint import pprint
 
 from django.contrib.auth.hashers import make_password
+from django.core.validators import validate_email
 from django.shortcuts import get_object_or_404
 from django_hosts import reverse
 from model_bakery import baker

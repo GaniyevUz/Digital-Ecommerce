@@ -3,14 +3,14 @@ from re import fullmatch
 from httpx import get
 from rest_framework import status
 from rest_framework.request import Request
+
 from shops.models import Shop, TelegramBot, Domain
 
 
-class EmailValidator:
+# ema
+def email_validator(value) -> bool:
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
-
-    def __call__(self, value) -> bool:
-        return bool(fullmatch(self.regex, value))
+    return bool(fullmatch(regex, value))
 
 
 class TelegramBotValidator:
