@@ -1,5 +1,6 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+
 class IsAuthenticatedOwner(BasePermission):
 
     def has_permission(self, request, view):

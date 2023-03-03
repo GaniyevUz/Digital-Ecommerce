@@ -3,20 +3,19 @@ from django.db.models import TextChoices, CharField, ForeignKey, TextField, CASC
     IntegerField, JSONField, Model, RESTRICT, DateTimeField, DecimalField
 from multiselectfield import MultiSelectField
 
+from shared.utils import site_languages
+
 
 class Shop(Model):
-    class Languages(TextChoices):
-        UZBEK = 'uz', "O'zbek"
-        RUSSIAN = 'ru', 'РУССКИЙ'
-        ENGLISH = 'en', 'ENGLISH'
+    langs = [(lang.get('code'), lang.get('title')) for lang in site_languages]
 
     class Delivery(TextChoices):
         PICKUP = 'pickup', "Pickup"
         DELIVERY = 'delivery', 'Delivery'
 
     name = CharField(max_length=255)
-    languages = MultiSelectField(max_length=255, choices=Languages.choices, min_choices=1)
-    user = ForeignKey('users.User', CASCADE, related_name='owner')  # owner of the shop
+    languages = MultiSelectField(max_length=255, choices=langs, min_choices=1)
+    user = ForeignKey('users.User', CASCADE, related_name='shops')  # owner of the shop
     shop_currency = ForeignKey('shops.Currency', RESTRICT)
     shop_category = ForeignKey('shops.Category', RESTRICT)
     country = ForeignKey('shops.Country', RESTRICT)
@@ -60,3 +59,6 @@ class Shop(Model):
     @property
     def telegram_bot(self):
         return self.telegrambot_set.first()
+
+    class Meta:
+        ordering = ['-id']

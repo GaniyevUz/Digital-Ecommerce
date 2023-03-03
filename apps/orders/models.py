@@ -30,8 +30,14 @@ class Order(Model):
     created_at = DateTimeField(auto_now_add=True)
     shop = ForeignKey('shops.Shop', CASCADE)
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class ProductOrder(Model):
     order = ForeignKey('orders.Order', CASCADE)
     product = ForeignKey('products.Product', CASCADE)
     count = IntegerField(default=1)
+
+    class Meta:
+        ordering = ('-id',)

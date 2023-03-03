@@ -8,7 +8,7 @@ from mptt.querysets import TreeQuerySet
 from django_hosts import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED
 
-from shared.mixins import TestFixtures
+from shared.django import TestFixtures
 from shops.models import Shop, Category, Currency
 from shops.serializers import ShopSerializer
 
@@ -55,7 +55,8 @@ class TestShopAPIView(TestFixtures):
         response = client.get(shop_config, **auth_header)
         assert response.status_code == HTTP_200_OK
 
-    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies, model_countries):
+    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies,
+                              model_countries):
         shop_url = reverse('api:shops:shop-list', host='api')
         data = {
             'name': faker.name(),
@@ -101,4 +102,3 @@ class TestShopAPIView(TestFixtures):
         url = reverse('api:shops:order-list', (obj_shop.pk,), host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == HTTP_200_OK
-

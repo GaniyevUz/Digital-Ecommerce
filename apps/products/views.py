@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
-from rest_framework.viewsets import ModelViewSet
+from shared.django import APIViewSet
 
 from shared.django import BaseShopMixin
 from shared.restframework import CustomPageNumberPagination, IsShopOwner
@@ -10,7 +10,7 @@ from .serializers import (ProductModelSerializer, CategoryModelSerializer, Categ
                           CategoryMoveSerializer)
 
 
-class ProductModelViewSet(BaseShopMixin, ModelViewSet):
+class ProductAPIViewSet(BaseShopMixin, APIViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductModelSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -24,7 +24,7 @@ class ProductModelViewSet(BaseShopMixin, ModelViewSet):
         return self.queryset.filter(category__shop=self.get_shop)
 
 
-class CategoryModelViewSet(BaseShopMixin, ModelViewSet):
+class CategoryAPIViewSet(BaseShopMixin, APIViewSet):
     queryset = Category.objects.all()
     serializer_class = CategoryModelSerializer
     pagination_class = CustomPageNumberPagination

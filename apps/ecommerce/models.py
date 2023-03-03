@@ -13,3 +13,6 @@ class Client(Model):
     phone = CharField(max_length=15, null=True, blank=True)
     account_type = CharField(max_length=10, choices=AccountType.choices)
     shop = ForeignKey('shops.Shop', CASCADE)
+
+    class Meta:
+        ordering = ('-id',)

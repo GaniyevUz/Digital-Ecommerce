@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
+from shared.django import APIViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer, \
@@ -27,7 +27,7 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):
         return self.request.user
 
 
-class ClientModelViewSet(ModelViewSet, BaseShopMixin):
+class ClientAPIViewSet(APIViewSet, BaseShopMixin):
     serializer_class = ClientCheckSerializer
     queryset = User.objects.all()
     permission_classes = AllowAny,
