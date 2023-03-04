@@ -15,6 +15,7 @@ class ShopAPIViewSet(APIViewSet):
     permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
     pagination_class = CountResultPaginate
+    lookup_url_kwarg = 'shop'
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)

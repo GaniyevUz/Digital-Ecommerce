@@ -24,8 +24,8 @@ class IsShopOwner(BasePermission):
         return True
 
     def has_object_permission(self, request, view, obj):
-        if request.method in SAFE_METHODS:
-            return True
+        # if request.method in SAFE_METHODS:
+        #     return True
         if hasattr(obj, 'shop') and hasattr(obj.shop, 'user') and request.user == obj.shop.user:
             return True
         if hasattr(obj, 'user') and request.user == obj.user:

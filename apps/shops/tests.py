@@ -4,6 +4,7 @@ import pytest
 from itertools import cycle
 
 from django.db.models import QuerySet
+from django.test import Client
 from mptt.querysets import TreeQuerySet
 from django_hosts import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED
@@ -28,20 +29,46 @@ class TestShopAPIView(TestFixtures):
         )
         assert Shop.objects.count() == shops_count + 20
 
-    def test_shop_model(self, obj_shop):
-        shop = obj_shop
+    def test_shop_payment_providers_api(self, client: Client, obj_shop, auth_header):
+        # List of Payment Providers
 
+        url = reverse('api:shops:payment-providers-list', kwargs={'shop': obj_shop.pk})
+        response = client.get(url, **auth_header)
+        assert response.status_code == HTTP_200_OK
+        assert response.data.get('count') is not None and response.data.get('results') is not None
+        #  Create Payment Provider
+
+        fields = 'code', 'title', 'type', 'fields'
+        data = {field: 'test' for field in fields}
+        data['shop_id'] = obj_shop.pk
+        response = client.post(url, data, **auth_header)
+        assert response.status_code == HTTP_201_CREATED
+        assert any(response.data.get(field) for field in fields)
+        # Detail Payment Provider
+
+        url = reverse('api:shops:payment-providers-detail', args=(obj_shop.pk, response.data.get('id')))
+        response = client.get(url, **auth_header)
+        assert response.status_code == HTTP_200_OK
+        fields = ('code', 'title', 'image', 'type', 'status', 'fields')
+        assert all(field in response.data for field in fields)
+        # Delete Payment Provider
+
+        response = client.delete(url, **auth_header)
+        assert response.status_code == HTTP_204_NO_CONTENT
+
+    def test_shop_model(self, obj_shop, domain):
+        shop = obj_shop
         # Test for __str__ methods of Models
+
         assert str(shop) == shop.name
         assert str(shop.shop_category.name) == shop.shop_category.name
         assert str(shop.shop_currency) == shop.shop_currency.name
         assert str(shop.telegram_bot) == shop.telegram_bot.username
         assert str(shop.domain) == shop.domain.name
-
         # Test for @property methods of Models
+
         assert isinstance(shop.categories, TreeQuerySet)
         assert isinstance(shop.clients, QuerySet)
-        # assert isinstance(shop.products, QuerySet) # TODO productsdan shops ochirdim
         assert isinstance(shop.orders, QuerySet)
         assert isinstance(shop.payment_providers, QuerySet)
 

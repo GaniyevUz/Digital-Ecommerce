@@ -36,7 +36,7 @@ class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
     pagination_class = CountResultPaginate
 
     def perform_create(self, serializer):
-        serializer.save(shop=self.get_shop())
+        serializer.save(shop=self.get_shop)
 
 
 class TelegramBotAPIViewSet(APIViewSet):

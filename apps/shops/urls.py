@@ -9,19 +9,20 @@ from shops.views.shop import CountryAPIViewSet
 from shops.views.shop_belongs import TelegramBotAPIViewSet
 
 router = CustomRouter()
-router.register('shop', ShopAPIViewSet, 'shop')
 router.register('category', CategoryAPIViewSet, 'category')
 router.register('currency', CurrencyAPIViewSet, 'currency')
 router.register('countries', CountryAPIViewSet, 'country')
 
 list_ = {'get': 'list', 'post': 'create'}
-detail = {'get': 'retrieve', 'patch': 'partial_update', 'put': 'update', 'delete': 'destroy'}
+detail = {'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'}
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('shop', ShopAPIViewSet.as_view(list_), name='shop-list'),
+    path('shop_config', ShopAPIViewSet.as_view({'get': 'shop-config'}), name='shop-config'),
+    path('<int:shop>/detail', ShopAPIViewSet.as_view(detail), name='shop-detail'),
     path('<int:shop>/bot', TelegramBotAPIViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),
          name='telegrambot'),
-
     path('<int:shop>/product', ProductAPIViewSet.as_view(list_), name='product-list'),
     path('<int:shop>/product/<int:pk>', ProductAPIViewSet.as_view(detail), name='product-detail'),
     path('<int:shop>/category', ProductCategoryAPIViewSet.as_view(list_), name='product-category-list'),
@@ -34,6 +35,5 @@ urlpatterns = [
     path('<int:shop>/payment-providers/<int:pk>', PaymentProvidersViewSet.as_view(detail),
          name='payment-providers-detail'),
 
-    path('shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all'),
-
+    path('shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all')
 ]
