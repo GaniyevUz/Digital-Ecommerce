@@ -1,3 +1,4 @@
+import datetime
 from itertools import cycle
 from random import choice, choices, randint
 
@@ -9,9 +10,8 @@ from model_bakery import baker
 
 from orders.models import Order
 from products.models import Category as ProductCategory, Product
-from shared.emojis import all_emojis
-from shared.visualize import Loader
-from shops.models import Currency, Category, Shop, Domain
+from shared.utils import all_emojis, Loader
+from shops.models import Currency, Category, Shop, Country
 from users.models import User
 
 
@@ -75,11 +75,10 @@ class Command(BaseCommand):
     def fake_users(self, count):
         baker.make(
             'users.User',
-            username=self.repeat(self.fake.user_name, count),
+            email=self.repeat(self.fake.unique.email, count),
             password=make_password('1'),
             first_name=self.repeat(self.fake.first_name, count),
             last_name=self.repeat(self.fake.last_name, count),
-            email=self.repeat(self.fake.email, count),
             invitation_token=self.repeat(self.fake.password, count, length=10, special_chars=False),
             _quantity=count
         )
@@ -110,6 +109,7 @@ class Command(BaseCommand):
             user=cycle(User.objects.all()),
             shop_category=cycle(Category.objects.all()),
             shop_currency=cycle(Currency.objects.all()),
+            country=cycle(Country.objects.all()),
             _quantity=count
         )
 
@@ -127,10 +127,50 @@ class Command(BaseCommand):
         except IntegrityError:
             pass
 
+    # def generate_category(self, shop):
+
+    # c1 = ProductCategory.objects.create(
+    #     name={'uz': "Ko'chmas mulk"},
+    #     shop_id=shop
+    # )
+    # c11 = ProductCategory.objects.create(
+    #     name={'uz': "Sutkalik ijarasi'"},
+    #     shop_id=shop,
+    #     parent=c1
+    # )
+    # c12 = ProductCategory.objects.create(
+    #     name={'uz': "Kvartiralar'"},
+    #     shop_id=shop,
+    #     parent=c1
+    # )
+    #
+    # c2 = ProductCategory.objects.create(
+    #     name={'uz': "Transport"},
+    #     shop_id=shop,
+    # )
+    #
+    # c21 = ProductCategory.objects.create(
+    #     name={'uz': "Yengil avtomashinalar"},
+    #     shop_id=shop,
+    #     parent=c2
+    # )
+    #
+    # c22 = ProductCategory.objects.create(
+    #     name={'uz': "Avto ehtiyot qismlari va aksessuarlar"},
+    #     shop_id=shop,
+    #     parent=c2
+    # )
+    #
+    # c23 = ProductCategory.objects.create(
+    #     name={'uz': "Shinalar, disklar va g'ildiraklar"},
+    #     shop_id=shop,
+    #     parent=c2
+    # )
 
     def fake_product_category(self, count):
         emoji = all_emojis
         shops = Shop.objects.all()
+
         baker.make(
             'products.Category',
             name=self.t_repeat(self.fake.first_name, count),
@@ -142,7 +182,7 @@ class Command(BaseCommand):
         )
 
     def fake_product(self, count):
-        shops = Shop.objects.all()
+        # shops = Shop.objects.all()
         categories = ProductCategory.objects.all()
 
         baker.make(

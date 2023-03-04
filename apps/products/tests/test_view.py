@@ -1,6 +1,6 @@
 import pytest
 from django.test import Client
-from django_hosts import reverse_lazy, reverse
+from django_hosts import reverse
 from rest_framework import status
 
 from products.models import Category as PrCategory, Product
@@ -9,9 +9,9 @@ from shops.models import Shop
 
 
 @pytest.mark.django_db
-class TestProductModelViewSet(FixtureClass):
+class TestProductAPIViewSet(FixtureClass):
 
-    def test_list_product(self, client: Client, user, create_products):
+    def test_list_product(self, client: Client, user):
         '''
         This test will check per page with 10 details in the product class
         '''
@@ -24,7 +24,7 @@ class TestProductModelViewSet(FixtureClass):
         assert len(response.data.get('results', 11)) <= 10
 
     # @pytest.mark.urls('products.urls')
-    def test_create_products(self, user, create_products, client):
+    def test_create_products(self, user, client):
         '''
         This test will check if there are any errors you received
         while creating the product
@@ -47,7 +47,7 @@ class TestProductModelViewSet(FixtureClass):
         response = client.post(url, data)
         assert response.status_code == status.HTTP_201_CREATED
 
-    def test_product_detail(self, client, user, create_product):
+    def test_product_detail(self, client):
         product = Product.objects.first()
         shop = product.category.shop
         url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')
@@ -55,7 +55,7 @@ class TestProductModelViewSet(FixtureClass):
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    def test_product_update(self, client, user, create_products):
+    def test_product_update(self, client, user):
         product = user.shop_set.first().categories[0].product_set.first()
         shop = product.category.shop
         url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')
@@ -67,7 +67,7 @@ class TestProductModelViewSet(FixtureClass):
         assert response.status_code == status.HTTP_200_OK
         assert response.data.get('name') == data.get('name')
 
-    def test_product_delete(self, client, user, create_products):
+    def test_product_delete(self, client, user):
         shop = user.shop_set.first()
         product = shop.categories[0].product_set.first()
         url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')

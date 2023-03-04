@@ -4,7 +4,6 @@ from django.db.models import Model, TextChoices, CharField, ForeignKey, TextFiel
 from shops.models import Shop
 
 
-
 class PaidOrderManager(Manager):
     def get_queryset(self):
         return super().get_queryset().filter(paid=True)
@@ -42,8 +41,14 @@ class Order(Model):
     def __str__(self):
         return self.phone
 
+    class Meta:
+        ordering = ('-id',)
+
 
 class ProductOrder(Model):
     order = ForeignKey('orders.Order', CASCADE)
     product = ForeignKey('products.Product', CASCADE)
     count = IntegerField(default=1)
+
+    class Meta:
+        ordering = ('-id',)

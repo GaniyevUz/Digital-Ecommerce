@@ -62,8 +62,6 @@ ROOT_HOSTCONF = 'root.hosts'
 PARENT_HOST = os.getenv('DOMAIN')
 DEFAULT_HOST = 'api'
 
-APPEND_SLASH = True
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -105,7 +103,7 @@ if os.environ.get('GITHUB_WORKFLOW'):
         }
     }
 AUTH_USER_MODEL = 'users.User'
-
+AUTHENTICATION_BACKENDS = ['apps.shared.django.CustomUserBackend']
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -144,7 +142,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
@@ -155,10 +153,6 @@ REST_FRAMEWORK = {
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'basic': {
-            'type': 'basic',
-            'description': 'Username and password.'
-        },
         'Bearer': {
             'type': 'apiKey',
             'name': 'Authorization',
@@ -174,6 +168,8 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
     # 'UPDATE_LAST_LOGIN': True,
+    "TOKEN_OBTAIN_SERIALIZER": "apps.shared.restframework.CustomTokenObtainPairSerializer",
+
 }
 JAZZMIN_SETTINGS = {
     "site_title": "BotCommerce Admin",
@@ -259,6 +255,9 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = os.getenv('TIME_ZONE')
 
-INTERNAL_IPS = [
-    "127.0.0.1",
-]
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+
+SILENCED_SYSTEM_CHECKS = ['auth.W004']

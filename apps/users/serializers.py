@@ -1,6 +1,7 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
 
+from shared.utils import email_validator
 from users.models import User
 
 
@@ -8,21 +9,20 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
-            'id', 'username', 'first_name', 'last_name', 'email',
+            'id', 'first_name', 'last_name', 'email',
             'invitation_token', 'default_shop', 'invitation',
             'date_joined', 'last_login'
         )
 
 
 class CreateUserModelSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True, validators=[
-        validators.UniqueValidator(queryset=User.objects.values_list('email', flat=True))])
+    email = serializers.EmailField(required=True, validators=[email_validator])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password], min_length=8)
     confirm_password = serializers.CharField(write_only=True, required=True, min_length=8)
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'confirm_password',
+        fields = ('password', 'confirm_password',
                   'email', 'first_name', 'last_name')
         extra_kwargs = {
             'first_name': {'required': True},

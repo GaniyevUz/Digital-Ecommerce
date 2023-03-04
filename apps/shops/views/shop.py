@@ -1,16 +1,16 @@
 from rest_framework.decorators import action
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
-from shared.paginate import CountResultPaginate
-from shared.permisions import IsAuthenticatedOwner
-from shops.models import Shop
+from shared.django import APIViewSet
+from shared.restframework import IsAuthenticatedOwner, CountResultPaginate
+from shared.utils import site_languages
+from shops.models import Shop, Country
 from shops.models.shop_belongs import PaymentProvider
-from shops.serializers import ShopSerializer, PaymentSerializers
+from shops.serializers import ShopSerializer, PaymentSerializers, CountrySerializer
 
 
-class ShopModelViewSet(ModelViewSet):
+class ShopAPIViewSet(APIViewSet):
     serializer_class = ShopSerializer
     permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
@@ -20,11 +20,26 @@ class ShopModelViewSet(ModelViewSet):
         self.queryset = self.queryset.filter(user=request.user)
         return super().list(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        shop = serializer.save()
+        user = self.request.user
+        if not user.default_shop:
+            user.default_shop = shop
+            user.save()
+
     @action(['GET'], False)
     def shop_config(self, request):
-        langs = (("🇺🇿", "O'zbekcha", "uz"), ("🇷🇺", "Русский", "ru"), ("🇺🇸", "English", "en"))
-        data = {"languages": [{'icon': i, 'title': t, 'code': c} for i, t, c in langs]}
+        shop = self.request.user.default_shop
+        languages = site_languages
+        if shop:
+            languages = list(filter(lambda _: _.get('code') in shop.languages, site_languages))
+        data = {"languages": [_ for _ in languages]}
         return Response(data)
+
+
+class CountryAPIViewSet(APIViewSet):
+    queryset = Country.objects.all()
+    serializer_class = CountrySerializer
 
 
 class PaymentProvidersListAPIView(ListAPIView):

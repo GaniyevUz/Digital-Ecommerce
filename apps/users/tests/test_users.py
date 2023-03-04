@@ -1,12 +1,9 @@
 import pytest
-from faker import Faker
 from rest_framework.reverse import reverse
 
-from shared.mixins import TestFixtures
+from shared.django import TestFixtures
 from users.models import User
 from users.serializers import UserModelSerializer
-
-fake = Faker()
 
 
 @pytest.mark.django_db
@@ -17,15 +14,14 @@ class TestUserAPIView(TestFixtures):
             'users.User',
             _quantity=10,
             first_name=self.repeat(faker.first_name, 10),
-            last_name=self.repeat(fake.unique.last_name, 10),
-            username=self.repeat(faker.user_name, 10)
+            last_name=self.repeat(faker.last_name, 10),
+            email=self.repeat(faker.unique.email, 10)
         )
         assert User.objects.count() == users_count + 10
 
     def test_user_create_api(self, client):
         url = reverse('api:users:user')
         data = {
-            'username': 'Jack123',
             'password': 'string123',
             'confirm_password': 'string123',
             'email': 'johndoe123@example.com',
@@ -34,7 +30,7 @@ class TestUserAPIView(TestFixtures):
         }
         response = client.post(url, data=data)
         assert response.status_code == 201
-        assert response.json()['username'] == data['username']
+        assert response.json()['email'] == data['email']
 
     def test_user_retrieve_api(self, client, auth_header, obj_user):
         url = reverse('api:users:user')
@@ -47,7 +43,6 @@ class TestUserAPIView(TestFixtures):
     def test_user_update_api(self, client, auth_header, obj_user):
         url = reverse('api:users:user')
         data = {
-            'username': 'Jane',
             'email': 'janedoe@example.com',
             'first_name': 'Jane',
         }
@@ -55,7 +50,6 @@ class TestUserAPIView(TestFixtures):
         assert response.status_code == 200
         response = response.json()
         assert response['first_name'] == data['first_name']
-        assert response['username'] == data['username']
         assert response['email'] == data['email']
 
     def test_user_destroy_api(self, client, auth_header, obj_user):

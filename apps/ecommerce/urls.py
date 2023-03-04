@@ -1,13 +1,14 @@
 from django.urls import path
-from ecommerce.views import ClientUpdateDestroyAPIView, CreateClientAPIView, ClientModelViewSet
+from ecommerce.views import ClientUpdateDestroyAPIView, ClientCreateAPIView, ClientModelViewSet, ShopClientListAPIView
 
 from django.shortcuts import get_object_or_404
 from shops.models import Domain
 
 urlpatterns = [
-    path('sign-in', ClientModelViewSet.as_view({'get': 'get', 'post': 'post'})),
-    path('sign-up', CreateClientAPIView.as_view()),
-    path('profile/personal-info', ClientUpdateDestroyAPIView.as_view()),
+    path('sign-in', ClientModelViewSet.as_view({'get': 'get', 'post': 'post'}), name='sign-in'),
+    path('sign-up', ClientCreateAPIView.as_view(), name='sign-up'),
+    path('profile/personal-info', ClientUpdateDestroyAPIView.as_view(), name='profile'),
+    path('clients', ShopClientListAPIView.as_view(), name='client-list'),
 ]
 
 

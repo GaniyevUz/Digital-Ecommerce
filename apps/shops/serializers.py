@@ -3,12 +3,12 @@ from rest_framework.fields import (HiddenField, CurrentUserDefault, MultipleChoi
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot
+from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot, Country
 
 
 class ShopSerializer(ModelSerializer):
     user = HiddenField(default=CurrentUserDefault())
-    languages = MultipleChoiceField(choices=Shop.Languages.choices)
+    languages = MultipleChoiceField(choices=Shop.langs)
     shop_orders_count = SerializerMethodField()
     shop_clients_count = SerializerMethodField()
     status = SerializerMethodField()
@@ -65,4 +65,10 @@ class TelegramBotModelSerializer(ModelSerializer):
 
     class Meta:
         model = TelegramBot
+        fields = '__all__'
+
+
+class CountrySerializer(ModelSerializer):
+    class Meta:
+        model = Country
         fields = '__all__'

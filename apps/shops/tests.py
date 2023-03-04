@@ -8,7 +8,7 @@ from mptt.querysets import TreeQuerySet
 from django_hosts import reverse
 from rest_framework.status import HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_201_CREATED
 
-from shared.mixins import TestFixtures
+from shared.django import TestFixtures
 from shops.models import Shop, Category, Currency
 from shops.serializers import ShopSerializer
 
@@ -33,8 +33,10 @@ class TestShopAPIView(TestFixtures):
 
         # Test for __str__ methods of Models
         assert str(shop) == shop.name
-        assert str(shop.shop_category) == shop.shop_category.name
+        assert str(shop.shop_category.name) == shop.shop_category.name
         assert str(shop.shop_currency) == shop.shop_currency.name
+        assert str(shop.telegram_bot) == shop.telegram_bot.username
+        assert str(shop.domain) == shop.domain.name
 
         # Test for @property methods of Models
         assert isinstance(shop.categories, TreeQuerySet)
@@ -53,12 +55,14 @@ class TestShopAPIView(TestFixtures):
         response = client.get(shop_config, **auth_header)
         assert response.status_code == HTTP_200_OK
 
-    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies):
+    def test_create_shops_api(self, client, auth_header, faker, obj_shop, model_shop_categories, model_currencies,
+                              model_countries):
         shop_url = reverse('api:shops:shop-list', host='api')
         data = {
             'name': faker.name(),
             'shop_category': choice(model_shop_categories).pk,
             'shop_currency': choice(model_currencies).pk,
+            'country': choice(model_countries).pk,
             'languages': {'uz', 'ru'}
         }
         response = client.post(shop_url, data, **auth_header)

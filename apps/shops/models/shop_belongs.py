@@ -1,5 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
-from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField,\
+from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField, \
     IntegerField, JSONField, BooleanField, \
     DateField, OneToOneField
 
@@ -13,6 +13,7 @@ class Category(Model):
     class Meta:
         verbose_name = 'Shop Category'
         verbose_name_plural = 'Shop Categories'
+        ordering = ('-id',)
 
 
 class Currency(Model):
@@ -24,6 +25,7 @@ class Currency(Model):
     class Meta:
         verbose_name = 'Shop Currency'
         verbose_name_plural = 'Shop Currencies'
+        ordering = ('-id',)
 
 
 class PaymentProvider(Model):
@@ -34,6 +36,9 @@ class PaymentProvider(Model):
     status = IntegerField(null=True, blank=True)
     fields = ArrayField(JSONField())
     shop = ForeignKey('shops.Shop', CASCADE)
+
+    class Meta:
+        ordering = ('-id',)
 
 
 class TelegramBot(Model):
@@ -54,3 +59,7 @@ class Domain(Model):
 
     def __str__(self):
         return self.name
+
+
+class Country(Model):
+    name = CharField(max_length=255, unique=True)

@@ -1,5 +1,3 @@
-import datetime
-
 from django.db import ProgrammingError
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
@@ -8,30 +6,34 @@ from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet, GenericViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet, ViewSetMixin
 
 from orders.models import Order, ProductOrder
 from shared.mixins import BaseShopMixin
 from shared.paginate import CountResultPaginate
 from shared.permisions import IsAdminOrReadOnly, IsShopOwner
 from shared.validators import TelegramBotValidator
+from orders.models import Order
+from shared.django import BaseShopMixin, APIViewSet
+from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
+from shared.utils import bot_validator
 from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
+import datetime
 
-
-class CategoryModelViewSet(ModelViewSet):
+class CategoryAPIViewSet(APIViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class CurrencyModelViewSet(ModelViewSet):
+class CurrencyAPIViewSet(APIViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
+class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
     serializer_class = PaymentSerializers
     queryset = PaymentProvider.objects.all()
     permission_classes = (IsShopOwner,)
@@ -41,15 +43,14 @@ class PaymentProvidersViewSet(BaseShopMixin, ModelViewSet):
         serializer.save(shop=self.get_shop())
 
 
-class TelegramBotModelViewSet(ModelViewSet):
+class TelegramBotAPIViewSet(APIViewSet):
     serializer_class = TelegramBotModelSerializer
     queryset = TelegramBot.objects.all()
     permission_classes = AllowAny,
 
     def update(self, request, *args, **kwargs):
         token = request.data.get('token')
-        validate = TelegramBotValidator()
-        bot = validate(token, **kwargs)
+        bot = bot_validator(token, **kwargs)
         if bot.get('data'):
             return Response(bot['data'], status=bot['status'])
         if not bot.get('shop'):

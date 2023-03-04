@@ -6,7 +6,7 @@ from rest_framework import permissions
 from root import settings
 
 urlpatterns = [
-    path('api/v1/ecommerce/', include(('apps.urls', 'apps'), 'v1')),
+    path('api/v1/ecommerce/', include(('apps.urls', 'apps'), 'api')),
 ]
 
 if settings.DEBUG:

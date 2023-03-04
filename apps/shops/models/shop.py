@@ -3,22 +3,22 @@ from django.db.models import TextChoices, CharField, ForeignKey, TextField, CASC
     IntegerField, JSONField, Model, RESTRICT, DateTimeField, DecimalField
 from multiselectfield import MultiSelectField
 
+from shared.utils import site_languages
+
 
 class Shop(Model):
-    class Languages(TextChoices):
-        UZBEK = 'uz', "O'zbek"
-        RUSSIAN = 'ru', 'РУССКИЙ'
-        ENGLISH = 'en', 'ENGLISH'
+    langs = [(lang.get('code'), lang.get('title')) for lang in site_languages]
 
     class Delivery(TextChoices):
         PICKUP = 'pickup', "Pickup"
         DELIVERY = 'delivery', 'Delivery'
 
     name = CharField(max_length=255)
-    languages = MultiSelectField(max_length=255, choices=Languages.choices, min_choices=1)
-    user = ForeignKey('users.User', CASCADE)
+    languages = MultiSelectField(max_length=255, choices=langs, min_choices=1)
+    user = ForeignKey('users.User', CASCADE, related_name='shops')  # owner of the shop
     shop_currency = ForeignKey('shops.Currency', RESTRICT)
     shop_category = ForeignKey('shops.Category', RESTRICT)
+    country = ForeignKey('shops.Country', RESTRICT)
     delivery_types = MultiSelectField(max_length=255, choices=Delivery.choices, min_choices=1, default=Delivery.PICKUP)
     about_us = CharField(max_length=1024, null=True, blank=True)
     delivery_price = IntegerField('Delivery Price', null=True, blank=True)
@@ -55,3 +55,10 @@ class Shop(Model):
     @property
     def payment_providers(self):
         return self.paymentprovider_set.all()
+
+    @property
+    def telegram_bot(self):
+        return self.telegrambot_set.first()
+
+    class Meta:
+        ordering = ['-id']
