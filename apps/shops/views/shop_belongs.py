@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import ProgrammingError
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
@@ -8,14 +10,13 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from orders.models import ProductOrder
 from orders.models import Order
+from orders.models import ProductOrder
 from shared.django import BaseShopMixin, APIViewSet
 from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
 from shared.utils import bot_validator
 from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
-import datetime
 
 
 class CategoryAPIViewSet(APIViewSet):
@@ -56,6 +57,9 @@ class TelegramBotAPIViewSet(APIViewSet):
         bot, _ = TelegramBot.objects.update_or_create(shop=shop, defaults=bot)
         serializer = TelegramBotModelSerializer(bot)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
 
 
 class StatShop(GenericViewSet, GenericAPIView):
