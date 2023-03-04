@@ -23,3 +23,6 @@ fake:
 
 test:
 	pytest && open coverage/index.html
+
+create_database_function:
+	./manage.py create_database_func

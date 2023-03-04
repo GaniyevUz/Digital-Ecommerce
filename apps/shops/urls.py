@@ -8,15 +8,18 @@ from shops.views import ShopModelViewSet, CurrencyModelViewSet, PaymentProviders
 from shops.views.shop_belongs import TelegramBotModelViewSet
 
 router = BotCommerceRouter()
+router_stat = BotCommerceRouter()
 router.register('shop', ShopModelViewSet, 'shop')
 router.register('category', CategoryModelViewSet, 'category')
 router.register('currency', CurrencyModelViewSet, 'currency')
+router_stat.register('stat', StatShop, 'stat')
 
 list_ = {'get': 'list', 'post': 'create'}
 detail = {'get': 'retrieve', 'patch': 'partial_update', 'put': 'update', 'delete': 'destroy'}
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('shop/<int:shop>', include(router_stat.urls)),
     path('shop/<int:shop>/bot', TelegramBotModelViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),
          name='telegrambot'),
 
@@ -31,7 +34,4 @@ urlpatterns = [
          name='payment-providers-list'),
     path('shop/<int:shop>/payment-providers/<int:pk>', PaymentProvidersViewSet.as_view(detail),
          name='payment-providers-detail'),
-
-    path('shop/shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all'),
-
 ]
