@@ -9,17 +9,17 @@ class CustomTokenObtainSerializer(jwt_serializers.TokenObtainSerializer):  # noq
         super().__init__(*args, **kwargs)
 
         self.fields[self.username_field] = serializers.CharField()
-        self.fields["password"] = jwt_serializers.PasswordField()
-        self.fields["shop"] = serializers.IntegerField(allow_null=True, required=False)
+        self.fields['password'] = jwt_serializers.PasswordField()
+        self.fields['shop'] = serializers.HiddenField(required=False, default=None)
 
     def validate(self, attrs):
         authenticate_kwargs = {
             self.username_field: attrs[self.username_field],
-            "password": attrs["password"],
-            "shop": attrs.get('shop'),
+            'password': attrs['password'],
+            'shop': attrs.get('shop'),
         }
         try:
-            authenticate_kwargs["request"] = self.context["request"]
+            authenticate_kwargs['request'] = self.context['request']
         except KeyError:
             pass
 
@@ -27,8 +27,8 @@ class CustomTokenObtainSerializer(jwt_serializers.TokenObtainSerializer):  # noq
 
         if not settings.api_settings.USER_AUTHENTICATION_RULE(self.user):
             raise exceptions.AuthenticationFailed(
-                self.error_messages["no_active_account"],
-                "no_active_account",
+                self.error_messages['no_active_account'],
+                'no_active_account',
             )
 
         return {}
@@ -42,8 +42,8 @@ class CustomTokenObtainPairSerializer(CustomTokenObtainSerializer):  # noqa pyli
 
         refresh = self.get_token(self.user)
 
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
 
         if settings.api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, self.user)
