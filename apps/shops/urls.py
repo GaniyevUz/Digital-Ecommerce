@@ -8,7 +8,7 @@ from shops.views import ShopAPIViewSet, CurrencyAPIViewSet, PaymentProvidersView
 from shops.views.shop import CountryAPIViewSet
 from shops.views.shop_belongs import TelegramBotAPIViewSet
 
-router_stat = BotCommerceRouter()
+router_stat = CustomRouter()
 router_stat.register('stat', StatShop, 'stat')
 router = CustomRouter()
 router.register('shop', ShopAPIViewSet, 'shop')
