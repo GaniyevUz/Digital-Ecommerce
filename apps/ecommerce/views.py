@@ -2,16 +2,24 @@ from django.contrib.auth.hashers import check_password
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
+
 from shared.django import APIViewSet
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ecommerce.serializers import ClientModelSerializer, ClientCheckSerializer, LoginClientModelSerializer, \
     CreateClientModelSerializer
 from shared.django import BaseShopMixin
+from shared.utils import get_subdomain
 from users.models import User
+
+
+class ShopClientListAPIView(BaseShopMixin, ListAPIView):
+    serializer_class = ClientModelSerializer
+    queryset = User.objects.all()
 
 
 class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):
@@ -22,7 +30,7 @@ class ClientUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView, BaseShopMixin):
         return self.request.user
 
 
-class ClientAPIViewSet(APIViewSet, BaseShopMixin):
+class ClientModelViewSet(ModelViewSet, BaseShopMixin):
     serializer_class = ClientCheckSerializer
     queryset = User.objects.all()
     permission_classes = AllowAny,
@@ -36,7 +44,8 @@ class ClientAPIViewSet(APIViewSet, BaseShopMixin):
     def post(self, request, *args, **kwargs):
         post_data = request.POST if request.POST else request.data
         if post_data.get('email') and post_data.get('password'):
-            user = User.objects.get(email=post_data['email'])
+            shop = get_subdomain(request).shop
+            user = User.objects.get(email=post_data['email'], shop=shop)
             if user and check_password(post_data['password'], user.password):
                 jwt = RefreshToken.for_user(user)
                 data = {
@@ -55,7 +64,7 @@ class ClientAPIViewSet(APIViewSet, BaseShopMixin):
         return super().get_serializer_class()
 
 
-class CreateClientAPIView(CreateAPIView, BaseShopMixin):
+class ClientCreateAPIView(CreateAPIView, BaseShopMixin):
     serializer_class = CreateClientModelSerializer
     permission_classes = AllowAny,
 

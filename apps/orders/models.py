@@ -1,7 +1,12 @@
 from django.db.models import Model, TextChoices, CharField, ForeignKey, TextField, CASCADE, BooleanField, \
-    ManyToManyField, DateTimeField, IntegerField
+    ManyToManyField, DateTimeField, IntegerField, Manager
 
 from shops.models import Shop
+
+
+class PaidOrderManager(Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(paid=True)
 
 
 class Order(Model):
@@ -29,6 +34,12 @@ class Order(Model):
     paid = BooleanField(default=False)
     created_at = DateTimeField(auto_now_add=True)
     shop = ForeignKey('shops.Shop', CASCADE)
+
+    objects = Manager()
+    paid_objects = PaidOrderManager()
+
+    def __str__(self):
+        return self.phone
 
     class Meta:
         ordering = ('-id',)

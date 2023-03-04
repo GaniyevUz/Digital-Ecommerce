@@ -52,7 +52,7 @@ BEGIN
                                         0) datetime
 
                   from orders_order oo
-                           join orders_order_items ooi on oo.id = ooi.order_id
+                           join orders_productorder ooi on oo.id = ooi.order_id
                            join products_product pp on pp.id = ooi.product_id
                   group by datetime, oo.shop_id
                   having oo.shop_id = answer);
