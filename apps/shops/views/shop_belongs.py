@@ -9,10 +9,9 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSetMixin
 
 from orders.models import Order
-from shared.django import APIViewSet
-from shared.django import BaseShopMixin
+from shared.django import BaseShopMixin, APIViewSet
 from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
-from shared.utils import TelegramBotValidator
+from shared.utils import bot_validator
 from shops.models import Currency, Category, TelegramBot, PaymentProvider
 from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
 
@@ -46,8 +45,7 @@ class TelegramBotAPIViewSet(APIViewSet):
 
     def update(self, request, *args, **kwargs):
         token = request.data.get('token')
-        validate = TelegramBotValidator()
-        bot = validate(token, **kwargs)
+        bot = bot_validator(token, **kwargs)
         if bot.get('data'):
             return Response(bot['data'], status=bot['status'])
         if not bot.get('shop'):

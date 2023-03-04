@@ -13,30 +13,24 @@ def email_validator(value) -> bool:
     return bool(fullmatch(regex, value))
 
 
-class TelegramBotValidator:
-
-    # def __init__(self, token, **kwargs) -> None:
-    #     self.token = token
-    #     self.kwargs = kwargs
-
-    def __call__(self, token, **kwargs):
-        if not kwargs.get('shop') or not Shop.objects.filter(pk=kwargs['shop']).exists():
-            return {'status': 'Invalid shop'}
-        get_me_url = f'https://api.telegram.org/bot{token}/getMe'
-        response = get(get_me_url).json()
-        data = {}
-        if response.get('ok'):
-            data['token'] = token
-            data['username'] = response.get('result')['username']
-            data['shop'] = Shop.objects.get(pk=kwargs['shop'])
-            if TelegramBot.objects.filter(token=token).exists():
-                return {
-                    'data': {
-                        'token': ['A bot with this token has already been registered in the system']
-                    },
-                    'status': status.HTTP_422_UNPROCESSABLE_ENTITY}
-            return data
-        return {'data': response, 'status': response.get('error_code')}
+def bot_validator(token, **kwargs):
+    if not kwargs.get('shop') or not Shop.objects.filter(pk=kwargs['shop']).exists():
+        return {'status': 'Invalid shop'}
+    get_me_url = f'https://api.telegram.org/bot{token}/getMe'
+    response = get(get_me_url).json()
+    data = {}
+    if response.get('ok'):
+        data['token'] = token
+        data['username'] = response.get('result')['username']
+        data['shop'] = Shop.objects.get(pk=kwargs['shop'])
+        if TelegramBot.objects.filter(token=token).exists():
+            return {
+                'data': {
+                    'token': ['A bot with this token has already been registered in the system']
+                },
+                'status': status.HTTP_422_UNPROCESSABLE_ENTITY}
+        return data
+    return {'data': response, 'status': response.get('error_code')}
 
 
 def get_subdomain(request: Request) -> Domain | bool:
