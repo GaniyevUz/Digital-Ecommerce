@@ -20,7 +20,7 @@ class TelegramBotValidator:
     #     self.kwargs = kwargs
 
     def __call__(self, token, **kwargs):
-        if not kwargs.get('pk') or not Shop.objects.filter(pk=kwargs['pk']).exists():
+        if not kwargs.get('shop') or not Shop.objects.filter(pk=kwargs['shop']).exists():
             return {'status': 'Invalid shop'}
         get_me_url = f'https://api.telegram.org/bot{token}/getMe'
         response = get(get_me_url).json()
@@ -28,7 +28,7 @@ class TelegramBotValidator:
         if response.get('ok'):
             data['token'] = token
             data['username'] = response.get('result')['username']
-            data['shop'] = Shop.objects.get(pk=kwargs['pk'])
+            data['shop'] = Shop.objects.get(pk=kwargs['shop'])
             if TelegramBot.objects.filter(token=token).exists():
                 return {
                     'data': {
