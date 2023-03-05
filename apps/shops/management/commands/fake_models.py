@@ -17,6 +17,7 @@ from users.models import User
 
 class Command(BaseCommand):
     fake = Faker()
+    categories = (None,)
 
     @staticmethod
     def repeat(func, count, *args, **kwargs):
@@ -127,59 +128,18 @@ class Command(BaseCommand):
         except IntegrityError:
             pass
 
-    # def generate_category(self, shop):
-
-    # c1 = ProductCategory.objects.create(
-    #     name={'uz': "Ko'chmas mulk"},
-    #     shop_id=shop
-    # )
-    # c11 = ProductCategory.objects.create(
-    #     name={'uz': "Sutkalik ijarasi'"},
-    #     shop_id=shop,
-    #     parent=c1
-    # )
-    # c12 = ProductCategory.objects.create(
-    #     name={'uz': "Kvartiralar'"},
-    #     shop_id=shop,
-    #     parent=c1
-    # )
-    #
-    # c2 = ProductCategory.objects.create(
-    #     name={'uz': "Transport"},
-    #     shop_id=shop,
-    # )
-    #
-    # c21 = ProductCategory.objects.create(
-    #     name={'uz': "Yengil avtomashinalar"},
-    #     shop_id=shop,
-    #     parent=c2
-    # )
-    #
-    # c22 = ProductCategory.objects.create(
-    #     name={'uz': "Avto ehtiyot qismlari va aksessuarlar"},
-    #     shop_id=shop,
-    #     parent=c2
-    # )
-    #
-    # c23 = ProductCategory.objects.create(
-    #     name={'uz': "Shinalar, disklar va g'ildiraklar"},
-    #     shop_id=shop,
-    #     parent=c2
-    # )
-
     def fake_product_category(self, count):
         emoji = all_emojis
         shops = Shop.objects.all()
-
-        baker.make(
-            'products.Category',
-            name=self.t_repeat(self.fake.first_name, count),
-            description=self.t_repeat(self.fake.sentence, count),
-            emoji=cycle(emoji),
-            # image='blogs/default.jpg',
-            shop=cycle(shops),
-            _quantity=count
-        )
+        for _ in range(count):
+            shop = choice(shops)
+            ProductCategory.objects.create(
+                name=self.fake.first_name(),
+                description=self.fake.sentence(),
+                emoji=choice(emoji),
+                shop=shop,
+                parent=self.parent_category(count, shop)
+            )
 
     def fake_product(self, count):
         # shops = Shop.objects.all()
@@ -219,3 +179,8 @@ class Command(BaseCommand):
         products = Product.objects.all()
         for _ in range(count):
             yield choices(products, k=randint(1, len(products)))
+
+    @staticmethod
+    def parent_category(count, shop):
+        for _ in range(count):
+            return choice(list(ProductCategory.objects.filter(shop=shop.pk)) + [None])

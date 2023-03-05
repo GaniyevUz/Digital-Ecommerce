@@ -1,7 +1,10 @@
+from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
 
+from products.models import Category
+from products.serializers import CategoryMoveSerializer
 from shared.django import APIViewSet
 from shared.restframework import IsAuthenticatedOwner, CountResultPaginate
 from shared.utils import site_languages
@@ -15,6 +18,7 @@ class ShopAPIViewSet(APIViewSet):
     permission_classes = IsAuthenticatedOwner,
     queryset = Shop.objects.all()
     pagination_class = CountResultPaginate
+    lookup_url_kwarg = 'shop'
 
     def list(self, request, *args, **kwargs):
         self.queryset = self.queryset.filter(user=request.user)
