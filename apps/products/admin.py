@@ -6,20 +6,26 @@ from products.models import Product, Category
 
 @admin.register(Category)
 class CategoryAdmin(DraggableMPTTAdmin):
-    list_display = 'tree_actions', 'english', 'russian', 'uzbek'
+    list_display = 'tree_actions', 'shop_id', 'english', 'russian', 'uzbek'
     list_display_links = 'english', 'russian', 'uzbek'
 
     @staticmethod
     def english(obj):
-        return obj.name.get('en')
+        if hasattr(obj.name, 'get'):
+            return obj.name.get('en')
+        return obj.name
 
     @staticmethod
     def russian(obj):
-        return obj.name.get('ru')
+        if hasattr(obj.name, 'get'):
+            return obj.name.get('ru')
+        return obj.name
 
     @staticmethod
     def uzbek(obj):
-        return obj.name.get('uz')
+        if hasattr(obj.name, 'get'):
+            return obj.name.get('uz')
+        return obj.name
 
 
 @admin.register(Product)

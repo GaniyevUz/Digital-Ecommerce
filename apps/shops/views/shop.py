@@ -1,7 +1,10 @@
+from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.response import Response
 
+from products.models import Category
+from products.serializers import CategoryMoveSerializer
 from shared.django import APIViewSet
 from shared.restframework import IsAuthenticatedOwner, CountResultPaginate
 from shared.utils import site_languages
@@ -46,3 +49,29 @@ class CountryAPIViewSet(APIViewSet):
 class PaymentProvidersListAPIView(ListAPIView):
     queryset = PaymentProvider.objects.all()
     serializer_class = PaymentSerializers
+
+
+class CategoryMoveAPI(GenericAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryMoveSerializer
+
+    def post(self, request, shop, pk, *args, **kwargs):
+        categories = self.get_queryset().filter(shop=shop)
+        not_found = 'No matching Category given %s'
+        if categories:
+            target = request.data.get('position')
+            if target is not None and target in categories.values_list('pk', flat=True):
+                try:
+                    target = categories.get(pk=target)
+                except Category.DoesNotExist:
+                    return Response({'status': not_found % 'position'}, status.HTTP_404_NOT_FOUND)
+                try:
+                    category: Category = categories.get(pk=pk)
+                    category.move_to(target, 'left')
+                    data = {'position': category.pk}
+                    return Response(data)
+                except Category.DoesNotExist:
+                    return Response({'status': not_found % 'id'}, status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({'status': 'Invalid Request'}, status.HTTP_400_BAD_REQUEST)
+        return Response({'status': not_found % 'shop_id'}, status.HTTP_400_BAD_REQUEST)
