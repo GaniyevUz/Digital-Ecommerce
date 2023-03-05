@@ -1,10 +1,11 @@
 from django.urls import path, include
 
 from orders.views import OrderAPIViewSet
-from products.views import CategoryAPIViewSet as ProductCategoryAPIViewSet, ProductAPIViewSet
+from products.views import (CategoryAPIViewSet as ProductCategoryAPIViewSet, ProductAPIViewSet,
+                            CategoryTranslationsAPI, CategoryMoveAPI as ProductCategoryMoveAPI)
 from shared.django import CustomRouter
 from shops.views import ShopAPIViewSet, CurrencyAPIViewSet, PaymentProvidersViewSet, CategoryAPIViewSet, StatShop
-from shops.views.shop import CountryAPIViewSet, CategoryMoveAPI as ProductCategoryMoveAPI
+from shops.views.shop import CountryAPIViewSet
 from shops.views.shop_belongs import TelegramBotAPIViewSet
 
 router_stat = CustomRouter()
@@ -31,7 +32,7 @@ urlpatterns = [
     path('<int:shop>/category/<int:pk>', ProductCategoryAPIViewSet.as_view(detail),
          name='product-category-detail'),
     path('<int:shop>/category/<int:pk>/move', ProductCategoryMoveAPI.as_view(), name='product-category-move'),
-    path('<int:shop>/category/<int:pk>/translations', ProductCategoryAPIViewSet.as_view('translations'),
+    path('<int:shop>/category/<int:pk>/translations', CategoryTranslationsAPI.as_view(),
          name='product-category-translations'),
     path('<int:shop>/order', OrderAPIViewSet.as_view({'get': 'list'}), name='order-list'),
     path('<int:shop>/payment-providers', PaymentProvidersViewSet.as_view(list_),

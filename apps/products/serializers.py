@@ -1,5 +1,7 @@
-from rest_framework.fields import IntegerField
-from rest_framework.serializers import ModelSerializer
+from abc import ABC
+
+from rest_framework.fields import IntegerField, JSONField
+from rest_framework.serializers import ModelSerializer, Serializer
 from products.models import Product, Category
 
 
@@ -21,9 +23,11 @@ class ProductModelSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class CategoryMoveSerializer(ModelSerializer):
+class CategoryMoveSerializer(Serializer):
     position = IntegerField()
 
+
+class CategoryTranslationSerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ('position',)
+        fields = 'name', 'description'

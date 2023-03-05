@@ -1,16 +1,16 @@
 from django_filters import rest_framework as filters
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
 
 from shared.django import APIViewSet
-
 from shared.django import BaseShopMixin
 from shared.restframework import CustomPageNumberPagination, IsShopOwner
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
-                          CategoryMoveSerializer)
+                          CategoryMoveSerializer, CategoryTranslationSerializer)
 
 
 class ProductAPIViewSet(BaseShopMixin, APIViewSet):
@@ -38,14 +38,51 @@ class CategoryAPIViewSet(BaseShopMixin, APIViewSet):
             return CategoryListSerializer
         return super().get_serializer_class()
 
-    @action(['GET', 'PATCH'], True)
-    def get_translations(self, request, shop, pk):
-        try:
-            ctg = self.get_queryset().get(shop=shop, pk=pk)
-            return Response('ok')
-        except Category.DoesNotExist:
-            return Response(status=404)
 
-    @action(['GET', 'PATCH'], True, serializer_class=CategoryMoveSerializer)
-    def move(self, *args, **kwargs):
-        return Response('move')
+class CategoryMoveAPI(GenericAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryMoveSerializer
+
+    def post(self, request, shop, pk, *args, **kwargs):
+        categories = self.get_queryset().filter(shop=shop)
+        not_found = 'No matching Category given %s'
+        if categories:
+            target = request.data.get('position')
+            if target is not None and target in categories.values_list('pk', flat=True):
+                try:
+                    target = categories.get(pk=target)
+                except Category.DoesNotExist:
+                    return Response({'status': not_found % 'position'}, status.HTTP_404_NOT_FOUND)
+                try:
+                    category: Category = categories.get(pk=pk)
+                    category.move_to(target, 'left')
+                    data = {'position': category.pk}
+                    return Response(data)
+                except Category.DoesNotExist:
+                    return Response({'status': not_found % 'id'}, status.HTTP_404_NOT_FOUND)
+            else:
+                return Response({'status': 'Invalid Request'}, status.HTTP_400_BAD_REQUEST)
+        return Response({'status': not_found % 'shop_id'}, status.HTTP_400_BAD_REQUEST)
+
+
+class CategoryTranslationsAPI(GenericAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategoryTranslationSerializer
+
+    def get(self, request, shop, pk, *args, **kwargs):
+        try:
+            category = Category.objects.get(shop=shop, pk=pk)
+            serializer = self.get_serializer(category)
+            return Response(serializer.data)
+        except Category.DoesNotExist:
+            return Response({'status': 'Category Not Found'}, status.HTTP_404_NOT_FOUND)
+
+    def patch(self, request, shop, pk, *args, **kwargs):
+        try:
+            category = Category.objects.get(shop=shop, pk=pk)
+            serializer = self.get_serializer(category, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data)
+        except Category.DoesNotExist:
+            return Response({'status': 'Category Not Found'}, status.HTTP_404_NOT_FOUND)
