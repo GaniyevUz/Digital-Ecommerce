@@ -44,7 +44,7 @@ class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
 class TelegramBotAPIViewSet(APIViewSet):
     serializer_class = TelegramBotModelSerializer
     queryset = TelegramBot.objects.all()
-    permission_classes = AllowAny,
+    # permission_classes = AllowAny,
 
     def update(self, request, *args, **kwargs):
         token = request.data.get('token')

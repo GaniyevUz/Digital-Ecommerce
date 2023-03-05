@@ -12,7 +12,6 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import GenericViewSet
 
-from ecommerce.models import Client
 from shared.utils import get_subdomain
 from shops.models import Currency, Category, Shop, Country, Domain
 from users.models import User
@@ -138,8 +137,8 @@ class TestFixtures:
 
     @fixture
     def obj_client(self, obj_shop) -> User:
-        client, _ = Client.objects.get_or_create(email='client@example.com', password=make_password('client_pass'),
-                                                 shop=obj_shop)
+        client, _ = User.objects.get_or_create(email='client@example.com', password=make_password('client_pass'),
+                                               shop=obj_shop)
         return client
 
     @staticmethod
