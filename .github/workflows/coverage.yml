@@ -43,7 +43,7 @@ jobs:
           DJANGO_SETTINGS_MODULE: core.settings
       - name: Run tests
         run: |
-          source poetry shell
+          poetry shell
           python3 manage.py makemigrations
           python3 manage.py migrate
           pytest --cov=./ --cov-report=xml
