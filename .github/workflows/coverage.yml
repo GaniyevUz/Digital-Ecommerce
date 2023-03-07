@@ -35,14 +35,14 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - name: activating venv
+        run: source .venv/bin/activate
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         env:
           DATABASE_URL: postgres://{{ POSTGRES_USER }}:{{ POSTGRES_PASSWORD }}@localhost:5432/{{ POSTGRES_DB }}
           DJANGO_SETTINGS_MODULE: core.settings
-      - name: activating venv
-        run: source .venv/bin/activate
       - name: Run tests
         run: |
           python3 manage.py makemigrations
