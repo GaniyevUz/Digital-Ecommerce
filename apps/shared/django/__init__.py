@@ -1,4 +1,3 @@
-from shared.django.mixins import BaseShopMixin, APIViewSet, TestFixtures
-from shared.django.model_configs import category_directory_path, product_directory_path
-from shared.django.backends import CustomUserBackend
-from shared.restframework import CustomRouter
+from .mixins import BaseShopMixin, APIViewSet, TestFixtures
+from .model_configs import category_directory_path, product_directory_path
+from .backends import CustomUserBackend

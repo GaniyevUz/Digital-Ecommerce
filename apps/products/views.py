@@ -1,12 +1,14 @@
+from django.http import HttpResponse
 from django_filters import rest_framework as filters
 from rest_framework import status
-from rest_framework.decorators import action
 from rest_framework.generics import GenericAPIView
 from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from shared.django import APIViewSet
 from shared.django import BaseShopMixin
+from shared.django.mixins import ImportExportMixin
 from shared.restframework import CustomPageNumberPagination, IsShopOwner
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
@@ -25,6 +27,21 @@ class ProductAPIViewSet(BaseShopMixin, APIViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(category__shop=self.get_shop)
+
+
+class ExportProductAPI(BaseShopMixin, ImportExportMixin, GenericAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductModelSerializer
+    permission_classes = ()
+
+    def get(self, request, *args, **kwargs):
+        fields = ('pk', 'name', 'description', 'category', 'image', 'price', 'in_availability',
+                  'length', 'width', 'height', 'weight', 'length_class', 'weight_class')
+        products = self.export(*fields)
+        shop = self.get_shop
+        response = HttpResponse(products, content_type='inline, application/vnd.ms-excel')
+        response['Content-Disposition'] = 'filename={shop}.xlsx;'.format(shop=shop)
+        return response
 
 
 class CategoryAPIViewSet(BaseShopMixin, APIViewSet):
