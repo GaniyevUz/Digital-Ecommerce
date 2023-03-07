@@ -1,13 +1,11 @@
-from re import fullmatch
-
 from httpx import get
+from re import fullmatch
 from rest_framework import status
 from rest_framework.request import Request
-
 from shops.models import Shop, TelegramBot, Domain
 
 
-# ema
+# email validator
 def email_validator(value) -> bool:
     regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'
     return bool(fullmatch(regex, value))
