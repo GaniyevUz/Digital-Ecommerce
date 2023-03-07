@@ -42,7 +42,7 @@ jobs:
           DATABASE_URL: postgres://{{ POSTGRES_USER }}:{{ POSTGRES_PASSWORD }}@localhost:5432/{{ POSTGRES_DB }}
           DJANGO_SETTINGS_MODULE: core.settings
       - name: activating venv
-        run: poetry shell
+        run: source .venv/bin/activate
       - name: Run tests
         run: |
           python3 manage.py makemigrations
