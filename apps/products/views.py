@@ -34,12 +34,15 @@ class ExportProductAPI(BaseShopMixin, ImportExportMixin, GenericAPIView):
     serializer_class = ProductModelSerializer
     permission_classes = ()
 
+    def get_queryset(self):
+        return self.queryset.filter(category__shop=self.get_shop)  # noqa
+
     def get(self, request, *args, **kwargs):
-        fields = ('pk', 'name', 'description', 'category', 'image', 'price', 'in_availability',
+        fields = ('pk', 'name', 'description', 'category', 'price', 'in_availability',
                   'length', 'width', 'height', 'weight', 'length_class', 'weight_class')
         products = self.export(*fields)
         shop = self.get_shop
-        response = HttpResponse(products, content_type='inline, application/vnd.ms-excel')
+        response = HttpResponse(products, content_type='application/vnd.ms-excel')
         response['Content-Disposition'] = 'filename={shop}.xlsx;'.format(shop=shop)
         return response
 

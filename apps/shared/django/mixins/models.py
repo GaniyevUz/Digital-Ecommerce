@@ -19,7 +19,9 @@ class BaseShopMixin:
         return None
 
     def get_queryset(self):
-        return self.queryset.filter(shop=self.get_shop)  # noqa
+        queryset = self.queryset
+        if hasattr(queryset.first, 'shop'):
+            return queryset.filter(shop=self.get_shop)  # noqa
 
 
 class APIViewSet(mixins.CreateModelMixin,
@@ -53,6 +55,6 @@ class ImportExportMixin:
         fields = list(fields)
         objects = self.get_queryset().values_list(*fields)
         data_frame = DataFrame(objects, columns=fields)
-        export = BytesIO()
-        data_frame.to_excel(export, 'products')
-        return export.getvalue()
+        with BytesIO() as export:
+            data_frame.to_excel(export, 'products')
+            return export.getvalue()
