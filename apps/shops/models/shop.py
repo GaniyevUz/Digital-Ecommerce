@@ -15,7 +15,7 @@ class Shop(Model):
 
     name = CharField(max_length=255)
     languages = MultiSelectField(max_length=255, choices=langs, min_choices=1)
-    user = ForeignKey('users.User', CASCADE, related_name='shop_set')  # owner of the shop
+    user = ForeignKey('users.User', CASCADE, related_name='shops')  # owner of the shop
     shop_currency = ForeignKey('shops.Currency', RESTRICT)
     shop_category = ForeignKey('shops.Category', RESTRICT)
     country = ForeignKey('shops.Country', RESTRICT)
@@ -47,10 +47,6 @@ class Shop(Model):
     @property
     def orders(self):
         return self.order_set.all()
-
-    @property
-    def clients(self):
-        return self.client_set.all()
 
     @property
     def payment_providers(self):

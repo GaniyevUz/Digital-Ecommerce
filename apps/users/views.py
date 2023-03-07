@@ -1,12 +1,12 @@
 from rest_framework.response import Response
-from shared.django import APIViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from shared.restframework import UserPermission
 from .models import User
 from .serializers import UserModelSerializer, CreateUserModelSerializer
 
 
-class UserAPIViewSet(APIViewSet):
+class UserAPIViewSet(ModelViewSet):
     serializer_class = UserModelSerializer
     queryset = User.objects.all()
     permission_classes = (UserPermission,)

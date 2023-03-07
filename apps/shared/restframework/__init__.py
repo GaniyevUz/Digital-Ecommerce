@@ -1,4 +1,4 @@
 from shared.restframework.routers import CustomRouter
 from shared.restframework.simplejwt_serializers import CustomTokenObtainPairSerializer
 from shared.restframework.paginate import CustomPageNumberPagination, CountResultPaginate
-from shared.restframework.permisions import UserPermission, IsShopOwner, IsAuthenticatedOwner, IsAdminOrReadOnly
+from shared.restframework.permisions import UserPermission, IsShopOwner, IsAdminOrReadOnly

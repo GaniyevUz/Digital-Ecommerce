@@ -1,5 +1,5 @@
 import pytest
-from rest_framework.reverse import reverse
+from django_hosts import reverse
 
 from shared.django import TestFixtures
 from users.models import User
@@ -20,7 +20,7 @@ class TestUserAPIView(TestFixtures):
         assert User.objects.count() == users_count + 10
 
     def test_user_create_api(self, client):
-        url = reverse('api:users:user')
+        url = reverse('api:users:user', host='api')
         data = {
             'password': 'string123',
             'confirm_password': 'string123',
@@ -33,7 +33,7 @@ class TestUserAPIView(TestFixtures):
         assert response.json()['email'] == data['email']
 
     def test_user_retrieve_api(self, client, auth_header, obj_user):
-        url = reverse('api:users:user')
+        url = reverse('api:users:user', host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == 200
         # assert response.json() == UserModelSerializer(obj_user).data
@@ -41,7 +41,7 @@ class TestUserAPIView(TestFixtures):
         assert sorted(response.json().items()) == sorted(data.items())
 
     def test_user_update_api(self, client, auth_header, obj_user):
-        url = reverse('api:users:user')
+        url = reverse('api:users:user', host='api')
         data = {
             'email': 'janedoe@example.com',
             'first_name': 'Jane',
@@ -52,19 +52,19 @@ class TestUserAPIView(TestFixtures):
         assert response['first_name'] == data['first_name']
         assert response['email'] == data['email']
 
-    def test_user_destroy_api(self, client, auth_header, obj_user):
-        url = reverse('api:users:user')
-        response = client.delete(url, **auth_header)
-        assert response.status_code == 204
-        response = client.get(url, **auth_header)
-        assert response.status_code == 403
-
     def test_user_change_default_shop_api(self, client, auth_header, obj_shop, obj_user):
-        url = reverse('api:users:user')
-        shop = obj_user.shop_set.first()
+        url = reverse('api:users:user', host='api')
+        shop = obj_user.shops.first()
         data = {
             'default_shop': shop.pk
         }
         response = client.patch(url, data=data, **auth_header, content_type='application/json')
         assert response.status_code == 200
         assert response.data['default_shop'] == shop.pk
+
+    def test_user_destroy_api(self, client, auth_header, obj_user):
+        url = reverse('api:users:user', host='api')
+        response = client.delete(url, **auth_header)
+        assert response.status_code == 204
+        response = client.get(url, **auth_header)
+        assert response.status_code == 401

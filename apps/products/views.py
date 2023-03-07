@@ -17,7 +17,7 @@ class ProductAPIViewSet(BaseShopMixin, APIViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductModelSerializer
     filter_backends = (filters.DjangoFilterBackend,)
-    permission_classes = (DjangoModelPermissionsOrAnonReadOnly, IsShopOwner,)
+    permission_classes = (IsShopOwner,)
     # parser_classes = (MultiPartParser,)
     # filterset_fields = ('category',)
     filterset_fields = ('name', 'price')

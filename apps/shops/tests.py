@@ -68,7 +68,7 @@ class TestShopAPIView(TestFixtures):
         # Test for @property methods of Models
 
         assert isinstance(shop.categories, TreeQuerySet)
-        assert isinstance(shop.clients, QuerySet)
+        assert isinstance(shop.clients.all(), QuerySet)
         assert isinstance(shop.orders, QuerySet)
         assert isinstance(shop.payment_providers, QuerySet)
 
@@ -77,8 +77,8 @@ class TestShopAPIView(TestFixtures):
 
         response = client.get(shop_url, **auth_header)
         assert response.status_code == HTTP_200_OK
-        assert response.data.get('count') == obj_user.shop_set.count()
-        shop_config = reverse('api:shops:shop-shop-config', host='api')
+        assert response.data.get('count') == obj_user.shops.count()
+        shop_config = reverse('api:shops:shop-config', host='api')
         response = client.get(shop_config, **auth_header)
         assert response.status_code == HTTP_200_OK
 
@@ -98,7 +98,7 @@ class TestShopAPIView(TestFixtures):
         assert response.data['languages'] == data['languages']
 
     def test_shop_detail_api(self, client, auth_header, obj_shop):
-        url = reverse('api:shops:shop-detail', kwargs={'pk': obj_shop.pk}, host='api')
+        url = reverse('api:shops:shop-detail', args=(obj_shop.pk,), host='api')
         response = client.get(url, **auth_header)
         assert response.status_code == HTTP_200_OK
 

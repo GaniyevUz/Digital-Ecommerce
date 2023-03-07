@@ -70,11 +70,11 @@ class TestEcommerce(TestFixtures):
         url = reverse('api:ecommerce:profile', host='other', host_args=(domain.name,))
         response = client.get(url, SERVER_NAME=server_name, **auth_header)
         assert response.status_code == status.HTTP_200_OK
-        user = response.json()['user']
+        user = response.json()
         for key in user:
             assert user[key] == getattr(obj_client, key)
 
-    def test_client_profile_update(self, client: Client, obj_client, domain, auth_header):
+    def test_client_profile_partial_update(self, client: Client, obj_client, domain, auth_header):
         server_name = reverse_host('other', (domain.name,))
         url = reverse('api:ecommerce:profile', host='other', host_args=(domain.name,))
         data = {
@@ -82,10 +82,10 @@ class TestEcommerce(TestFixtures):
             'last_name': 'Doe',
             'phone': '+998901234567',
         }
-        response = client.put(url, data, SERVER_NAME=server_name, **auth_header)
+        response = client.patch(url, data, SERVER_NAME=server_name, content_type='application/json', **auth_header)
         assert response.status_code == status.HTTP_200_OK
-        user = response.json()['user']
-        for key in user:
+        user = response.json()
+        for key in data:
             assert user[key] == data[key]
 
     def test_client_profile_destroy(self, client: Client, obj_client, domain, auth_header):
@@ -94,7 +94,7 @@ class TestEcommerce(TestFixtures):
         response = client.delete(url, SERVER_NAME=server_name, **auth_header)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         response = client.delete(url, SERVER_NAME=server_name, **auth_header)
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     def test_category_list(self, client: Client, domain):
         server_name = reverse_host('other', (domain.name,))
