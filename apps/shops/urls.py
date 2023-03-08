@@ -21,7 +21,7 @@ detail = {'get': 'retrieve', 'patch': 'partial_update', 'delete': 'destroy'}
 urlpatterns = [
     path('', include(router.urls)),
     path('shop', ShopAPIViewSet.as_view(list_), name='shop-list'),
-    path('shop_config', ShopAPIViewSet.as_view({'get': 'shop-config'}), name='shop-config'),
+    path('shop_config', ShopAPIViewSet.as_view({'get': 'shop_config'}), name='shop-config'),
     path('<int:shop>/detail', ShopAPIViewSet.as_view(detail), name='shop-detail'),
     path('shop/<int:shop>/', include(router_stat.urls)),
     path('<int:shop>/bot', TelegramBotAPIViewSet.as_view({'get': 'list', 'post': 'create', 'put': 'update'}),

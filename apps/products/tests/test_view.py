@@ -5,31 +5,23 @@ from rest_framework import status
 
 from products.models import Category as PrCategory, Product
 from products.tests.fixture import FixtureClass
+from shared.django import TestFixtures
 from shops.models import Shop
 
 
 @pytest.mark.django_db
-class TestProductAPIViewSet(FixtureClass):
+class TestProductAPIViewSet(TestFixtures):
 
-    def test_list_product(self, client: Client, user):
-        '''
-        This test will check per page with 10 details in the product class
-        '''
-        client.force_login(user)
-        shop = Shop.objects.first()
-        url = reverse('api:shops:product-list', kwargs={'shop': shop.pk}, host='api')
+    def test_list_product(self, client: Client, obj_user, obj_shop):
+        url = reverse('api:shops:product-list', kwargs={'shop': obj_shop.pk}, host='api')
         response = client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
         assert len(response.data.get('results', 11)) <= 10
 
     # @pytest.mark.urls('products.urls')
-    def test_create_products(self, user, client):
-        '''
-        This test will check if there are any errors you received
-        while creating the product
-        '''
-        category = PrCategory.objects.first()
+    def test_create_products(self, client, obj_category, auth_header):
+        category = obj_category[0]
         shop = category.shop
         url = reverse('api:shops:product-list', kwargs={'shop': shop.pk}, host='api')
 
@@ -41,37 +33,32 @@ class TestProductAPIViewSet(FixtureClass):
             'attributes': [{}]
         }
         response = client.post(url, data)
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
-        client.force_login(user)
-        response = client.post(url, data)
+        response = client.post(url, data, **auth_header)
         assert response.status_code == status.HTTP_201_CREATED
 
-    def test_product_detail(self, client):
-        product = Product.objects.first()
-        shop = product.category.shop
-        url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')
+    def test_product_detail(self, client, obj_product):
+        shop = obj_product[0].category.shop
+        url = reverse('api:shops:product-detail', args=(shop.pk, obj_product[0].pk), host='api')
 
         response = client.get(url)
         assert response.status_code == status.HTTP_200_OK
 
-    def test_product_update(self, client, user):
-        product = user.shop_set.first().categories[0].product_set.first()
+    def test_product_update(self, client, obj_product, auth_header):
+        product = obj_product[0]
         shop = product.category.shop
         url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')
         data = {
             'name': 'new name1',
         }
-        client.force_login(user)
-        response = client.patch(url, data, 'application/json')
+        response = client.patch(url, data, 'application/json', **auth_header)
         assert response.status_code == status.HTTP_200_OK
         assert response.data.get('name') == data.get('name')
 
-    def test_product_delete(self, client, user):
-        shop = user.shop_set.first()
-        product = shop.categories[0].product_set.first()
-        url = reverse('api:shops:product-detail', args=(shop.pk, product.pk), host='api')
-        client.force_login(user)
-        response = client.delete(url)
+    def test_product_delete(self, client, obj_product, auth_header):
+        product = obj_product[0]
+        url = reverse('api:shops:product-detail', args=(product.category.shop.pk, product.pk), host='api')
+        response = client.delete(url, **auth_header)
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert not Product.objects.filter(pk=product.pk).exists()

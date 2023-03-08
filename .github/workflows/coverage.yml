@@ -17,6 +17,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -27,7 +28,6 @@ jobs:
         with:
           virtualenvs-create: true
           virtualenvs-in-project: true
-          installer-parallel: true
 
       - name: Load cached venv
         id: cached-poetry-dependencies
@@ -35,15 +35,16 @@ jobs:
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+      - name: activating venv
+        run: source .venv/bin/activate
       - name: Install dependencies
         run: poetry install
         if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
+          DATABASE_URL: postgres://{{ POSTGRES_USER }}:{{ POSTGRES_PASSWORD }}@localhost:5432/{{ POSTGRES_DB }}
           DJANGO_SETTINGS_MODULE: core.settings
       - name: Run tests
         run: |
-          source .venv/bin/activate
           python3 manage.py makemigrations
           python3 manage.py migrate
           pytest --cov=./ --cov-report=xml
@@ -51,3 +52,4 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+

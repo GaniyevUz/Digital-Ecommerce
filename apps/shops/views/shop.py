@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from products.models import Category
 from products.serializers import CategoryMoveSerializer
 from shared.django import APIViewSet
-from shared.restframework import IsAuthenticatedOwner, CountResultPaginate
+from shared.restframework import CountResultPaginate, IsShopOwner
 from shared.utils import site_languages
 from shops.models import Shop, Country
 from shops.models.shop_belongs import PaymentProvider
@@ -15,7 +15,7 @@ from shops.serializers import ShopSerializer, PaymentSerializers, CountrySeriali
 
 class ShopAPIViewSet(APIViewSet):
     serializer_class = ShopSerializer
-    permission_classes = IsAuthenticatedOwner,
+    permission_classes = IsShopOwner,
     queryset = Shop.objects.all()
     pagination_class = CountResultPaginate
     lookup_url_kwarg = 'shop'
