@@ -6,7 +6,7 @@ from products.models import Product, Category
 
 @admin.register(Category)
 class CategoryAdmin(DraggableMPTTAdmin):
-    list_display = 'tree_actions', 'shop_id', 'english', 'russian', 'uzbek'
+    list_display = 'tree_actions', 'english', 'russian', 'uzbek'
     list_display_links = 'english', 'russian', 'uzbek'
 
     @staticmethod
