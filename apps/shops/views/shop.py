@@ -1,10 +1,7 @@
-from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 
-from products.models import Category
-from products.serializers import CategoryMoveSerializer
 from shared.django import APIViewSet
 from shared.restframework import CountResultPaginate, IsShopOwner
 from shared.utils import site_languages

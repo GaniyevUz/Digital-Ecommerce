@@ -1,10 +1,9 @@
 from django.http import HttpResponse
+from django.utils.timezone import now
 from django_filters import rest_framework as filters
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from shared.django import APIViewSet
 from shared.django import BaseShopMixin
@@ -43,7 +42,9 @@ class ExportProductAPI(BaseShopMixin, ImportExportMixin, GenericAPIView):
         products = self.export(*fields)
         shop = self.get_shop
         response = HttpResponse(products, content_type='application/vnd.ms-excel')
-        response['Content-Disposition'] = 'filename={shop}.xlsx;'.format(shop=shop)
+        response['Content-Disposition'] = 'filename={SHOP}-{DATE}.xlsx;'.format(
+            SHOP=shop.pk,
+            DATE=now().strftime('%d.%m.%Y'))
         return response
 
 

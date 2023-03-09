@@ -44,6 +44,7 @@ class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
 class TelegramBotAPIViewSet(APIViewSet):
     serializer_class = TelegramBotModelSerializer
     queryset = TelegramBot.objects.all()
+
     # permission_classes = AllowAny,
 
     def update(self, request, *args, **kwargs):
@@ -79,7 +80,7 @@ class StatShop(GenericViewSet, GenericAPIView):
             _ = Order.objects.values('id').annotate(summ=RawSQL("SELECT get_summ_all(%s)", (pk,)),
                                                     avg=RawSQL("SELECT get_avarage_price(%s)", (pk,)))[0]
             revenue, avg = _['summ'], _['avg']
-        except ProgrammingError as error:
+        except ProgrammingError:
             revenue = avg = 0
 
         # total_customers = Client.objects.filter(shop_id=pk).count() # client chala

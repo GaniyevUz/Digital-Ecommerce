@@ -1,12 +1,13 @@
+from io import BytesIO
+
 from django.shortcuts import get_object_or_404
+from pandas import DataFrame
 from rest_framework import mixins
-from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from io import BytesIO
+
 from shared.utils import get_subdomain
 from shops.models import Shop
-from pandas import DataFrame, ExcelWriter
 
 
 class BaseShopMixin:
