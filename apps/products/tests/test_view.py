@@ -3,10 +3,8 @@ from django.test import Client
 from django_hosts import reverse
 from rest_framework import status
 
-from products.models import Category as PrCategory, Product
-from products.tests.fixture import FixtureClass
+from products.models import Product
 from shared.django import TestFixtures
-from shops.models import Shop
 
 
 @pytest.mark.django_db

@@ -1,3 +1,5 @@
+from django.http import HttpResponse
+from django.utils.timezone import now
 from django_filters import rest_framework as filters
 from rest_framework import status
 from rest_framework.generics import GenericAPIView
@@ -5,6 +7,7 @@ from rest_framework.response import Response
 
 from shared.django import APIViewSet
 from shared.django import BaseShopMixin
+from shared.django.mixins import ImportExportMixin
 from shared.restframework import CustomPageNumberPagination, IsShopOwner
 from .models import Category, Product
 from .serializers import (ProductModelSerializer, CategoryModelSerializer, CategoryListSerializer,
@@ -23,6 +26,26 @@ class ProductAPIViewSet(BaseShopMixin, APIViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(category__shop=self.get_shop)
+
+
+class ExportProductAPI(BaseShopMixin, ImportExportMixin, GenericAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductModelSerializer
+    permission_classes = ()
+
+    def get_queryset(self):
+        return self.queryset.filter(category__shop=self.get_shop)  # noqa
+
+    def get(self, request, *args, **kwargs):
+        fields = ('pk', 'name', 'description', 'category', 'price', 'in_availability',
+                  'length', 'width', 'height', 'weight', 'length_class', 'weight_class')
+        products = self.export(*fields)
+        shop = self.get_shop
+        response = HttpResponse(products, content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'filename={SHOP}-{DATE}.xlsx;'.format(
+            SHOP=shop.pk,
+            DATE=now().strftime('%d.%m.%Y'))
+        return response
 
 
 class CategoryAPIViewSet(BaseShopMixin, APIViewSet):

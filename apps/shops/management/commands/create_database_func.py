@@ -1,9 +1,7 @@
-import os
-
 from django.core.management.base import BaseCommand
 from django.db import connection
 
-from shared.database_functions import get_summ_all, get_stat_sales, get_avarage_price
+from shared.utils import get_summ_all, get_stat_sales, get_avarage_price
 
 
 class Command(BaseCommand):

@@ -1,7 +1,6 @@
-from abc import ABC
-
-from rest_framework.fields import IntegerField, JSONField
+from rest_framework.fields import IntegerField
 from rest_framework.serializers import ModelSerializer, Serializer
+
 from products.models import Product, Category
 
 

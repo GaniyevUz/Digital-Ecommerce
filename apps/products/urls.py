@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from products.views import ProductAPIViewSet, CategoryAPIViewSet
-from shared.django import CustomRouter
+from shared.restframework import CustomRouter
 
 router = CustomRouter()
 

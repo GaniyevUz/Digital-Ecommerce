@@ -2,32 +2,13 @@ from itertools import cycle
 from pprint import pprint
 
 from django.contrib.auth.hashers import make_password
-from django.core.validators import validate_email
-from django.shortcuts import get_object_or_404
 from django_hosts import reverse
 from model_bakery import baker
 from pytest import fixture
-from rest_framework import mixins
-from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
-from rest_framework.viewsets import GenericViewSet
 
-from shared.utils import get_subdomain
 from shops.models import Currency, Category, Shop, Country, Domain
 from users.models import User
-
-
-class BaseShopMixin:
-    @property
-    def get_shop(self):
-        if shop_id := self.kwargs.get('shop'):  # noqa
-            return get_object_or_404(Shop, pk=shop_id)
-        if domain := get_subdomain(self.request):  # noqa
-            return get_object_or_404(Shop, domain=domain)
-        return None
-
-    def get_queryset(self):
-        return self.queryset.filter(shop=self.get_shop)  # noqa
 
 
 class TestFixtures:
@@ -150,23 +131,3 @@ class TestFixtures:
     def t_repeat(func, count, *args, **kwargs):
         for _ in range(count):
             yield {'en': func(*args, **kwargs), 'ru': '', 'uz': ''}
-
-
-class APIViewSet(mixins.CreateModelMixin,
-                 mixins.RetrieveModelMixin,
-                 mixins.DestroyModelMixin,
-                 mixins.ListModelMixin,
-                 GenericViewSet):
-
-    def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        if getattr(instance, '_prefetched_objects_cache', None):
-            # If 'prefetch_related' has been applied to a queryset, we need to
-            # forcibly invalidate the prefetch cache on the instance.
-            instance._prefetched_objects_cache = {}
-
-        return Response(serializer.data)
