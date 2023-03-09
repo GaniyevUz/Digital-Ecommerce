@@ -21,8 +21,9 @@ class BaseShopMixin:
 
     def get_queryset(self):
         queryset = self.queryset
-        if hasattr(queryset.first, 'shop'):
+        if hasattr(queryset.first(), 'shop'):
             return queryset.filter(shop=self.get_shop)  # noqa
+        return queryset.none()
 
 
 class APIViewSet(mixins.CreateModelMixin,
