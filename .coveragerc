@@ -3,4 +3,4 @@ omit = */migrations/*, */__init__.py, root/*
 disable_warnings = True
 
 [html]
-title=BotCommerceApi Coverage
+title=digital-ecommerceApi Coverage

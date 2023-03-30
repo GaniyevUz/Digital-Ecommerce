@@ -6,8 +6,7 @@ from shared.django import APIViewSet
 from shared.restframework import CountResultPaginate, IsShopOwner
 from shared.utils import site_languages
 from shops.models import Shop, Country
-from shops.models.shop_belongs import PaymentProvider
-from shops.serializers import ShopSerializer, PaymentSerializers, CountrySerializer
+from shops.serializers import ShopSerializer, CountrySerializer
 
 
 class ShopAPIViewSet(APIViewSet):
@@ -41,8 +40,3 @@ class ShopAPIViewSet(APIViewSet):
 class CountryAPIViewSet(APIViewSet):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
-
-
-class PaymentProvidersListAPIView(ListAPIView):
-    queryset = PaymentProvider.objects.all()
-    serializer_class = PaymentSerializers

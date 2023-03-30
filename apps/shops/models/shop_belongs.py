@@ -1,6 +1,4 @@
-from django.contrib.postgres.fields import ArrayField
-from django.db.models import Model, CharField, ForeignKey, CASCADE, ImageField, \
-    IntegerField, JSONField, BooleanField, \
+from django.db.models import Model, CharField, ForeignKey, CASCADE, BooleanField, \
     DateField, OneToOneField
 
 
@@ -25,19 +23,6 @@ class Currency(Model):
     class Meta:
         verbose_name = 'Shop Currency'
         verbose_name_plural = 'Shop Currencies'
-        ordering = ('-id',)
-
-
-class PaymentProvider(Model):
-    code = CharField(max_length=255)
-    title = CharField(max_length=255)
-    image = ImageField(upload_to='payment_providers/', null=True, blank=True)
-    type = CharField(max_length=255)
-    status = IntegerField(null=True, blank=True)
-    fields = ArrayField(JSONField())
-    shop = ForeignKey('shops.Shop', CASCADE)
-
-    class Meta:
         ordering = ('-id',)
 
 

@@ -1,9 +1,8 @@
-# BotCommerce
+# digital-ecommerce
 
-[![codecov](https://codecov.io/gh/GaniyevUz/BotCommerce/branch/master/graph/badge.svg?token=IPVIFRXEMB)](https://codecov.io/gh/GaniyevUz/BotCommerce)
+[![codecov](https://codecov.io/gh/GaniyevUz/digital-ecommerce/branch/master/graph/badge.svg?token=IPVIFRXEMB)](https://codecov.io/gh/GaniyevUz/digital-ecommerce)
 
-A complete shop, with payment systems, delivery services and convenient control panel with built-in CRM and Analytics.
-
+An e-commerce platform with online shop creation, user-friendly dashboard, and a customizable Telegram bot for real-time updates and customer communication.
 ## TODO - Required
 
 1. [ ] server

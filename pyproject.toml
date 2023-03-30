@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "botcommerce"
+name = "digital-ecommerce"
 version = "0.1.0"
 description = ""
 authors = [ "jakhongir <ganiyevuzb@gmail.com>", "habibullo <bubbless7456@gmail.com>"]

@@ -12,12 +12,12 @@ urlpatterns = [
 if settings.DEBUG:
     schema_view = get_schema_view(
         openapi.Info(
-            title="BotCommerce.io API for Ecommerce",
+            title="Digital-Ecommerce API for Ecommerce",
             default_version='v1',
-            description="A complete shop, with payment systems, delivery services and convenient control panel with "
-                        "built-in CRM and Analytics.",
+            description="An e-commerce platform with online shop creation, user-friendly dashboard, and "
+                        "a customizable Telegram bot for real-time updates and customer communication.",
             terms_of_service="https://www.google.com/policies/terms/",
-            contact=openapi.Contact('GitHub Repository', 'https://github.com/GaniyevUz/BotCommerce'),
+            contact=openapi.Contact('GitHub Repository', 'https://github.com/GaniyevUz/Digital-Ecommerce'),
             license=openapi.License(name='MIT License'),
         ),
         public=True,

@@ -4,7 +4,7 @@ from orders.views import OrderAPIViewSet
 from products.views import (CategoryAPIViewSet as ProductCategoryAPIViewSet, ProductAPIViewSet,
                             CategoryTranslationsAPI, CategoryMoveAPI as ProductCategoryMoveAPI, ExportProductAPI)
 from shared.restframework import CustomRouter
-from shops.views import ShopAPIViewSet, CurrencyAPIViewSet, PaymentProvidersViewSet, CategoryAPIViewSet, StatShop
+from shops.views import ShopAPIViewSet, CurrencyAPIViewSet, CategoryAPIViewSet, StatShop
 from shops.views.shop import CountryAPIViewSet
 from shops.views.shop_belongs import TelegramBotAPIViewSet
 
@@ -35,10 +35,6 @@ urlpatterns = [
     path('<int:shop>/category/<int:pk>/translations', CategoryTranslationsAPI.as_view(),
          name='product-category-translations'),
     path('<int:shop>/order', OrderAPIViewSet.as_view({'get': 'list'}), name='order-list'),
-    path('<int:shop>/payment-providers', PaymentProvidersViewSet.as_view(list_),
-         name='payment-providers-list'),
-    path('<int:shop>/payment-providers/<int:pk>', PaymentProvidersViewSet.as_view(detail),
-         name='payment-providers-detail'),
     path('<int:shop>/export/product', ExportProductAPI.as_view())
     # Todo Conflict
     # path('shop/<int:shop>/stat', StatShop.as_view(), name='shop-stat-all')

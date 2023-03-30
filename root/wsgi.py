@@ -1,5 +1,5 @@
 """
-WSGI config for BotCommerce project.
+WSGI config for digital-ecommerce project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

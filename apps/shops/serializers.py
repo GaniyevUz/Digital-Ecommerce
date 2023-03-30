@@ -3,7 +3,7 @@ from rest_framework.fields import (HiddenField, CurrentUserDefault, MultipleChoi
 from rest_framework.serializers import ModelSerializer
 
 from orders.models import Order
-from shops.models import Shop, Category, Currency, PaymentProvider, TelegramBot, Country
+from shops.models import Shop, Category, Currency, TelegramBot, Country
 
 
 class ShopSerializer(ModelSerializer):
@@ -45,12 +45,6 @@ class CurrencySerializer(ModelSerializer):
     class Meta:
         model = Currency
         fields = "__all__"
-
-
-class PaymentSerializers(ModelSerializer):
-    class Meta:
-        model = PaymentProvider
-        exclude = ('shop',)
 
 
 class OrderSerializer(ModelSerializer):

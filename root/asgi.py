@@ -1,5 +1,5 @@
 """
-ASGI config for BotCommerce project.
+ASGI config for digital-ecommerce project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

@@ -29,33 +29,6 @@ class TestShopAPIView(TestFixtures):
         )
         assert Shop.objects.count() == shops_count + 20
 
-    def test_shop_payment_providers_api(self, client: Client, obj_shop, auth_header):
-        # List of Payment Providers
-
-        url = reverse('api:shops:payment-providers-list', kwargs={'shop': obj_shop.pk})
-        response = client.get(url, **auth_header)
-        assert response.status_code == HTTP_200_OK
-        assert response.data.get('count') is not None and response.data.get('results') is not None
-        #  Create Payment Provider
-
-        fields = 'code', 'title', 'type', 'fields'
-        data = {field: 'test' for field in fields}
-        data['shop_id'] = obj_shop.pk
-        response = client.post(url, data, **auth_header)
-        assert response.status_code == HTTP_201_CREATED
-        assert any(response.data.get(field) for field in fields)
-        # Detail Payment Provider
-
-        url = reverse('api:shops:payment-providers-detail', args=(obj_shop.pk, response.data.get('id')))
-        response = client.get(url, **auth_header)
-        assert response.status_code == HTTP_200_OK
-        fields = ('code', 'title', 'image', 'type', 'status', 'fields')
-        assert all(field in response.data for field in fields)
-        # Delete Payment Provider
-
-        response = client.delete(url, **auth_header)
-        assert response.status_code == HTTP_204_NO_CONTENT
-
     def test_shop_model(self, obj_shop, domain):
         shop = obj_shop
         # Test for __str__ methods of Models
@@ -70,7 +43,6 @@ class TestShopAPIView(TestFixtures):
         assert isinstance(shop.categories, TreeQuerySet)
         assert isinstance(shop.clients.all(), QuerySet)
         assert isinstance(shop.orders, QuerySet)
-        assert isinstance(shop.payment_providers, QuerySet)
 
     def test_get_shops_api(self, client, obj_user, auth_header, obj_shop):
         shop_url = reverse('api:shops:shop-list', host='api')
@@ -118,9 +90,9 @@ class TestShopAPIView(TestFixtures):
         serializer = ShopSerializer(obj_shop)
         required_fields = (
             'id', 'name', 'shop_category', 'shop_currency', 'languages', 'shop_orders_count', 'shop_clients_count',
-            'status', 'shop_status_readable', 'about_us', 'delivery_price', 'delivery_price_per_km', 'lon', 'lat',
-            'minimum_delivery_price', 'free_delivery', 'about_us_image', 'expires_at', 'delivery_types', 'has_terminal',
-            'created_at', 'starts_at', 'ends_at', 'current_plans', 'delivery_terms', 'shop_category'
+            'is_active', 'shop_status_readable', 'about_us', 'delivery_price', 'delivery_price_per_km', 'lon', 'lat',
+            'minimum_delivery_price', 'free_delivery', 'about_us_image', 'delivery_types',
+            'created_at', 'delivery_terms', 'shop_category'
         )
         for field in required_fields:
             assert field in serializer.data

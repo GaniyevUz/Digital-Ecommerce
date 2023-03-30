@@ -172,16 +172,16 @@ SIMPLE_JWT = {
 
 }
 JAZZMIN_SETTINGS = {
-    "site_title": "BotCommerce Admin",
-    "site_header": "BotCommerce",
-    "site_brand": "BotCommerce",
+    "site_title": "digital-ecommerce Admin",
+    "site_header": "digital-ecommerce",
+    "site_brand": "digital-ecommerce",
     "site_logo": "site/logo.square.svg",
     "login_logo": "site/logo.svg",
     "login_logo_dark": None,
     "site_logo_classes": False,
     "site_icon": None,
-    "welcome_sign": "BotCommerce API",
-    "copyright": "BotCommerce MCHJ",
+    "welcome_sign": "digital-ecommerce API",
+    "copyright": "digital-ecommerce MCHJ",
     "search_model": ["users.User", "auth.Group"],
     "user_avatar": None,
     "topmenu_links": [
@@ -214,7 +214,6 @@ JAZZMIN_SETTINGS = {
 
         "products.Product": "fas fa-boxes",
         "products.Category": "fas fa-bars",
-
         "shops.Category": "fas fa-bars",
         "shops.Currency": "fas fa-coins",
         "shops.Shop": "fas fa-shopping-cart",

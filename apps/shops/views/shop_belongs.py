@@ -15,8 +15,8 @@ from orders.models import ProductOrder
 from shared.django import BaseShopMixin, APIViewSet
 from shared.restframework import CountResultPaginate, IsAdminOrReadOnly, IsShopOwner
 from shared.utils import bot_validator
-from shops.models import Currency, Category, TelegramBot, PaymentProvider
-from shops.serializers import CategorySerializer, CurrencySerializer, PaymentSerializers, TelegramBotModelSerializer
+from shops.models import Currency, Category, TelegramBot
+from shops.serializers import CategorySerializer, CurrencySerializer, TelegramBotModelSerializer
 
 
 class CategoryAPIViewSet(APIViewSet):
@@ -29,16 +29,6 @@ class CurrencyAPIViewSet(APIViewSet):
     serializer_class = CurrencySerializer
     queryset = Currency.objects.all()
     permission_classes = (IsAdminOrReadOnly,)
-
-
-class PaymentProvidersViewSet(BaseShopMixin, APIViewSet):
-    serializer_class = PaymentSerializers
-    queryset = PaymentProvider.objects.all()
-    permission_classes = (IsShopOwner,)
-    pagination_class = CountResultPaginate
-
-    def perform_create(self, serializer):
-        serializer.save(shop=self.get_shop)
 
 
 class TelegramBotAPIViewSet(APIViewSet):

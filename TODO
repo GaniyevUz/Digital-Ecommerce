@@ -9,48 +9,48 @@
 gunicorn, uwsgi
 daphne
 
-/etc/nginx/sites-enabled/botcommerce
+/etc/nginx/sites-enabled/digital-ecommerce
 
 server {
     listen [::]:80;
-    server_name fastcommerce.online www.fastcommerce.online;
+    server_name digital-ecommerce.online www.digital-ecommerce.online;
 
     location = /favicon.ico { access_log off; log_not_found off; }
 
     location /static/ {
-        root /var/www/botcommerce;
+        root /var/www/digital-ecommerce;
     }
 
     location /media/ {
-        root /var/www/botcommerce;
+        root /var/www/digital-ecommerce;
     }
 
     location / {
         include proxy_params;
-        proxy_pass http://unix:/var/www/botcommerce/botcommerce.sock;
+        proxy_pass http://unix:/var/www/digital-ecommerce/digital-ecommerce.sock;
     }
 }
 
 
 server {
     listen 80;
-    server_name static.fastcommerce.online www.static.fastcommerce.online;
+    server_name static.digital-ecommerce.online www.static.digital-ecommerce.online;
 
     location /static/ {
-        root /var/www/botcommerce;
+        root /var/www/digital-ecommerce;
     }
 }
 
-fastcommerce.online
-api.fastcommerce.online
-static.fastcommerce.online
-media.fastcommerce.online
+digital-ecommerce.online
+api.digital-ecommerce.online
+static.digital-ecommerce.online
+media.digital-ecommerce.online
 
 
 
 
 
-/etc/systemd/system/botcommerce.service
+/etc/systemd/system/digital-ecommerce.service
 
 
 [Unit]
@@ -60,8 +60,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/var/www/botcommerce
-ExecStart=/root/.cache/pypoetry/virtualenvs/botcommerce-gFegOML8-py3.10/bin/gunicorn --bind unix:/var/www/botcommerce/botcommerce.sock root.wsgi:application
+WorkingDirectory=/var/www/digital-ecommerce
+ExecStart=/root/.cache/pypoetry/virtualenvs/digital-ecommerce-gFegOML8-py3.10/bin/gunicorn --bind unix:/var/www/digital-ecommerce/digital-ecommerce.sock root.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
