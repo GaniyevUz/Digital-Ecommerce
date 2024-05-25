@@ -1,7 +1,7 @@
 
 # Digital-Ecommerce API
 
-[![codecov](https://codecov.io/gh/GaniyevUz/digital-ecommerce/branch/master/graph/badge.svg?token=IPVIFRXEMB)](https://codecov.io/gh/GaniyevUz/digital-ecommerce)
+[![codecov](https://codecov.io/gh/GaniyevUz/botcommerce/branch/master/graph/badge.svg?token=IPVIFRXEMB)](https://codecov.io/gh/GaniyevUz/botcommerce)
 
 ## An e-commerce platform with online shop creation, user-friendly dashboard, and a customizable Telegram bot for real-time updates and customer communication.
 ### Features
